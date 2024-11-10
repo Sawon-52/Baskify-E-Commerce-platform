@@ -1,31 +1,40 @@
 import Footer from "./Components/Footer";
 import Header from "./Components/Header";
+import SecondFooter from "./Components/SecondFooter";
 
 const App = () => {
   return (
     <div className="font-Montserrat">
-      <div className="w-full min-h-10 py-2 bg-[#222222] text-base flex justify-center text-white ">
-        <p className="text-[12px]">
-          Summer sale discount off 50%! <span className="text-red-500 ">Shop Now</span>
-        </p>
-      </div>
-      <div className="">
-        <div className="w-full lg:w-[80%] mx-auto px-6 lg:px-40">
-          <header>
-            <Header />
-          </header>
+      <header>
+        {/* discount header it is top of the page  */}
+        <div className="w-full min-h-10 py-2 bg-[#222222] text-base flex justify-center text-white ">
+          <p className="text-[12px]">
+            Summer sale discount off 50%! <span className="text-red-500 ">Shop Now</span>
+          </p>
+        </div>
+
+        {/* Navber  */}
+        <nav className="max-w-screen-lg mx-auto px-4 md:px-0">
+          <Header />
           <div>
             <hr className="h-1" />
           </div>
-          <main>
-            <h2 className="text-xl font-semibold">Welcome to Baskify! Enhance Your shoping experience</h2>
-          </main>
+        </nav>
+      </header>
+
+      <main className="max-w-screen-lg mx-auto min-h-screen px-4 md:px-0">
+        <h2 className="text-xl font-semibold">Welcome to Baskify! Enhance Your shoping experience</h2>
+      </main>
+
+      <footer>
+        <div className="w-full bg-third ">
+          <Footer />
         </div>
 
-        <footer>
-          <Footer></Footer>
-        </footer>
-      </div>
+        <div>
+          <SecondFooter />
+        </div>
+      </footer>
     </div>
   );
 };

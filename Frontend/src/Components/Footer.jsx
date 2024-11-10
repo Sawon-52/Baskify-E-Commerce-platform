@@ -2,16 +2,14 @@ import React from "react";
 import { CiLocationOn } from "react-icons/ci";
 import { CiMail } from "react-icons/ci";
 import { PiPhoneCallThin } from "react-icons/pi";
-import { SlSocialFacebook } from "react-icons/sl";
-import { CiInstagram } from "react-icons/ci";
-import { FaXTwitter } from "react-icons/fa6";
+
 
 const Footer = () => {
   return (
     <>
-      <div className="w-full bg-third py-20">
-        <footer className="footer w-full lg:w-[80%] mx-auto px-6 lg:px-40">
-          <nav className=" space-y-1">
+      <div>
+        <footer className="footer justify-between px-4 md:px-0  py-10  md:py-20 max-w-screen-lg mx-auto">
+          <nav className="space-y-1">
             {/* <h6 className="footer-title">Services</h6> */}
             <div className="flex-1">
               <a className="text-xl font-bold text-primary">
@@ -19,7 +17,7 @@ const Footer = () => {
               </a>
             </div>
             <a className="link link-hover flex items-center gap-2">
-              <CiLocationOn className="text-primary text-base " />
+              <CiLocationOn className="text-primary text-base" />
               <p>Mirpur 10, Dhaka, Bangladesh</p>
             </a>
             <a className="link link-hover flex items-center gap-2">
@@ -59,22 +57,7 @@ const Footer = () => {
         </footer>
       </div>
 
-      <footer className="footer items-center p-4 py-10 w-full lg:w-[80%] mx-auto px-6 lg:px-40">
-        <aside className="grid-flow-col items-center">
-          <p>Copyright © {new Date().getFullYear()} - All right reserved by Baskify</p>
-        </aside>
-        <nav className="grid-flow-col gap-4 md:place-self-center md:justify-self-end place-content-center cursor-pointer">
-          <a>
-            <SlSocialFacebook className="text-xl font-bold text-secondary" />
-          </a>
-          <a>
-            <CiInstagram className="text-xl font-bold text-secondary" />
-          </a>
-          <a>
-            <FaXTwitter className="text-xl font-bold text-secondary" />
-          </a>
-        </nav>
-      </footer>
+      
     </>
   );
 };
