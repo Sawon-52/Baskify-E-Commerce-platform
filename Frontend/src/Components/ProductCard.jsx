@@ -6,16 +6,16 @@ const ProductCard = ({ product }) => {
   const { name, image, category, price, rating, numReviews } = product;
   return (
     <div>
-      <div className="card bg-base-100 w-60 min-h-96 shadow-xl">
+      <div className="card bg-base-100 w-full shadow-xl rounded-xl">
         <figure>
           <Link to={`/product/${product._id}`}>
             <img className="cursor-pointer hover:scale-125 transition duration-500 ease-linear" src={image} alt={name} />
           </Link>
         </figure>
-        <div className="card-body px-4">
+        <div className="card-body px-6 py-10 md:py-6">
           <h3 className="text-sm text-secondary">{category}</h3>
           <Link to={`/product/${product._id}`}>
-            <h2 className="card-title font-semibold text-sm text-primary hover:underline transition duration-150 cursor-pointer">{name}</h2>
+            <h2 className="card-title font-semibold text-sm text-primary hover:underline  hover:decoration-mintGreen transition duration-100 cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap line-clamp-2">{`${name}...`}</h2>
           </Link>
           <div>
             <Rating value={rating} text={`${numReviews} reviews`} />

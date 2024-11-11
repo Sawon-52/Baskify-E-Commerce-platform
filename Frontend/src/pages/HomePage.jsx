@@ -10,7 +10,7 @@ const HomePage = () => {
         <h2 className="text-xl font-semibold">Welcome to Baskify! Enhance Your shoping experience.</h2>
         <h1 className="text-xl my-4 text-primary font-bold">Latest Product</h1>
       </div>
-      <div className="grid grid-cols-4 justify-between gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-items-stretch gap-5 ">
         {products.map((product) => (
           <div key={product._id}>
             <ProductCard product={product} />

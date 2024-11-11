@@ -16,7 +16,7 @@ const App = () => {
         </div>
 
         {/* Navber  */}
-        <nav className="max-w-screen-lg mx-auto px-4 md:px-0">
+        <nav className="max-w-screen-lg mx-auto px-4 md:px-6">
           <Header />
           <div>
             <hr className="h-1" />
@@ -24,7 +24,7 @@ const App = () => {
         </nav>
       </header>
 
-      <main className="max-w-screen-lg mx-auto min-h-screen px-4 md:px-0 my-6">
+      <main className="max-w-screen-lg mx-auto min-h-screen px-4 md:px-6  my-6">
         <Outlet />
       </main>
 

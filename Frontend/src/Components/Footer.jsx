@@ -13,7 +13,7 @@ const Footer = () => {
   return (
     <>
       <div>
-        <footer className="footer justify-between px-4 md:px-0  py-10  md:py-20 max-w-screen-lg mx-auto">
+        <footer className="footer justify-between px-4 md:px-6 py-10  md:py-20 max-w-screen-lg mx-auto">
           <nav className="space-y-1">
             {/* <h6 className="footer-title">Services</h6> */}
             <div className="flex-1">
