@@ -1,6 +1,7 @@
 import Footer from "./Components/Footer";
 import Header from "./Components/Header";
 import SecondFooter from "./Components/SecondFooter";
+import HomePage from "./pages/HomePage";
 
 const App = () => {
   return (
@@ -23,7 +24,11 @@ const App = () => {
       </header>
 
       <main className="max-w-screen-lg mx-auto min-h-screen px-4 md:px-0">
-        <h2 className="text-xl font-semibold">Welcome to Baskify! Enhance Your shoping experience</h2>
+        <h2 className="text-xl font-semibold">Welcome to Baskify! Enhance Your shoping experience.</h2>
+        <h1 className="text-xl my-4 text-primary font-bold">Latest Product</h1>
+        <div className="grid grid-cols-4 justify-between gap-4">
+          <HomePage />
+        </div>
       </main>
 
       <footer>
