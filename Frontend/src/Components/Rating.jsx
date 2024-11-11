@@ -6,7 +6,7 @@ import { IoMdStarOutline } from "react-icons/io";
 const Rating = ({ value, text }) => {
   
   return (
-    <div className="flex gap-1 items-center justify-between text-sm font-normal">
+    <div className="flex gap-10 items-center  text-sm font-normal">
       <div className="flex gap-1 items-center text-hunyadiYellow">
         <span>{value >= 1 ? <IoMdStar /> : value >= 0.5 ? <IoMdStarHalf /> : <IoMdStarOutline />}</span>
         <span>{value >= 2 ? <IoMdStar /> : value >= 1.5 ? <IoMdStarHalf /> : <IoMdStarOutline />}</span>
@@ -15,7 +15,7 @@ const Rating = ({ value, text }) => {
         <span>{value >= 5 ? <IoMdStar /> : value >= 4.5 ? <IoMdStarHalf /> : <IoMdStarOutline />}</span>
       </div>
       <div>
-        <span className="text-secondary text-xs">{text && text}</span>
+        <span className="text-secondary text-xs">{`${text && text} reviews`}</span>
       </div>
     </div>
   );

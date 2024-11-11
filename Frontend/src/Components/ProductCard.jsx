@@ -18,7 +18,7 @@ const ProductCard = ({ product }) => {
             <h2 className="card-title font-semibold text-sm text-primary hover:underline  hover:decoration-mintGreen transition duration-100 cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap line-clamp-2">{`${name}...`}</h2>
           </Link>
           <div>
-            <Rating value={rating} text={`${numReviews} reviews`} />
+            <Rating value={rating} text={`${numReviews} `} />
           </div>
           <div>
             <p className="text-secondary text-base font-semibold">${price}</p>

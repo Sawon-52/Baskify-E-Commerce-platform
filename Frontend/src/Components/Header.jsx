@@ -4,8 +4,8 @@ import { Link } from "react-router-dom";
 const Header = () => {
   const [isLogin, setIsLogin] = useState(false);
   return (
-    <div className="flex ">
-      <div className="navbar p-0 ">
+    <div className="flex">
+      <div className="navbar p-0 bg-[#ffff]">
         <div className="flex-1 ">
           <Link to={"/"} className="text-xl font-bold text-primary cursor-pointer">
             <span className="text-2xl text-mintGreen">B</span>askify

@@ -7,7 +7,7 @@ import HomePage from "./pages/HomePage";
 const App = () => {
   return (
     <div className="font-Montserrat">
-      <header>
+      <header className=" sticky top-0 z-10">
         {/* discount header it is top of the page  */}
         <div className="w-full min-h-10 py-2 bg-[#222222] text-base flex justify-center text-white ">
           <p className="text-[12px]">
@@ -24,7 +24,7 @@ const App = () => {
         </nav>
       </header>
 
-      <main className="max-w-screen-lg mx-auto min-h-screen px-4 md:px-6  my-6">
+      <main className="max-w-screen-lg mx-auto min-h-[calc(100vh-500px)]  px-4 md:px-6  my-10">
         <Outlet />
       </main>
 
