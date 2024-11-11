@@ -1,8 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Rating from "./Rating";
 
 const ProductCard = ({ product }) => {
-  const { name, image, description, brand, category, price, countInStock, rating, numReviews } = product;
+  const { name, image, category, price, rating, numReviews } = product;
   return (
     <div>
       <div className="card bg-base-100 w-60 min-h-96 shadow-xl">
@@ -17,7 +18,10 @@ const ProductCard = ({ product }) => {
             <h2 className="card-title font-semibold text-sm text-primary hover:underline transition duration-150 cursor-pointer">{name}</h2>
           </Link>
           <div>
-            <p className="text-primary text-base font-semibold">${price}</p>
+            <Rating value={rating} text={`${numReviews} reviews`} />
+          </div>
+          <div>
+            <p className="text-secondary text-base font-semibold">${price}</p>
           </div>
         </div>
       </div>
