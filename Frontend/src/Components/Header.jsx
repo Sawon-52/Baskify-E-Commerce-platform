@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+
 
 const Header = () => {
   const [isLogin, setIsLogin] = useState(false);
@@ -6,9 +8,9 @@ const Header = () => {
     <div className="flex ">
       <div className="navbar p-0 ">
         <div className="flex-1 ">
-          <a className="text-xl font-bold text-primary">
+          <Link to={"/"} className="text-xl font-bold text-primary cursor-pointer">
             <span className="text-2xl text-mintGreen">B</span>askify
-          </a>
+          </Link>
         </div>
         <div className="flex-none  gap-4">
           <div className="dropdown dropdown-end">
@@ -40,21 +42,23 @@ const Header = () => {
               </div>
               <ul tabIndex={0} className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
                 <li>
-                  <a className="justify-between">
+                  <Link className="justify-between">
                     Profile
                     <span className="badge">New</span>
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a>Settings</a>
+                  <Link>Settings</Link>
                 </li>
                 <li>
-                  <a>Logout</a>
+                  <Link>Logout</Link>
                 </li>
               </ul>
             </div>
           ) : (
-            <button className="btn-sm bg-primary text-white rounded-full text-xs px-3 hover:bg-mintGreen duration-200 font-semibold">Login</button>
+            <Link to={"/login"}>
+              <button className="btn-sm bg-primary text-white rounded-full text-xs px-3 hover:bg-mintGreen duration-200 font-semibold">Login</button>
+            </Link>
           )}
         </div>
       </div>
