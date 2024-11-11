@@ -6,7 +6,7 @@ const ProductCard = ({ product }) => {
     <div>
       <div className="card bg-base-100 w-60 min-h-96 shadow-xl">
         <figure>
-          <img className="cursor-pointer hover:scale-125 transition duration-300 ease-linear" src={image} alt={name} />
+          <img className="cursor-pointer hover:scale-125 transition duration-1000 ease-linear" src={image} alt={name} />
         </figure>
         <div className="card-body px-4">
           <h3 className="text-sm text-secondary">{category}</h3>
