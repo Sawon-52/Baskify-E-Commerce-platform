@@ -15,10 +15,10 @@ const Rating = ({ value, text }) => {
         <span>{value >= 5 ? <IoMdStar /> : value >= 4.5 ? <IoMdStarHalf /> : <IoMdStarOutline />}</span>
       </div>
       <div>
-        <span className="text-secondary text-xs">{`${text && text} reviews`}</span>
+        <span className="text-secondary text-xs font-semibold">{`${text && text} reviews`}</span>
       </div>
     </div>
   );
-};
+}; 
 
 export default Rating;

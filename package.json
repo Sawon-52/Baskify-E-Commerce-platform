@@ -1,0 +1,30 @@
+{
+  "name": "baskify-e-commerce-platform",
+  "version": "1.0.0",
+  "description": "It is MERN stack Project",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node Backend/server.js",
+    "server":"nodemon Backend/server.js",
+    "client":"npm run dev --prefix Frontend",
+    "build":"npm run build --prefix Frontend",
+    "dev":"concurrently \"npm run server\" \" npm run client\""
+  },
+  "keywords": [
+    "MERN",
+    "react",
+    "node",
+    "express",
+    "mongoDB"
+  ],
+  "author": "Mehedi Hasan",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.1"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0",
+    "nodemon": "^3.1.7"
+  }
+}
