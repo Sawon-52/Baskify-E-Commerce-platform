@@ -1,6 +1,7 @@
 import express from "express";
 import products from "./Data/products.js";
 import dotenv from "dotenv";
+dotenv.config();
 import cors from 'cors';
 const port = process.env.PORT || 5000;
 
