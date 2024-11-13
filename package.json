@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "It is MERN stack Project",
   "type": "module",
+
   "main": "server.js",
   "scripts": {
     "start": "node Backend/server.js",
@@ -29,4 +30,7 @@
     "dotenv": "^16.4.5",
     "nodemon": "^3.1.7"
   }
+
+  
+
 }
