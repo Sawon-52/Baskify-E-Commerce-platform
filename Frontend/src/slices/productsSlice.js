@@ -3,7 +3,7 @@ import { PRODUCTS_URL } from "../constant.js";
 import axios from "axios";
 
 //async thunk for fetching products
-export const fetchProducts = createAsyncThunk("products/fetchByIdStatus", async (_, { rejectWithValue }) => {
+export const fetchProducts = createAsyncThunk("products/fetchAllProducts", async (_, { rejectWithValue }) => {
   try {
     const response = await axios.get(`${PRODUCTS_URL}`);
     return response.data;

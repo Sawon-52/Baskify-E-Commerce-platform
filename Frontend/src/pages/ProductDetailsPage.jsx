@@ -1,26 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { Link, NavLink, useParams } from "react-router-dom";
-// import products from "../products";
 import Rating from "../Components/Rating";
 import { BsCart2 } from "react-icons/bs";
 import { IoIosArrowRoundBack } from "react-icons/io";
-import axios from "axios";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchProductDetails } from "../slices/productDetailsSlice";
 
 const ProductDetailsPage = () => {
-  const [product, setProduct] = useState([]);
   const { id: productId } = useParams();
+  const dispatch = useDispatch();
+  const { product, status, error } = useSelector((state) => state.productDetails);
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await axios.get(`http://localhost:5000/api/products/${productId}`);
-        setProduct(response.data); // Update state with fetched data
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      }
-    };
-    fetchProducts();
-  }, []);
+    dispatch(fetchProductDetails(productId));
+  }, [dispatch, productId]);
+
+  if (status === "loading") return <div>Loading product details...</div>;
+  if (status === "failed") return <div>Error: {error}</div>;
+  if (!product) return <div>Product not found!</div>;
 
   const { name, description, image, category, price, rating, numReviews, countInStock } = product;
 

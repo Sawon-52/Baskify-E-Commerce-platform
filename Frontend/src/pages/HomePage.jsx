@@ -3,9 +3,9 @@ import ProductCard from "../Components/ProductCard";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchProducts } from "../slices/productsSlice";
 const HomePage = () => {
+  
   const dispatch = useDispatch();
   const { products, status, error } = useSelector((state) => state.products);
-  console.log(products, status);
 
   useEffect(() => {
     if (status === "idle") {
