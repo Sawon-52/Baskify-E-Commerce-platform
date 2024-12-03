@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Link, NavLink, useParams } from "react-router-dom";
 import Rating from "../Components/Rating";
 import { BsCart2 } from "react-icons/bs";
 import { IoIosArrowRoundBack } from "react-icons/io";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchProductDetails } from "../slices/productDetailsSlice";
+import Loader from "../Components/Loader";
 
 const ProductDetailsPage = () => {
   const { id: productId } = useParams();
@@ -15,7 +16,7 @@ const ProductDetailsPage = () => {
     dispatch(fetchProductDetails(productId));
   }, [dispatch, productId]);
 
-  if (status === "loading") return <div>Loading product details...</div>;
+  if (status === "loading") return <Loader></Loader>;
   if (status === "failed") return <div>Error: {error}</div>;
   if (!product) return <div>Product not found!</div>;
 
@@ -35,7 +36,7 @@ const ProductDetailsPage = () => {
           <img src={image} alt={name} className="h-full w-full object-center object-cover rounded-xl" />
         </div>
         <div className="min-h-32 p-0 rounded-none space-y-4 row-span-4">
-          <h2 className="card-title font-semibold text-xl text-primary">{`${name}`}</h2>
+          <h2 className="card-title font-semibold text-xl text-primary">{name}</h2>
           <h2 className="font-normal text-sm text-secondary ">{description}</h2>
           <Rating value={rating} text={numReviews} />
           <p className="text-secondary text-sm font-semibold">${price}</p>
