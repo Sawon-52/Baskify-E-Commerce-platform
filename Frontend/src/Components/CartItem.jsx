@@ -2,11 +2,15 @@ import React, { useState } from "react";
 import { AiFillDelete } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../slices/cartSlice";
+import { removeFromCart } from "../slices/cartSlice";
 
 const CartItem = ({ item }) => {
   const dispatch = useDispatch();
   const addToCartHandler = async (product, qty) => {
     dispatch(addToCart({ ...product, qty }));
+  };
+  const removeFromCartHandler = async (id) => {
+    dispatch(removeFromCart(id));
   };
   return (
     <div>
@@ -34,7 +38,7 @@ const CartItem = ({ item }) => {
           <div>
             <p className="font-semibold ">${item?.price}</p>
           </div>
-          <div className="">
+          <div onClick={() => removeFromCartHandler(item?._id)}>
             <button className="text-2xl text-red-400">
               <AiFillDelete />
             </button>
