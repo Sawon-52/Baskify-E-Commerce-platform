@@ -1,17 +1,20 @@
-import React, { useEffect } from "react";
-import { Link, NavLink, useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, NavLink, useParams, useNavigate } from "react-router-dom";
 import Rating from "../Components/Rating";
 import { BsCart2 } from "react-icons/bs";
 import { IoIosArrowRoundBack } from "react-icons/io";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchProductDetails } from "../slices/productDetailsSlice";
 import Loader from "../Components/Loader";
+import { addToCart } from "../slices/cartSlice";
 
 const ProductDetailsPage = () => {
   const { id: productId } = useParams();
+  //quentity state
+  const [qty, setQty] = useState(1);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { product, status, error } = useSelector((state) => state.productDetails);
-
   useEffect(() => {
     dispatch(fetchProductDetails(productId));
   }, [dispatch, productId]);
@@ -21,6 +24,11 @@ const ProductDetailsPage = () => {
   if (!product) return <div>Product not found!</div>;
 
   const { name, description, image, category, price, rating, numReviews, countInStock } = product;
+
+  const addToCartHandler = () => {
+    dispatch(addToCart({ ...product, qty }));
+    navigate("/cart");
+  };
 
   return (
     <div>
@@ -45,8 +53,29 @@ const ProductDetailsPage = () => {
             <span className="text-primary">Status: </span>
             {`${countInStock > 0 ? "In Stock" : "Out of Stock"}`}
           </p>
+          {product.countInStock > 0 && (
+            <div className="flex gap-3 items-center">
+              <div>
+                <p className="text-sm font-semibold ">Quantity:</p>
+              </div>
+              <select
+                className="select select-bordered w-full max-w-xs"
+                value={qty}
+                onChange={(e) => {
+                  setQty(Number(e.target.value));
+                }}
+              >
+                {[...Array(product.countInStock).keys()].map((x) => (
+                  <option key={x + 1} value={x + 1} className="">
+                    {x + 1}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+
           <Link>
-            <button className="btn w-full bg-primary text-white hover:bg-mintGreen transition-colors duration-300 my-10">
+            <button className="btn w-full bg-primary text-white hover:bg-mintGreen transition-colors duration-300 my-10" disabled={product.countInStock === 0} onClick={addToCartHandler}>
               <BsCart2 /> Add to Cart
             </button>
           </Link>
