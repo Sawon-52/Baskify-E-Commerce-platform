@@ -1,10 +1,14 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const CartSammary = () => {
+  const navigate = useNavigate();
   const cart = useSelector((state) => state.cart);
   const { itemsPrice, shippingPrice, taxPrice, totalPrice } = cart;
+  const checkoutHandler = () => {
+    navigate('/login?redirect=/shipping')
+  };
   return (
     <div className="rounded-lg text-sm shadow-lg p-5 min-h-max">
       <h2 className="text-xl font-semibold mb-4">Delivery</h2>
@@ -31,7 +35,7 @@ const CartSammary = () => {
         </div>
       </div>
 
-      <button className=" btn w-full mt-4 py-2 bg-primary text-white rounded-lg">Proceed to checkout</button>
+      <button className=" btn w-full mt-4 py-2 bg-primary text-white rounded-lg" onClick={checkoutHandler}>Proceed to checkout</button>
       <Link to="/">
         <button className=" btn w-full mt-2 py-2 bg-gray-200 rounded-lg">Continue shopping</button>
       </Link>

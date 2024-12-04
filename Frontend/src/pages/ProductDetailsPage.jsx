@@ -40,7 +40,7 @@ const ProductDetailsPage = () => {
       </NavLink>
 
       <div className="flex flex-col md:flex-row gap-8 justify-between">
-        <div className="w-full md:max-w-[600px] max-h-96 rounded-xl">
+        <div className="w-full md:max-w-[600px] rounded-xl">
           <img src={image} alt={name} className="w-full h-full object-cover rounded-xl" />
         </div>
 
