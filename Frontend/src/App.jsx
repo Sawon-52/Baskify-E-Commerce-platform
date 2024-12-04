@@ -24,7 +24,7 @@ const App = () => {
         </nav>
       </header>
 
-      <main className="max-w-screen-lg mx-auto min-h-[calc(100vh-500px)]  px-4 md:px-6  my-10">
+      <main className="max-w-screen-lg mx-auto px-4 md:px-6 my-4">
         <Outlet />
       </main>
 

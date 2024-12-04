@@ -7,13 +7,14 @@ import store from "./store.js";
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider, Routes } from "react-router-dom";
 import HomePage from "./pages/HomePage.jsx";
 import ProductDetailsPage from "./pages/ProductDetailsPage.jsx";
+import CartPage from "./pages/CartPage.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
       <Route index={true} path="/" element={<HomePage />} />
       <Route path="/product/:id" element={<ProductDetailsPage />} />
-      <Route path="/cart" element={<h2>cart Component</h2>} />
+      <Route path="/cart" element={<CartPage />} />
     </Route>,
   ),
 );

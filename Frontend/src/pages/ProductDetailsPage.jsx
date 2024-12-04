@@ -39,46 +39,49 @@ const ProductDetailsPage = () => {
         </div>
       </NavLink>
 
-      <div className=" grid grid-cols-1 md:grid-cols-3 grid-rows-4 gap-10 min-h-96">
-        <div className=" col-span-1 md:col-span-2 row-span-4 ">
-          <img src={image} alt={name} className="h-full w-full object-center object-cover rounded-xl" />
+      <div className="flex flex-col md:flex-row gap-8 justify-between">
+        <div className="w-full md:max-w-[600px] max-h-96 rounded-xl">
+          <img src={image} alt={name} className="w-full h-full object-cover rounded-xl" />
         </div>
-        <div className="min-h-32 p-0 rounded-none space-y-4 row-span-4">
-          <h2 className="card-title font-semibold text-xl text-primary">{name}</h2>
-          <h2 className="font-normal text-sm text-secondary ">{description}</h2>
-          <Rating value={rating} text={numReviews} />
-          <p className="text-secondary text-sm font-semibold">${price}</p>
-          <p className="text-secondary text-sm font-semibold">
-            {" "}
-            <span className="text-primary">Status: </span>
-            {`${countInStock > 0 ? "In Stock" : "Out of Stock"}`}
-          </p>
-          {product.countInStock > 0 && (
-            <div className="flex gap-3 items-center">
-              <div>
-                <p className="text-sm font-semibold ">Quantity:</p>
-              </div>
-              <select
-                className="select select-bordered w-full max-w-xs"
-                value={qty}
-                onChange={(e) => {
-                  setQty(Number(e.target.value));
-                }}
-              >
-                {[...Array(product.countInStock).keys()].map((x) => (
-                  <option key={x + 1} value={x + 1} className="">
-                    {x + 1}
-                  </option>
-                ))}
-              </select>
-            </div>
-          )}
 
-          <Link>
-            <button className="btn w-full bg-primary text-white hover:bg-mintGreen transition-colors duration-300 my-10" disabled={product.countInStock === 0} onClick={addToCartHandler}>
-              <BsCart2 /> Add to Cart
-            </button>
-          </Link>
+        <div className="w-full md:w-1/3">
+          <div className=" space-y-4 rounded-lg text-sm ">
+            <h2 className="card-title font-semibold text-xl text-primary">{name}</h2>
+            <h2 className="font-normal text-sm text-secondary ">{description}</h2>
+            <Rating value={rating} text={numReviews} />
+            <p className="text-secondary text-sm font-semibold">${price}</p>
+            <p className="text-secondary text-sm font-semibold">
+              {" "}
+              <span className="text-primary">Status: </span>
+              {`${countInStock > 0 ? "In Stock" : "Out of Stock"}`}
+            </p>
+            {product.countInStock > 0 && (
+              <div className="flex gap-3 items-center">
+                <div>
+                  <p className="text-sm font-semibold ">Quantity:</p>
+                </div>
+                <select
+                  className="select select-bordered  w-full max-w-xs"
+                  value={qty}
+                  onChange={(e) => {
+                    setQty(Number(e.target.value));
+                  }}
+                >
+                  {[...Array(product.countInStock).keys()].map((x) => (
+                    <option key={x + 1} value={x + 1} className="">
+                      {x + 1}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
+
+            <Link>
+              <button className="btn w-full bg-primary text-white hover:bg-mintGreen transition-colors duration-300 mt-5" disabled={product.countInStock === 0} onClick={addToCartHandler}>
+                <BsCart2 /> Add to Cart
+              </button>
+            </Link>
+          </div>
         </div>
       </div>
     </div>
