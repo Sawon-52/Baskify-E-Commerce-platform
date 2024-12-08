@@ -3,6 +3,8 @@ import Footer from "./Components/Footer";
 import Header from "./Components/Header";
 import SecondFooter from "./Components/SecondFooter";
 import HomePage from "./pages/HomePage";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const App = () => {
   return (
@@ -37,6 +39,7 @@ const App = () => {
           <SecondFooter />
         </div>
       </footer>
+      <ToastContainer />
     </div>
   );
 };

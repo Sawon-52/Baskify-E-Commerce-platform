@@ -1,16 +1,33 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import profilePic from "../assets/profile.png";
+import { logout } from "../slices/authSlice";
+import { toast } from "react-toastify";
+
 
 const Header = () => {
-  const [isLogin, setIsLogin] = useState(false);
+  // const [isLogin, setIsLogin] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const navigate = useNavigate();
   const { cartItems, totalPrice } = useSelector((state) => state.cart);
+  const { userInfo } = useSelector((state) => state.auth);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleViewCart = () => {
     navigate("/cart");
     setShowModal(false);
+  };
+
+  const logoutHandler = async () => {
+    try {
+      await dispatch(logout()).unwrap();
+      toast.success("Logged out successfully!");
+      navigate("/login");
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <div className="flex">
@@ -45,24 +62,21 @@ const Header = () => {
             )}
           </div>
 
-          {isLogin ? (
+          {userInfo ? (
             <div className="dropdown dropdown-end">
               <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
                 <div className="w-10 rounded-full">
-                  <img alt="Tailwind CSS Navbar component" src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+                  <img alt="profilePic" src={profilePic} />
                 </div>
               </div>
               <ul tabIndex={0} className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
                 <li>
-                  <Link className="justify-between">
-                    Profile
-                    <span className="badge">New</span>
-                  </Link>
+                  <Link className="justify-between">{userInfo.name}</Link>
                 </li>
                 <li>
                   <Link>Settings</Link>
                 </li>
-                <li>
+                <li onClick={logoutHandler}>
                   <Link>Logout</Link>
                 </li>
               </ul>
