@@ -12,13 +12,14 @@ const ShippingPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [address, setAddress] = useState(shippingAddress?.address || "");
+  const [phoneNumber, setPhoneNumber] = useState(shippingAddress?.phoneNumber || "");
   const [city, setCity] = useState(shippingAddress?.city || "");
   const [postalCode, setPostalCode] = useState(shippingAddress?.postalCode || "");
   const [country, setCountry] = useState(shippingAddress?.country || "");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(saveShippingAddress({ address, city, postalCode, country }));
+    dispatch(saveShippingAddress({ address, phoneNumber, city, postalCode, country }));
     navigate("/payment");
   };
   return (
@@ -26,15 +27,21 @@ const ShippingPage = () => {
       <div>
         <CheckoutSteps step1 step2 />
       </div>
-      <div className="flex flex-col justify-center items-center my-28">
-        <h2 className="text-base font-bold mb-8">Add Delivery Address</h2>
-        <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
+      <div className="flex flex-col justify-center items-center my-10">
+        <h2 className="text-xl font-bold mb-8 ">Add Delivery Address</h2>
+        <div className="card bg-base-100 w-full max-w-md shrink-0 shadow-2xl">
           <form className="card-body" onSubmit={handleSubmit}>
             <div className="form-control">
               <label className="label">
                 <span className="label-text">Address</span>
               </label>
               <input type="text" placeholder="Enter Address" className="input input-bordered" value={address} onChange={(e) => setAddress(e.target.value)} required />
+            </div>
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Phone Number</span>
+              </label>
+              <input type="text" placeholder="01XXXXXXXXX" className="input input-bordered" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} required />
             </div>
             <div className="form-control">
               <label className="label">
