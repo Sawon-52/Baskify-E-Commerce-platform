@@ -5,7 +5,6 @@ import profilePic from "../assets/profile.png";
 import { logout } from "../slices/authSlice";
 import { toast } from "react-toastify";
 
-
 const Header = () => {
   // const [isLogin, setIsLogin] = useState(false);
   const [showModal, setShowModal] = useState(false);
