@@ -33,7 +33,7 @@ const FormComponent = () => {
       toast.success("Login successful!");
       navigate(redirect);
     } catch (err) {
-      toast.error(err || "Login failed!");
+      toast.error(err.message || "Login failed!");
     }
   };
 
@@ -57,8 +57,6 @@ const FormComponent = () => {
             {isLoading ? "Logging in..." : "Login"}
           </button>
         </div>
-        {isLoading && <Loader />}
-        {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
       </form>
       <div className="flex justify-center mb-4 gap-2">
         <p className="label-text-alt">New Customer?</p>

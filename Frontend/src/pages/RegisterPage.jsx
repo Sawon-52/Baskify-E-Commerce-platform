@@ -11,7 +11,7 @@ const RegisterPage = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const { isLoading, error } = useSelector((state) => state.register);
+  const { isLoading } = useSelector((state) => state.register);
   const { userInfo } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
@@ -23,7 +23,7 @@ const RegisterPage = () => {
 
   useEffect(() => {
     if (userInfo) {
-      navigate(redirect); // Redirect after login
+      navigate(redirect); // Redirect after registration
     }
   }, [userInfo, redirect, navigate]);
 
