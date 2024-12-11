@@ -39,33 +39,33 @@ const PlaceOrderPage = () => {
         <div className="w-full">
           {/* Summary Section */}
           <div>
-            <h2>Shipping</h2>
-            <p>
-              <strong>Address:</strong>
-              {cart.shippingAddress.address}, {cart.shippingAddress.postalCode}, {cart.shippingAddress.country}
+            <h2 className="text-2xl font-bold mb-5">Shipping</h2>
+            <p className="my-2">
+              <strong>Address: </strong>
+              {cart.shippingAddress.address}, {cart.shippingAddress.postalCode},{cart.shippingAddress.country}
             </p>
           </div>
           <hr />
-          <div>
-            <h2>Payment Method</h2>
-            <strong>Method: </strong>
-            {cart.paymentMethod}
+          <div className="my-2">
+            <h2 className="font-bold text-base my-1">Payment Method</h2>
+            <strong className="text-sm font-medium">Method: </strong>
+            <span className="text-sm">{cart.paymentMethod}</span>
           </div>
           <hr />
           <div>
             <div>
-              <h2>Order Items</h2>
+              <h2 className="text-xl font-bold my-2">Order Items</h2>
             </div>
             {cart.cartItems.length === 0 ? (
               <div>
-                <h2>Your Cat is empty</h2>
+                <h2 className="text-red-400 font-medium">Your Cart is empty</h2>
               </div>
             ) : (
               <div className="overflow-x-auto">
                 <table className="table">
                   {/* head */}
                   <thead>
-                    <tr>
+                    <tr className="text-primary">
                       <th>image</th>
                       <th>Title</th>
                       <th>price</th>
@@ -75,9 +75,9 @@ const PlaceOrderPage = () => {
                     {cart.cartItems.map((item, index) => (
                       <tr key={index}>
                         <td>
-                          <img src={item.image} alt={item.name} className="w-10 h-10 rounded" />
+                          <img src={item.image} alt={item.name} className="h-12 w-12 rounded" />
                         </td>
-                        <td>
+                        <td className="underline cursor-pointer">
                           <Link to={`/product/${item._id}`}>{item.name}</Link>
                         </td>
                         <td>

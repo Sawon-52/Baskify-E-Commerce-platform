@@ -31,7 +31,7 @@ const PaymentPage = () => {
           <h2 className="text-base font-medium">Select Method</h2>
 
           <div className="flex items-center gap-2 my-4">
-            <input type="radio" className="radio w-5 h-5 defaultChecked" name="paymentMethod" value="Paypal-2" onChange={(e) => setPaymentMethod(e.target.value)} />
+            <input type="radio" className="radio w-5 h-5 defaultChecked" name="paymentMethod" value="Paypal" onChange={(e) => setPaymentMethod(e.target.value)} />
             <label htmlFor="">Paypal or Credit Card</label>
           </div>
 
