@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import React from "react";
 import CartItem from "../Components/CartItem";
-import CartSammary from "../Components/cartSammary";
+import CartSummary from "../Components/CartSummary";
 
 const CartPage = () => {
   const dispatch = useDispatch();
@@ -38,7 +38,7 @@ const CartPage = () => {
             </div>
             {/* Summary Section */}
             <div className="w-full md:w-1/3">
-              <CartSammary />
+              <CartSummary />
             </div>
           </div>
         )}

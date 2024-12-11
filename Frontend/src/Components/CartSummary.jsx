@@ -2,7 +2,7 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-const CartSammary = () => {
+const CartSummary = () => {
   const navigate = useNavigate();
   const cart = useSelector((state) => state.cart);
   const { itemsPrice, shippingPrice, taxPrice, totalPrice } = cart;
@@ -43,4 +43,4 @@ const CartSammary = () => {
   );
 };
 
-export default CartSammary;
+export default CartSummary;
