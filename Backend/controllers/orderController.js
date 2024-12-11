@@ -16,6 +16,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
       const sanitizedOrderItems = orderItems
         .filter((item) => item && item._id) // Filter out null, undefined, or items without _id
         .map((x) => ({ ...x, product: x._id, _id: undefined }));
+        
       const order = new Order({
         orderItems: sanitizedOrderItems,
         user: req.user._id,
