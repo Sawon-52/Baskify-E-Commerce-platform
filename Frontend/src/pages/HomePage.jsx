@@ -1,24 +1,22 @@
 import { useEffect } from "react";
 import ProductCard from "../Components/ProductCard";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchProducts } from "../slices/productsSlice";
+import { fetchProducts } from "../slices/productsApiSlice";
 import Loader from "../Components/Loader";
 const HomePage = () => {
   const dispatch = useDispatch();
-  const { products, status, error } = useSelector((state) => state.products);
+  const { allProducts, isLoading, isError } = useSelector((state) => state.products);
 
   useEffect(() => {
-    if (status === "idle") {
-      dispatch(fetchProducts());
-    }
-  }, [dispatch, status]);
+    dispatch(fetchProducts()).unwrap();
+  }, []);
 
-  if (status === "loading") {
+  if (isLoading) {
     return <Loader />;
   }
 
-  if (status === "failed") {
-    return <div>Error: {error.message}</div>;
+  if (isError) {
+    return <div>Error: {isError.message}</div>;
   }
 
   return (
@@ -28,7 +26,7 @@ const HomePage = () => {
         <h1 className="text-xl my-4 text-primary font-bold">Latest Product</h1>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-items-stretch gap-5 ">
-        {products.map((product) => (
+        {allProducts?.map((product) => (
           <div key={product._id}>
             <ProductCard product={product} />
           </div>

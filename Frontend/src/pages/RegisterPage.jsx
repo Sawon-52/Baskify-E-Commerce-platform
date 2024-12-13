@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { registerUser } from "../slices/registerSlice";
+import { registerUser } from "../slices/usersApiSlice";
 import { setCredentials } from "../slices/authSlice";
 
 const RegisterPage = () => {
@@ -11,7 +11,7 @@ const RegisterPage = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const { isLoading } = useSelector((state) => state.register);
+  const { isLoading } = useSelector((state) => state.users);
   const { userInfo } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();

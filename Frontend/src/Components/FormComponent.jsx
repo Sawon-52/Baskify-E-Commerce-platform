@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import Loader from "./Loader";
 import { setCredentials } from "../slices/authSlice";
-import { loginUser } from "../slices/loginSlice";
+import { loginUser } from "../slices/usersApiSlice";
 import { toast } from "react-toastify";
 
 const FormComponent = () => {
@@ -12,7 +11,7 @@ const FormComponent = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isLoading, error } = useSelector((state) => state.login);
+  const { isLoading, error } = useSelector((state) => state.users);
   const { userInfo } = useSelector((state) => state.auth);
 
   const { search } = useLocation();

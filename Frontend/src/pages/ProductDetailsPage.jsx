@@ -4,7 +4,7 @@ import Rating from "../Components/Rating";
 import { BsCart2 } from "react-icons/bs";
 import { IoIosArrowRoundBack } from "react-icons/io";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchProductDetails } from "../slices/productDetailsSlice";
+import { fetchProductDetails } from "../slices/productsApiSlice";
 import Loader from "../Components/Loader";
 import { addToCart } from "../slices/cartSlice";
 
@@ -14,19 +14,19 @@ const ProductDetailsPage = () => {
   const [qty, setQty] = useState(1);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { product, status, error } = useSelector((state) => state.productDetails);
+  const { productInfo, isLoading, isError } = useSelector((state) => state.products);
   useEffect(() => {
     dispatch(fetchProductDetails(productId));
   }, [dispatch, productId]);
 
-  if (status === "loading") return <Loader></Loader>;
-  if (status === "failed") return <div>Error: {error}</div>;
-  if (!product) return <div>Product not found!</div>;
+  if (isLoading) return <Loader></Loader>;
+  if (isError) return <div>Error: {isError.message}</div>;
+  if (!productInfo) return <div>Product not found!</div>;
 
-  const { name, description, image, category, price, rating, numReviews, countInStock } = product;
+  const { name, description, image, category, price, rating, numReviews, countInStock } = productInfo;
 
   const addToCartHandler = () => {
-    dispatch(addToCart({ ...product, qty }));
+    dispatch(addToCart({ ...productInfo, qty }));
     navigate("/cart");
   };
 
@@ -55,7 +55,7 @@ const ProductDetailsPage = () => {
               <span className="text-primary">Status: </span>
               {`${countInStock > 0 ? "In Stock" : "Out of Stock"}`}
             </p>
-            {product.countInStock > 0 && (
+            {productInfo.countInStock > 0 && (
               <div className="flex gap-3 items-center">
                 <div>
                   <p className="text-sm font-semibold ">Quantity:</p>
@@ -67,7 +67,7 @@ const ProductDetailsPage = () => {
                     setQty(Number(e.target.value));
                   }}
                 >
-                  {[...Array(product.countInStock).keys()].map((x) => (
+                  {[...Array(productInfo.countInStock).keys()].map((x) => (
                     <option key={x + 1} value={x + 1} className="">
                       {x + 1}
                     </option>
@@ -77,7 +77,7 @@ const ProductDetailsPage = () => {
             )}
 
             <Link>
-              <button className="btn w-full bg-primary text-white hover:bg-mintGreen transition-colors duration-300 mt-5" disabled={product.countInStock === 0} onClick={addToCartHandler}>
+              <button className="btn w-full bg-primary text-white hover:bg-mintGreen transition-colors duration-300 mt-5" disabled={productInfo.countInStock === 0} onClick={addToCartHandler}>
                 <BsCart2 /> Add to Cart
               </button>
             </Link>

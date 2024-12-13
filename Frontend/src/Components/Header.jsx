@@ -2,8 +2,10 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import profilePic from "../assets/profile.png";
-import { logout } from "../slices/authSlice";
+import { logoutUser } from "../slices/usersApiSlice";
+import { removeCredentials } from "../slices/authSlice";
 import { toast } from "react-toastify";
+import { clearShippingAddress } from "../slices/cartSlice";
 
 const Header = () => {
   // const [isLogin, setIsLogin] = useState(false);
@@ -21,7 +23,8 @@ const Header = () => {
 
   const logoutHandler = async () => {
     try {
-      await dispatch(logout()).unwrap();
+      await dispatch(logoutUser()).unwrap();
+      await dispatch(removeCredentials()).unwrap();
       toast.success("Logged out successfully!");
       navigate("/login");
     } catch (error) {
