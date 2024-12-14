@@ -11,7 +11,7 @@ const PlaceOrderPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
-  const { isLoading, isError } = useSelector((state) => state.orders);
+  const { isLoading } = useSelector((state) => state.orders);
 
   useEffect(() => {
     if (!cart.shippingAddress.address) {

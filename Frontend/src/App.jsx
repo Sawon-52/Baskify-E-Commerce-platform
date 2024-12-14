@@ -18,7 +18,7 @@ const App = () => {
         </div>
 
         {/* Navber  */}
-        <nav className="max-w-screen-lg mx-auto px-4 md:px-6">
+        <nav className="max-w-screen-lg mx-auto px-4 md:px-6 bg-[#ffff]">
           <Header />
           <div>
             <hr className="h-1" />
@@ -26,7 +26,7 @@ const App = () => {
         </nav>
       </header>
 
-      <main className="max-w-screen-lg mx-auto px-4 md:px-6 my-4">
+      <main className="max-w-screen-lg mx-auto px-4 md:px-6 my-10 min-h-max">
         <Outlet />
       </main>
 

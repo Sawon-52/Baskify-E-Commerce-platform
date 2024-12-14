@@ -33,7 +33,7 @@ const Header = () => {
   };
   return (
     <div className="flex">
-      <div className="navbar p-0 bg-[#ffff]">
+      <div className="navbar p-0 ">
         <div className="flex-1 ">
           <Link to={"/"} className="text-xl font-bold text-primary cursor-pointer">
             <span className="text-2xl text-mintGreen">B</span>askify
@@ -73,10 +73,9 @@ const Header = () => {
               </div>
               <ul tabIndex={0} className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
                 <li>
-                  <Link className="justify-between">{userInfo.name}</Link>
-                </li>
-                <li>
-                  <Link>Settings</Link>
+                  <Link to={"/profile"} className="justify-between">
+                    {userInfo.name}
+                  </Link>
                 </li>
                 <li onClick={logoutHandler}>
                   <Link>Logout</Link>
