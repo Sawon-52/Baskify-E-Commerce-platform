@@ -5,10 +5,8 @@ import profilePic from "../assets/profile.png";
 import { logoutUser } from "../slices/usersApiSlice";
 import { removeCredentials } from "../slices/authSlice";
 import { toast } from "react-toastify";
-import { clearShippingAddress } from "../slices/cartSlice";
 
 const Header = () => {
-  // const [isLogin, setIsLogin] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const { cartItems, totalPrice } = useSelector((state) => state.cart);
   const { userInfo } = useSelector((state) => state.auth);
@@ -31,6 +29,7 @@ const Header = () => {
       console.log(error);
     }
   };
+
   return (
     <div className="flex">
       <div className="navbar p-0 ">
@@ -77,6 +76,26 @@ const Header = () => {
                     {userInfo.name}
                   </Link>
                 </li>
+                {userInfo.isAdmin && (
+                  <ul>
+                    <li>
+                      <Link to={"/admin/productlist"} className="justify-between">
+                        Products
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to={"/admin/userlist"} className="justify-between">
+                        Users
+                      </Link>
+                    </li>
+
+                    <li>
+                      <Link to={"/admin/orderlist"} className="justify-between">
+                        Orders
+                      </Link>
+                    </li>
+                  </ul>
+                )}
                 <li onClick={logoutHandler}>
                   <Link>Logout</Link>
                 </li>

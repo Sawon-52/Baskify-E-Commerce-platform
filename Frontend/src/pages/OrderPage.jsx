@@ -7,11 +7,11 @@ import { useEffect } from "react";
 const OrderPage = () => {
   const { id: orderId } = useParams();
   const dispatch = useDispatch();
-  const { orders, isLoading, isError } = useSelector((state) => state.orders);
-  console.log(orders);
+  const { orders, isLoading } = useSelector((state) => state.orders);
+  const { userInfo } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    const featchData = async () => {
+    const fetchData = async () => {
       try {
         const res = await dispatch(getOrderDetails(orderId)).unwrap();
         console.log(res);
@@ -19,7 +19,7 @@ const OrderPage = () => {
         console.log(error);
       }
     };
-    featchData();
+    fetchData();
   }, [orderId]);
   return (
     <>
@@ -116,7 +116,7 @@ const OrderPage = () => {
                             <td>
                               <img src={item.image} alt={item.name} className="h-12 w-12 rounded" />
                             </td>
-                            <td className="underline cursor-pointer">{item.name}</td>
+                            <td className="text-primary">{item.name}</td>
                             <td>
                               {item.qty} X ${item.price} = ${(item.qty * item.price).toFixed(2)}
                             </td>
@@ -155,6 +155,7 @@ const OrderPage = () => {
                     <p>${orders.totalPrice}</p>
                   </div>
                 </div>
+                {userInfo.isAdmin ? <button className=" btn w-full mt-4 py-2 bg-primary text-white rounded-lg hover:bg-primary">Mark As Delivered</button> : <button className=" btn w-full mt-4 py-2 bg-primary text-white rounded-lg hover:bg-primary"></button>}
               </div>
             </div>
           </div>

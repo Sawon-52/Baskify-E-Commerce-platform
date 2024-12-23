@@ -31,6 +31,16 @@ export const getMyOrders = createAsyncThunk("orders/getMyOrders", async (_, { re
     return rejectWithValue(error.response.data);
   }
 });
+
+// get orders using API calls
+export const getOrders = createAsyncThunk("orders/getOrders", async (_, { rejectWithValue }) => {
+  try {
+    const response = await axios.get(`${ORDER_URL}`);
+    return response.data;
+  } catch (error) {
+    return rejectWithValue(error.response.data);
+  }
+});
 // create orders slice
 const ordersSlice = createSlice({
   name: "orders",
@@ -83,6 +93,20 @@ const ordersSlice = createSlice({
         state.myOrders = action.payload;
       })
       .addCase(getMyOrders.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = action.payload;
+      })
+
+      // get Orders
+      .addCase(getOrders.pending, (state) => {
+        state.isLoading = true;
+        state.isError = null;
+      })
+      .addCase(getOrders.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.orders = action.payload;
+      })
+      .addCase(getOrders.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = action.payload;
       });

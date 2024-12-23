@@ -16,7 +16,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
       const sanitizedOrderItems = orderItems
         .filter((item) => item && item._id) // Filter out null, undefined, or items without _id
         .map((x) => ({ ...x, product: x._id, _id: undefined }));
-        
+
       const order = new Order({
         orderItems: sanitizedOrderItems,
         user: req.user._id,
@@ -76,7 +76,9 @@ const updateOrderToDelivered = asyncHandler(async (req, res) => {
 //@route    GET/api/orders
 //@access   private/Admin
 const getOrders = asyncHandler(async (req, res) => {
-  res.send("get all orders");
+  const orders = await Order.find({}).populate("user", "id name");
+  res.status(200).json(orders);
+  console.log(orders)
 });
 
 export { addOrderItems, getMyOrders, getOrderById, updateOrderToPaid, updateOrderToDelivered, getOrders };
