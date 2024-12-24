@@ -1,8 +1,10 @@
 import { Link, useParams } from "react-router-dom";
 import Loader from "../Components/Loader";
-import { getOrderDetails } from "../slices/OrdersApiSlice";
+import { deliverOrder, getOrderDetails } from "../slices/OrdersApiSlice";
+
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
+import { toast } from "react-toastify";
 
 const OrderPage = () => {
   const { id: orderId } = useParams();
@@ -14,13 +16,23 @@ const OrderPage = () => {
     const fetchData = async () => {
       try {
         const res = await dispatch(getOrderDetails(orderId)).unwrap();
-        console.log(res);
       } catch (error) {
         console.log(error);
       }
     };
     fetchData();
   }, [orderId]);
+
+  const handleToDeliver = async () => {
+    try {
+      await dispatch(deliverOrder(orderId)).unwrap();
+      refetch();
+      toast.success("Order delivered");
+    } catch (error) {
+      toast.error(error.message || error.message);
+    }
+  };
+
   return (
     <>
       {isLoading ? (
@@ -57,7 +69,7 @@ const OrderPage = () => {
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    <span>Your purchase has been confirmed!</span>
+                    <span>Delivered on {orders.deliveredAt}</span>
                   </div>
                 ) : (
                   <div role="alert" className="alert alert-error my-2 bg-red-200">
@@ -155,7 +167,12 @@ const OrderPage = () => {
                     <p>${orders.totalPrice}</p>
                   </div>
                 </div>
-                {userInfo.isAdmin ? <button className=" btn w-full mt-4 py-2 bg-primary text-white rounded-lg hover:bg-primary">Mark As Delivered</button> : <button className=" btn w-full mt-4 py-2 bg-primary text-white rounded-lg hover:bg-primary"></button>}
+                {!userInfo.isAdmin && !orders.isPaid && <button className=" btn w-full mt-4 py-2 bg-primary text-white rounded-lg hover:bg-primary">Please Paid first</button>}
+                {userInfo.isAdmin && !orders.isDelivered && (
+                  <button className=" btn w-full mt-4 py-2 bg-primary text-white rounded-lg hover:bg-primary" onClick={handleToDeliver}>
+                    Mark As Delivered
+                  </button>
+                )}
               </div>
             </div>
           </div>

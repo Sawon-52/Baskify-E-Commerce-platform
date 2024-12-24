@@ -41,12 +41,22 @@ export const getOrders = createAsyncThunk("orders/getOrders", async (_, { reject
     return rejectWithValue(error.response.data);
   }
 });
+// Async Thunks for API Calls
+export const deliverOrder = createAsyncThunk("orders/deliverOrder", async (orderId, { rejectWithValue }) => {
+  try {
+    const response = await axios.put(`${ORDER_URL}/${orderId}/deliver`, orderId);
+    return response.data;
+  } catch (error) {
+    return rejectWithValue(error.response.data);
+  }
+});
 // create orders slice
 const ordersSlice = createSlice({
   name: "orders",
   initialState: {
     orders: [],
     myOrders: [],
+    allOrders: [],
     isLoading: false,
     isError: null,
   },
@@ -104,9 +114,23 @@ const ordersSlice = createSlice({
       })
       .addCase(getOrders.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.orders = action.payload;
+        state.allOrders = action.payload;
       })
       .addCase(getOrders.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = action.payload;
+      })
+
+      // Deliver Order
+      .addCase(deliverOrder.pending, (state) => {
+        state.isLoading = true;
+        state.isError = null;
+      })
+      .addCase(deliverOrder.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.orders = action.payload;
+      })
+      .addCase(deliverOrder.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = action.payload;
       });

@@ -7,12 +7,11 @@ import { Link } from "react-router-dom";
 
 const OrderListPage = () => {
   const dispatch = useDispatch();
-  const { orders, isLoading, isError } = useSelector((state) => state.orders);
+  const { allOrders: orders, isLoading, isError } = useSelector((state) => state.orders);
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await dispatch(getOrders()).unwrap();
-        console.log(res);
       } catch (error) {
         console.log(error);
       }
@@ -26,10 +25,10 @@ const OrderListPage = () => {
         {isLoading ? (
           <Loader />
         ) : isError ? (
-          <p>{isError?.data.message || isError.error}</p>
+          <p> {isError?.data.message || isError.error}</p>
         ) : (
           <div className="overflow-x-auto">
-            <table className="table table-xs">
+            <table className="table">
               <thead>
                 <tr className="text-primary font-medium">
                   <th>ID</th>
@@ -43,7 +42,7 @@ const OrderListPage = () => {
               </thead>
               <tbody>
                 {orders?.map((order) => (
-                  <tr key={order._id} className="text-base font-medium">
+                  <tr key={order._id} className="font-medium">
                     <td>{order._id}</td>
                     <td>{order.user && order.user.name}</td>
                     <td>{order.createdAt.substring(0, 10)}</td>

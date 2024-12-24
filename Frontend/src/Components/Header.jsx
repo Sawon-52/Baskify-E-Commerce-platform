@@ -5,9 +5,12 @@ import profilePic from "../assets/profile.png";
 import { logoutUser } from "../slices/usersApiSlice";
 import { removeCredentials } from "../slices/authSlice";
 import { toast } from "react-toastify";
+import { getOrders } from "../slices/OrdersApiSlice";
 
 const Header = () => {
+  // const [isLogin, setIsLogin] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [hideModal, setHideModal] = useState(true);
   const { cartItems, totalPrice } = useSelector((state) => state.cart);
   const { userInfo } = useSelector((state) => state.auth);
 
@@ -17,6 +20,9 @@ const Header = () => {
   const handleViewCart = () => {
     navigate("/cart");
     setShowModal(false);
+  };
+  const handleMenubar = () => {
+    setHideModal(false);
   };
 
   const logoutHandler = async () => {
@@ -29,7 +35,13 @@ const Header = () => {
       console.log(error);
     }
   };
-
+  const handleFetchOrder = async () => {
+    try {
+      await dispatch(getOrders()).unwrap();
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="flex">
       <div className="navbar p-0 ">
@@ -65,41 +77,43 @@ const Header = () => {
 
           {userInfo ? (
             <div className="dropdown dropdown-end">
-              <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
+              <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar" onClick={() => setHideModal(true)}>
                 <div className="w-10 rounded-full">
                   <img alt="profilePic" src={profilePic} />
                 </div>
               </div>
-              <ul tabIndex={0} className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
-                <li>
-                  <Link to={"/profile"} className="justify-between">
-                    {userInfo.name}
-                  </Link>
-                </li>
-                {userInfo.isAdmin && (
-                  <ul>
-                    <li>
-                      <Link to={"/admin/productlist"} className="justify-between">
-                        Products
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to={"/admin/userlist"} className="justify-between">
-                        Users
-                      </Link>
-                    </li>
+              {hideModal && (
+                <ul tabIndex={0} className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow font-medium" onClick={handleMenubar}>
+                  <li>
+                    <Link to={"/profile"} className="justify-between">
+                      {userInfo.name}
+                    </Link>
+                  </li>
+                  {userInfo.isAdmin && (
+                    <ul>
+                      <li>
+                        <Link to={"/admin/productlist"} className="justify-between">
+                          Products
+                        </Link>
+                      </li>
+                      <li>
+                        <Link to={"/admin/userlist"} className="justify-between">
+                          Users
+                        </Link>
+                      </li>
 
-                    <li>
-                      <Link to={"/admin/orderlist"} className="justify-between">
-                        Orders
-                      </Link>
-                    </li>
-                  </ul>
-                )}
-                <li onClick={logoutHandler}>
-                  <Link>Logout</Link>
-                </li>
-              </ul>
+                      <li onClick={handleFetchOrder}>
+                        <Link to={"/admin/orderlist"} className="justify-between">
+                          Orders
+                        </Link>
+                      </li>
+                    </ul>
+                  )}
+                  <li onClick={logoutHandler}>
+                    <Link>Logout</Link>
+                  </li>
+                </ul>
+              )}
             </div>
           ) : (
             <Link to={"/login"}>
