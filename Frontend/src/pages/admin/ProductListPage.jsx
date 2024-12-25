@@ -62,7 +62,7 @@ const ProductListPage = () => {
                   <tr key={index} className="font-medium">
                     <td>{product._id}</td>
                     <td>{product.name}</td>
-                    <td>{product.price}</td>
+                    <td>$ {product.price}</td>
                     <td>{product.category}</td>
                     <td>{product.brand}</td>
                     <td className="flex text-xl cursor-pointer h-full">

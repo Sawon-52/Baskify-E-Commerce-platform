@@ -1,7 +1,6 @@
 import { Link, useParams } from "react-router-dom";
 import Loader from "../Components/Loader";
 import { deliverOrder, getOrderDetails } from "../slices/OrdersApiSlice";
-
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
@@ -26,7 +25,6 @@ const OrderPage = () => {
   const handleToDeliver = async () => {
     try {
       await dispatch(deliverOrder(orderId)).unwrap();
-      refetch();
       toast.success("Order delivered");
     } catch (error) {
       toast.error(error.message || error.message);
