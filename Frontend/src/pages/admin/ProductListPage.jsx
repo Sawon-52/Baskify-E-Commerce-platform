@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProducts, createProduct } from "../../slices/productsApiSlice";
+import { fetchProducts, createProduct, fetchProductDetails } from "../../slices/productsApiSlice";
 import Loader from "../../Components/Loader";
 import { IoCreate } from "react-icons/io5";
 import { MdDelete } from "react-icons/md";
@@ -11,7 +11,10 @@ const ProductListPage = () => {
   const { allProducts: products, isLoading } = useSelector((state) => state.products);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(fetchProducts()).unwrap();
+    const fetchProduct = async () => {
+      await dispatch(fetchProducts()).unwrap();
+    };
+    fetchProduct();
   }, []);
 
   const handleProductDelete = (id) => {
@@ -42,7 +45,7 @@ const ProductListPage = () => {
           <Loader />
         ) : (
           <div className="overflow-x-auto">
-            <table className="table ">
+            <table className="table px-0">
               {/* head */}
               <thead>
                 <tr className="text-primary">
@@ -54,7 +57,7 @@ const ProductListPage = () => {
                   <th>ACTION</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="align-middle">
                 {products?.map((product, index) => (
                   <tr key={index} className="font-medium">
                     <td>{product._id}</td>
@@ -62,16 +65,13 @@ const ProductListPage = () => {
                     <td>{product.price}</td>
                     <td>{product.category}</td>
                     <td>{product.brand}</td>
-                    <td className="flex gap-2 items-center text-base cursor-pointer ">
+                    <td className="flex text-xl cursor-pointer h-full">
                       <Link to={`/admin/product/${product._id}/edit`}>
-                        <button type="button">
-                          <IoCreate className="text-green-400 " />
-                        </button>
+                        <IoCreate className="text-green-400" />
                       </Link>
+
                       <Link>
-                        <button type="button" onClick={() => handleProductDelete(product._id)}>
-                          <MdDelete className="text-red-400" />
-                        </button>
+                        <MdDelete className="text-red-400" onClick={() => handleProductDelete(product._id)} />
                       </Link>
                     </td>
                   </tr>

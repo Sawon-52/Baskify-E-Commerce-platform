@@ -40,11 +40,25 @@ export const createProduct = createAsyncThunk("products/createProduct", async (_
   }
 });
 
+//Async thunk to update product
+export const updateProduct = createAsyncThunk("products/updateProduct", async (data, { rejectWithValue }) => {
+  try {
+    const response = await axios.put(`${PRODUCTS_URL}/${data.productId}`, data);
+    return response.data;
+  } catch (error) {
+    return rejectWithValue(error.response ? error.response.data : error.message);
+  }
+});
+
 //slice
 const productsApiSlice = createSlice({
   name: "products",
   initialState,
-  reducers: {},
+  reducers: {
+    clearProductInfo: (state, action) => {
+      state.productInfo = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchProducts.pending, (state) => {
@@ -81,8 +95,20 @@ const productsApiSlice = createSlice({
       })
       .addCase(createProduct.rejected, (state, action) => {
         state.isError = action.error.message;
+      })
+
+      // for Update product
+      .addCase(updateProduct.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateProduct.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.productInfo = action.payload;
+      })
+      .addCase(updateProduct.rejected, (state, action) => {
+        state.isError = action.error.message;
       });
   },
 });
-
+export const { clearProductInfo } = productsApiSlice.actions;
 export default productsApiSlice.reducer;
