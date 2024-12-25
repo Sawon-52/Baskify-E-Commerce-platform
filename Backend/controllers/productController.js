@@ -22,4 +22,25 @@ const getProductsById = asyncHandler(async (req, res) => {
   throw new Error("Resource not found");
 });
 
-export { getProducts, getProductsById };
+//@desc     create product
+//@route    POST/api/products
+//@access   private/admin
+const createProduct = asyncHandler(async (req, res) => {
+  const product = new Product({
+    name: "sample name",
+    price: 0,
+    user: req.user._id,
+    image: "/image/sample.jpg",
+    brand: "sample brand",
+    category: "sample category",
+    countInStock: 0,
+    numReviews: 0,
+    description: "sample description",
+  });
+
+  const createdProduct = await product.save();
+  console.log(createdProduct);
+  res.status(201).json(createdProduct);
+});
+
+export { getProducts, getProductsById, createProduct };

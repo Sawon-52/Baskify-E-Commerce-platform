@@ -3,8 +3,9 @@ import { PRODUCTS_URL } from "../constant.js";
 import axios from "axios";
 
 const initialState = {
-  allProducts:[],
+  allProducts: [],
   productInfo: [],
+  createdProduct: [],
   isLoading: false,
   isError: null,
 };
@@ -23,6 +24,16 @@ export const fetchProducts = createAsyncThunk("products/fetchAllProducts", async
 export const fetchProductDetails = createAsyncThunk("products/fetchDetails", async (productId, { rejectWithValue }) => {
   try {
     const response = await axios.get(`${PRODUCTS_URL}/${productId}`);
+    return response.data;
+  } catch (error) {
+    return rejectWithValue(error.response ? error.response.data : error.message);
+  }
+});
+
+//Async thunk to create product
+export const createProduct = createAsyncThunk("products/createProduct", async (_, { rejectWithValue }) => {
+  try {
+    const response = await axios.post(`${PRODUCTS_URL}`);
     return response.data;
   } catch (error) {
     return rejectWithValue(error.response ? error.response.data : error.message);
@@ -57,6 +68,18 @@ const productsApiSlice = createSlice({
         state.productInfo = action.payload;
       })
       .addCase(fetchProductDetails.rejected, (state, action) => {
+        state.isError = action.error.message;
+      })
+
+      // for create Product
+      .addCase(createProduct.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(createProduct.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.createdProduct = action.payload;
+      })
+      .addCase(createProduct.rejected, (state, action) => {
         state.isError = action.error.message;
       });
   },
