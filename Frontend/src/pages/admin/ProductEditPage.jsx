@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Navigate, NavLink, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProductDetails, clearProductInfo, updateProduct } from "../../slices/productsApiSlice";
+import { fetchProductDetails, clearProductInfo, updateProduct, uploadProductImage } from "../../slices/productsApiSlice";
 import Loader from "../../Components/Loader";
 import { IoIosArrowRoundBack } from "react-icons/io";
 import { toast } from "react-toastify";
@@ -64,6 +64,17 @@ const ProductEditPage = () => {
       navigate("/admin/productlist");
     }
   };
+  const uploadFileHandler = async (e) => {
+    const formData = new FormData();
+    formData.append("image", e.target.files[0]);
+    try {
+      const res = await dispatch(uploadProductImage(formData)).unwrap();
+      toast.success(res.messages);
+      setImage(res.image);
+    } catch (error) {
+      toast.error(error?.data?.message || error.error);
+    }
+  };
 
   return (
     <>
@@ -92,6 +103,14 @@ const ProductEditPage = () => {
                 </label>
                 <input type="text" placeholder="Enter Price" className="input input-bordered input-sm" value={price} onChange={(e) => setPrice(e.target.value)} />
               </div>
+              <div className="form-control">
+                <label className="label font-medium">
+                  <span className="label-text">Image</span>
+                </label>
+                <input type="text" placeholder="Enter Image url" className="input input-bordered input-sm my-1" value={image} onChange={(e) => setImage(e.target.value)} />
+                <input type="file" className="file-input file-input-bordered file-input-xs w-full " onChange={uploadFileHandler} />
+              </div>
+
               <div className="form-control">
                 <label className="label font-medium">
                   <span className="label-text">Brand</span>

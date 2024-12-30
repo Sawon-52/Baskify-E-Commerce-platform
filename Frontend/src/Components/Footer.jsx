@@ -4,12 +4,10 @@ import { CiMail } from "react-icons/ci";
 import { PiPhoneCallThin } from "react-icons/pi";
 import { Link } from "react-router-dom";
 
-
 const Footer = () => {
-  const handleSubscribe =(e) =>{
+  const handleSubscribe = (e) => {
     e.preventDefault();
-
-  }
+  };
   return (
     <>
       <div>
@@ -55,14 +53,14 @@ const Footer = () => {
               </label>
               <div className="relative max-w-sm">
                 <input type="text" placeholder="username@site.com" className=" py-4 pl-1 md:pl-5 pr-[125px] md:pr-[120px] border border-primary rounded-full outline-none  " />
-                <button className="btn rounded-full  bg-primary hover:bg-[#27A599] text-white absolute right-3 top-[3px]" onClick={handleSubscribe}>Subscribe</button>
+                <button className="btn rounded-full  bg-primary hover:bg-[#27A599] text-white absolute right-3 top-[3px]" onClick={handleSubscribe}>
+                  Subscribe
+                </button>
               </div>
             </fieldset>
           </form>
         </footer>
       </div>
-
-      
     </>
   );
 };

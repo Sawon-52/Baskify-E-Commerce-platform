@@ -1,11 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { PRODUCTS_URL } from "../constant.js";
+import { PRODUCTS_URL, UPLOAD_URL } from "../constant.js";
 import axios from "axios";
 
 const initialState = {
   allProducts: [],
   productInfo: [],
   createdProduct: [],
+  productImage: [],
   isLoading: false,
   isError: null,
 };
@@ -44,6 +45,16 @@ export const createProduct = createAsyncThunk("products/createProduct", async (_
 export const updateProduct = createAsyncThunk("products/updateProduct", async (data, { rejectWithValue }) => {
   try {
     const response = await axios.put(`${PRODUCTS_URL}/${data.productId}`, data);
+    return response.data;
+  } catch (error) {
+    return rejectWithValue(error.response ? error.response.data : error.message);
+  }
+});
+
+//Async thunk to Upload image
+export const uploadProductImage = createAsyncThunk("products/uploadProductImage", async (data, { rejectWithValue }) => {
+  try {
+    const response = await axios.post(`${UPLOAD_URL}`, data);
     return response.data;
   } catch (error) {
     return rejectWithValue(error.response ? error.response.data : error.message);
@@ -106,6 +117,18 @@ const productsApiSlice = createSlice({
         state.productInfo = action.payload;
       })
       .addCase(updateProduct.rejected, (state, action) => {
+        state.isError = action.error.message;
+      })
+
+      // for image upload
+      .addCase(uploadProductImage.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(uploadProductImage.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.productImage = action.payload;
+      })
+      .addCase(uploadProductImage.rejected, (state, action) => {
         state.isError = action.error.message;
       });
   },

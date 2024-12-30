@@ -4,6 +4,7 @@ import Rating from "./Rating";
 
 const ProductCard = ({ product }) => {
   const { name, image, category, price, rating, numReviews } = product;
+  console.log(image);
   return (
     <div>
       <div className="card bg-base-100 w-full shadow-xl rounded-xl">
