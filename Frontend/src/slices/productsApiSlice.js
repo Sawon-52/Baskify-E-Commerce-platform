@@ -61,6 +61,16 @@ export const uploadProductImage = createAsyncThunk("products/uploadProductImage"
   }
 });
 
+//Async thunk to delete product
+export const deleteProduct = createAsyncThunk("products/deleteProduct", async (productId, { rejectWithValue }) => {
+  try {
+    const response = await axios.delete(`${PRODUCTS_URL}/${productId}`);
+    return response.data;
+  } catch (error) {
+    return rejectWithValue(error.response ? error.response.data : error.message);
+  }
+});
+
 //slice
 const productsApiSlice = createSlice({
   name: "products",
@@ -129,6 +139,17 @@ const productsApiSlice = createSlice({
         state.productImage = action.payload;
       })
       .addCase(uploadProductImage.rejected, (state, action) => {
+        state.isError = action.error.message;
+      })
+
+      // product delete case
+      .addCase(deleteProduct.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteProduct.fulfilled, (state, action) => {
+        state.isLoading = false;
+      })
+      .addCase(deleteProduct.rejected, (state, action) => {
         state.isError = action.error.message;
       });
   },

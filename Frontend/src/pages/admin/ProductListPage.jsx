@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProducts, createProduct, fetchProductDetails } from "../../slices/productsApiSlice";
+import { fetchProducts, createProduct, deleteProduct } from "../../slices/productsApiSlice";
 import Loader from "../../Components/Loader";
 import { IoCreate } from "react-icons/io5";
 import { MdDelete } from "react-icons/md";
@@ -17,8 +17,16 @@ const ProductListPage = () => {
     fetchProduct();
   }, []);
 
-  const handleProductDelete = (id) => {
-    console.log("Delete this product-" + id);
+  const handleProductDelete = async (id) => {
+    if (window.confirm("Are you Sure?")) {
+      try {
+        const res = await dispatch(deleteProduct(id)).unwrap();
+        toast.success(res.message);
+        await dispatch(fetchProducts()).unwrap();
+      } catch (error) {
+        toast.error(error?.data?.message || error.error);
+      }
+    }
   };
 
   const createProductHandler = async () => {
