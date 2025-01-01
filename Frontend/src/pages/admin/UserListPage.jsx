@@ -1,23 +1,26 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts, createProduct, deleteProduct } from "../../slices/productsApiSlice";
+import { getUsers } from "../../slices/usersApiSlice";
 import Loader from "../../Components/Loader";
 import { IoCreate } from "react-icons/io5";
 import { MdDelete } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import { FaCheck } from "react-icons/fa6";
+import { FaTimes } from "react-icons/fa";
 
-const ProductListPage = () => {
-  const { allProducts: products, isLoading } = useSelector((state) => state.products);
+const UserListPage = () => {
+  const { userInfo: users, isLoading } = useSelector((state) => state.users);
   const dispatch = useDispatch();
   useEffect(() => {
-    const fetchProduct = async () => {
-      await dispatch(fetchProducts()).unwrap();
+    const fetchUser = async () => {
+      await dispatch(getUsers()).unwrap();
     };
-    fetchProduct();
+    fetchUser();
   }, []);
 
-  const handleProductDelete = async (id) => {
+  const handleUserDelete = async (id) => {
     if (window.confirm("Are you Sure?")) {
       try {
         const res = await dispatch(deleteProduct(id)).unwrap();
@@ -30,7 +33,7 @@ const ProductListPage = () => {
   };
 
   const createProductHandler = async () => {
-    if (window.confirm("Are you sure you want to create a new product?")) {
+    if (window.confirm("Are you sure you want to create a new user?")) {
       try {
         await dispatch(createProduct()).unwrap();
         await dispatch(fetchProducts()).unwrap();
@@ -39,14 +42,10 @@ const ProductListPage = () => {
       }
     }
   };
-
   return (
     <>
       <div className="flex items-center justify-between mb-5">
-        <h1 className="text-xl font-bold">Products</h1>
-        <button className=" btn btn-sm  bg-primary text-white rounded-lg hover:bg-primary" onClick={createProductHandler}>
-          <IoCreate /> Create Product
-        </button>
+        <h1 className="text-xl font-bold">Users</h1>
       </div>
       <div>
         {isLoading ? (
@@ -59,27 +58,27 @@ const ProductListPage = () => {
                 <tr className="text-primary">
                   <th>ID</th>
                   <th>NAME</th>
-                  <th>PRICE</th>
-                  <th>CATEGORY</th>
-                  <th>BRAND</th>
+                  <th>Email</th>
+                  <th>IS ADMIN</th>
                   <th>ACTION</th>
                 </tr>
               </thead>
               <tbody className="align-middle">
-                {products?.map((product, index) => (
+                {users?.map((user, index) => (
                   <tr key={index} className="font-medium">
-                    <td>{product._id}</td>
-                    <td>{product.name}</td>
-                    <td>$ {product.price}</td>
-                    <td>{product.category}</td>
-                    <td>{product.brand}</td>
+                    <td>{user._id}</td>
+                    <td>{user.name}</td>
+                    <td>
+                      <a href={`mailto:${user.email}`}> {user.email}</a>
+                    </td>
+                    <td>{user.isAdmin ? <FaCheck className="text-green-500" /> : <FaTimes className="text-red-400" />}</td>
                     <td className="flex text-xl cursor-pointer h-full gap-2">
-                      <Link to={`/admin/product/${product._id}/edit`}>
+                      <Link to={`/admin/user/${user._id}/edit`}>
                         <IoCreate className="text-green-400" />
                       </Link>
 
                       <Link>
-                        <MdDelete className="text-red-400" onClick={() => handleProductDelete(product._id)} />
+                        <MdDelete className="text-red-400" onClick={() => handleUserDelete(user._id)} />
                       </Link>
                     </td>
                   </tr>
@@ -93,4 +92,4 @@ const ProductListPage = () => {
   );
 };
 
-export default ProductListPage;
+export default UserListPage;

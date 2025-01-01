@@ -49,6 +49,16 @@ export const UpdateProfile = createAsyncThunk("users/profile", async (data, { re
   }
 });
 
+//async thunk for get all user by admin
+export const getUsers = createAsyncThunk("users/getUsers", async (_, { rejectWithValue }) => {
+  try {
+    const response = await axios.get(`${USERS_URL}`);
+    return response.data;
+  } catch (error) {
+    return rejectWithValue(error.response ? error.response.data : error.message);
+  }
+});
+
 //User slice
 const userSlice = createSlice({
   name: "users",
@@ -110,6 +120,22 @@ const userSlice = createSlice({
         state.isError = null;
       })
       .addCase(UpdateProfile.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = action.payload;
+      })
+
+      //For Update profile
+      .addCase(getUsers.pending, (state) => {
+        state.isLoading = true;
+        state.isError = null;
+      })
+      .addCase(getUsers.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.userInfo = action.payload;
+        state.isAuthenticated = true;
+        state.isError = null;
+      })
+      .addCase(getUsers.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = action.payload;
       });
