@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProducts, createProduct, deleteProduct } from "../../slices/productsApiSlice";
-import { getUsers } from "../../slices/usersApiSlice";
+import { getUsers, deleteUser } from "../../slices/usersApiSlice";
 import Loader from "../../Components/Loader";
 import { IoCreate } from "react-icons/io5";
 import { MdDelete } from "react-icons/md";
@@ -11,7 +10,7 @@ import { FaCheck } from "react-icons/fa6";
 import { FaTimes } from "react-icons/fa";
 
 const UserListPage = () => {
-  const { userInfo: users, isLoading } = useSelector((state) => state.users);
+  const { users, isLoading } = useSelector((state) => state.users);
   const dispatch = useDispatch();
   useEffect(() => {
     const fetchUser = async () => {
@@ -23,25 +22,15 @@ const UserListPage = () => {
   const handleUserDelete = async (id) => {
     if (window.confirm("Are you Sure?")) {
       try {
-        const res = await dispatch(deleteProduct(id)).unwrap();
+        const res = await dispatch(deleteUser(id)).unwrap();
         toast.success(res.message);
-        await dispatch(fetchProducts()).unwrap();
+        await dispatch(getUsers()).unwrap();
       } catch (error) {
-        toast.error(error?.data?.message || error.error);
+        toast.error(error?.message || error.error);
       }
     }
   };
 
-  const createProductHandler = async () => {
-    if (window.confirm("Are you sure you want to create a new user?")) {
-      try {
-        await dispatch(createProduct()).unwrap();
-        await dispatch(fetchProducts()).unwrap();
-      } catch (error) {
-        toast.error(error.message || error.error);
-      }
-    }
-  };
   return (
     <>
       <div className="flex items-center justify-between mb-5">
