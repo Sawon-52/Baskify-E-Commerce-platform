@@ -7,6 +7,7 @@ const initialState = {
   productInfo: [],
   createdProduct: [],
   productImage: [],
+  reviews: [],
   isLoading: false,
   isError: null,
 };
@@ -65,6 +66,26 @@ export const uploadProductImage = createAsyncThunk("products/uploadProductImage"
 export const deleteProduct = createAsyncThunk("products/deleteProduct", async (productId, { rejectWithValue }) => {
   try {
     const response = await axios.delete(`${PRODUCTS_URL}/${productId}`);
+    return response.data;
+  } catch (error) {
+    return rejectWithValue(error.response ? error.response.data : error.message);
+  }
+});
+
+//Async thunk to created review
+export const createReview = createAsyncThunk("products/createReview", async (data, { rejectWithValue }) => {
+  try {
+    const response = await axios.post(`${PRODUCTS_URL}/${data.productId}/review`, data);
+    return response.data;
+  } catch (error) {
+    return rejectWithValue(error.response ? error.response.data : error.message);
+  }
+});
+
+//Async thunk to get reviews
+export const getReview = createAsyncThunk("products/getReviews", async (productId, { rejectWithValue }) => {
+  try {
+    const response = await axios.get(`${PRODUCTS_URL}/${productId}/reviews`);
     return response.data;
   } catch (error) {
     return rejectWithValue(error.response ? error.response.data : error.message);
@@ -150,6 +171,29 @@ const productsApiSlice = createSlice({
         state.isLoading = false;
       })
       .addCase(deleteProduct.rejected, (state, action) => {
+        state.isError = action.error.message;
+      })
+
+      // create review section
+      .addCase(createReview.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(createReview.fulfilled, (state, action) => {
+        state.isLoading = false;
+      })
+      .addCase(createReview.rejected, (state, action) => {
+        state.isError = action.error.message;
+      })
+
+      // create review section
+      .addCase(getReview.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getReview.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.reviews = action.payload;
+      })
+      .addCase(getReview.rejected, (state, action) => {
         state.isError = action.error.message;
       });
   },

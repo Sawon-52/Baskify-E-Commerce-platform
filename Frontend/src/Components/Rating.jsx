@@ -14,9 +14,7 @@ const Rating = ({ value, text }) => {
         <span>{value >= 4 ? <IoMdStar /> : value >= 3.5 ? <IoMdStarHalf /> : <IoMdStarOutline />}</span>
         <span>{value >= 5 ? <IoMdStar /> : value >= 4.5 ? <IoMdStarHalf /> : <IoMdStarOutline />}</span>
       </div>
-      <div>
-        <span className="text-secondary text-xs font-semibold">{`${text && text} reviews`}</span>
-      </div>
+      
     </div>
   );
 }; 
