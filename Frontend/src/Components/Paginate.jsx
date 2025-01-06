@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { MdArrowForwardIos } from "react-icons/md";
 import { MdArrowBackIosNew } from "react-icons/md";
 
-const Paginate = ({ pages, page, isAdmin }) => {
+const Paginate = ({ pages, page, isAdmin = false, keyword = "" }) => {
   const getPaginationRange = () => {
     const totalVisiblePages = 5; // Adjust this to control how many page numbers to show
     const range = [];
@@ -33,7 +33,7 @@ const Paginate = ({ pages, page, isAdmin }) => {
     <>
       {pages > 1 && (
         <div className="flex flex-wrap justify-center items-center gap-5">
-          <Link to={page > 1 ? (!isAdmin ? `/page/${page - 1}` : `/admin/productlist/page/${page - 1}`) : "#"} className={` ${page === 1 ? "btn-disabled text-gray-400" : ""}`}>
+          <Link to={page <= pages ? (!isAdmin ? (keyword ? `/search/${keyword}/page/${page - 1}` : `/page/${page - 1}`) : keyword ? `/admin/productlist/search/${keyword}/page/${page - 1}` : `/admin/productlist/page/${page - 1}`) : ""} className={` ${page === 1 ? "btn-disabled text-gray-400" : ""}`}>
             <p className="flex items-center gap-2 text-sm">
               <MdArrowBackIosNew /> Previous
             </p>
@@ -41,17 +41,17 @@ const Paginate = ({ pages, page, isAdmin }) => {
           <div className="join">
             {getPaginationRange().map((item, index) =>
               item === "..." ? (
-                <span key={index} className="btn btn-disabled">
+                <span key={index} className="disabled mx-3 font-semibold">
                   ...
                 </span>
               ) : (
-                <Link key={item} to={!isAdmin ? `/page/${item}` : `/admin/productlist/page/${item}`}>
+                <Link key={item} to={!isAdmin ? (keyword ? `/search/${keyword}/page/${item}` : `/page/${item}`) : keyword ? `/admin/productlist/search/${keyword}/page/${item}` : `/admin/productlist/page/${item}`}>
                   <button className={`join-item btn btn-sm rounded-none  ${item === page ? "btn-active" : ""}`}>{item}</button>
                 </Link>
               ),
             )}
           </div>
-          <Link to={page < pages ? (!isAdmin ? `/page/${page + 1}` : `/admin/productlist/page/${page + 1}`) : "#"} className={` ${page === pages ? "btn-disabled text-gray-400" : ""}`}>
+          <Link to={page <= pages ? (!isAdmin ? (keyword ? `/search/${keyword}/page/${page + 1}` : `/page/${page + 1}`) : keyword ? `/admin/productlist/search/${keyword}/page/${page + 1}` : `/admin/productlist/page/${page + 1}`) : ""} className={` ${page === pages ? "btn-disabled text-gray-400" : ""}`}>
             <p className="flex items-center gap-2 text-sm">
               Next <MdArrowForwardIos />
             </p>

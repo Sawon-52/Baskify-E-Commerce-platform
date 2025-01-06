@@ -4,20 +4,22 @@ import { fetchProducts, createProduct, deleteProduct } from "../../slices/produc
 import Loader from "../../Components/Loader";
 import { IoCreate } from "react-icons/io5";
 import { MdDelete } from "react-icons/md";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import Paginate from "../../Components/paginate";
 
 const ProductListPage = () => {
-  const { pageNumber } = useParams();
+  const location = useLocation();
+  const { pageNumber, keyword } = useParams();
+  
   const { data, isLoading } = useSelector((state) => state.products);
   const dispatch = useDispatch();
   useEffect(() => {
     const fetchProduct = async () => {
-      await dispatch(fetchProducts(pageNumber)).unwrap();
+      await dispatch(fetchProducts({ pageNumber, keyword })).unwrap();
     };
     fetchProduct();
-  }, [pageNumber]);
+  }, [pageNumber, keyword]);
 
   const handleProductDelete = async (id) => {
     if (window.confirm("Are you Sure?")) {
@@ -93,7 +95,7 @@ const ProductListPage = () => {
       </div>
 
       <div className="my-10">
-        <Paginate pages={data.pages} page={data.page} isAdmin={true} />
+        <Paginate pages={data.pages} page={data.page} isAdmin={true} keyword={keyword ? keyword : ""} />
       </div>
     </>
   );

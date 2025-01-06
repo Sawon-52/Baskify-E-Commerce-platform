@@ -6,12 +6,12 @@ import { useParams } from "react-router-dom";
 import Paginate from "../Components/paginate";
 import { fetchProducts } from "../slices/productsApiSlice";
 const HomePage = () => {
-  const { pageNumber } = useParams();
+  const { pageNumber, keyword } = useParams();
   const dispatch = useDispatch();
   const { data, isLoading, isError } = useSelector((state) => state.products);
   useEffect(() => {
-    dispatch(fetchProducts(pageNumber));
-  }, [pageNumber]);
+    dispatch(fetchProducts({ pageNumber, keyword }));
+  }, [pageNumber, keyword]);
 
   if (isLoading) {
     return <Loader />;
@@ -36,7 +36,7 @@ const HomePage = () => {
       </div>
 
       <div className="flex justify-center my-14">
-        <Paginate pages={data.pages} page={data.page} />
+        <Paginate pages={data.pages} page={data.page} keyword={keyword ? keyword : ""} />
       </div>
     </>
   );

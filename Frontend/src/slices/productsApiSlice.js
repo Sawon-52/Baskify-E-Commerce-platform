@@ -13,10 +13,10 @@ const initialState = {
 };
 
 //async thunk for fetching products
-export const fetchProducts = createAsyncThunk("products/fetchAllProducts", async (pageNumber, { rejectWithValue }) => {
+export const fetchProducts = createAsyncThunk("products/fetchAllProducts", async ({ keyword, pageNumber }, { rejectWithValue }) => {
   try {
     const response = await axios.get(`${PRODUCTS_URL}`, {
-      params: { pageNumber },
+      params: { keyword, pageNumber },
     });
     return response.data;
   } catch (error) {
