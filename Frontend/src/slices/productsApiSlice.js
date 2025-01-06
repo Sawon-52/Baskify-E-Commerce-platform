@@ -3,7 +3,7 @@ import { PRODUCTS_URL, UPLOAD_URL } from "../constant.js";
 import axios from "axios";
 
 const initialState = {
-  allProducts: [],
+  data: [],
   productInfo: [],
   createdProduct: [],
   productImage: [],
@@ -13,9 +13,11 @@ const initialState = {
 };
 
 //async thunk for fetching products
-export const fetchProducts = createAsyncThunk("products/fetchAllProducts", async (_, { rejectWithValue }) => {
+export const fetchProducts = createAsyncThunk("products/fetchAllProducts", async (pageNumber, { rejectWithValue }) => {
   try {
-    const response = await axios.get(`${PRODUCTS_URL}`);
+    const response = await axios.get(`${PRODUCTS_URL}`, {
+      params: { pageNumber },
+    });
     return response.data;
   } catch (error) {
     return rejectWithValue(error.response ? error.response.data : error.message);
@@ -108,7 +110,7 @@ const productsApiSlice = createSlice({
       })
       .addCase(fetchProducts.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.allProducts = action.payload;
+        state.data = action.payload;
       })
       .addCase(fetchProducts.rejected, (state, action) => {
         state.isLoading = false;

@@ -1,15 +1,17 @@
 import { useEffect } from "react";
 import ProductCard from "../Components/ProductCard";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchProducts } from "../slices/productsApiSlice";
 import Loader from "../Components/Loader";
+import { useParams } from "react-router-dom";
+import Paginate from "../Components/paginate";
+import { fetchProducts } from "../slices/productsApiSlice";
 const HomePage = () => {
+  const { pageNumber } = useParams();
   const dispatch = useDispatch();
-  const { allProducts, isLoading, isError } = useSelector((state) => state.products);
-
+  const { data, isLoading, isError } = useSelector((state) => state.products);
   useEffect(() => {
-    dispatch(fetchProducts()).unwrap();
-  }, []);
+    dispatch(fetchProducts(pageNumber));
+  }, [pageNumber]);
 
   if (isLoading) {
     return <Loader />;
@@ -26,11 +28,15 @@ const HomePage = () => {
         <h1 className="text-xl my-4 text-primary font-bold">Latest Product</h1>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-items-stretch gap-5 ">
-        {allProducts?.map((product) => (
+        {data.products?.map((product) => (
           <div key={product._id}>
             <ProductCard product={product} />
           </div>
         ))}
+      </div>
+
+      <div className="flex justify-center my-14">
+        <Paginate pages={data.pages} page={data.page} />
       </div>
     </>
   );

@@ -4,18 +4,20 @@ import { fetchProducts, createProduct, deleteProduct } from "../../slices/produc
 import Loader from "../../Components/Loader";
 import { IoCreate } from "react-icons/io5";
 import { MdDelete } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import Paginate from "../../Components/paginate";
 
 const ProductListPage = () => {
-  const { allProducts: products, isLoading } = useSelector((state) => state.products);
+  const { pageNumber } = useParams();
+  const { data, isLoading } = useSelector((state) => state.products);
   const dispatch = useDispatch();
   useEffect(() => {
     const fetchProduct = async () => {
-      await dispatch(fetchProducts()).unwrap();
+      await dispatch(fetchProducts(pageNumber)).unwrap();
     };
     fetchProduct();
-  }, []);
+  }, [pageNumber]);
 
   const handleProductDelete = async (id) => {
     if (window.confirm("Are you Sure?")) {
@@ -66,7 +68,7 @@ const ProductListPage = () => {
                 </tr>
               </thead>
               <tbody className="align-middle">
-                {products?.map((product, index) => (
+                {data.products?.map((product, index) => (
                   <tr key={index} className="font-medium">
                     <td>{product._id}</td>
                     <td>{product.name}</td>
@@ -88,6 +90,10 @@ const ProductListPage = () => {
             </table>
           </div>
         )}
+      </div>
+
+      <div className="my-10">
+        <Paginate pages={data.pages} page={data.page} isAdmin={true} />
       </div>
     </>
   );
