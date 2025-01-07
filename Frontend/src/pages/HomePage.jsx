@@ -7,6 +7,7 @@ import Paginate from "../Components/paginate";
 import { fetchProducts } from "../slices/productsApiSlice";
 import ProductCarousel from "../Components/ProductCarousel";
 import { IoIosArrowRoundBack } from "react-icons/io";
+import Meta from "../Components/Meta";
 const HomePage = () => {
   const { pageNumber, keyword } = useParams();
   const dispatch = useDispatch();
@@ -17,6 +18,7 @@ const HomePage = () => {
 
   return (
     <>
+      <Meta></Meta>
       {!keyword ? (
         <ProductCarousel />
       ) : (

@@ -22,6 +22,7 @@ import ProductListPage from "./pages/admin/ProductListPage.jsx";
 import ProductEditPage from "./pages/admin/ProductEditPage.jsx";
 import UserListPage from "./pages/admin/userListPage.jsx";
 import UserEditPage from "./pages/admin/userEditPage.jsx";
+import { HelmetProvider } from "react-helmet-async";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -59,8 +60,10 @@ const router = createBrowserRouter(
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <Provider store={store}>
-      <RouterProvider router={router} />
-    </Provider>
+    <HelmetProvider>
+      <Provider store={store}>
+        <RouterProvider router={router} />
+      </Provider>
+    </HelmetProvider>
   </StrictMode>,
 );

@@ -7,6 +7,7 @@ import { setCredentials } from "../slices/authSlice";
 import { getMyOrders } from "../slices/OrdersApiSlice";
 import Loader from "../Components/Loader";
 import { RxCross2 } from "react-icons/rx";
+import Meta from "../Components/Meta";
 
 const ProfilePage = () => {
   const [name, setName] = useState("");
@@ -43,6 +44,7 @@ const ProfilePage = () => {
 
   return (
     <>
+      <Meta title={userInfo.name} />
       <h1 className="text-2xl font-bold mb-8 text-center md:text-start">
         Hello <span>{userInfo.name} !</span>
       </h1>

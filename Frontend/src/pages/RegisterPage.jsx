@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { registerUser } from "../slices/usersApiSlice";
 import { setCredentials } from "../slices/authSlice";
+import Meta from "../Components/Meta";
 
 const RegisterPage = () => {
   const [name, setName] = useState("");
@@ -46,49 +47,52 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center my-28">
-      <h2 className="text-base font-medium mb-8">
-        Register to <span className=" text-xl font-semibold"> Baskify</span>
-      </h2>
-      <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
-        <form className="card-body" onSubmit={handleSubmit}>
-          <div className="form-control">
-            <label className="label">
-              <span className="label-text">Name</span>
-            </label>
-            <input type="text" placeholder="Enter name" className="input input-bordered" value={name} onChange={(e) => setName(e.target.value)} required />
-          </div>
-          <div className="form-control">
-            <label className="label">
-              <span className="label-text">Email Address</span>
-            </label>
-            <input type="email" placeholder="Enter email" className="input input-bordered" value={email} onChange={(e) => setEmail(e.target.value)} required />
-          </div>
+    <>
+      <Meta title={"Register"} />
+      <div className="flex flex-col justify-center items-center my-28">
+        <h2 className="text-base font-medium mb-8">
+          Register to <span className=" text-xl font-semibold"> Baskify</span>
+        </h2>
+        <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
+          <form className="card-body" onSubmit={handleSubmit}>
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Name</span>
+              </label>
+              <input type="text" placeholder="Enter name" className="input input-bordered" value={name} onChange={(e) => setName(e.target.value)} required />
+            </div>
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Email Address</span>
+              </label>
+              <input type="email" placeholder="Enter email" className="input input-bordered" value={email} onChange={(e) => setEmail(e.target.value)} required />
+            </div>
 
-          <div className="form-control">
-            <label className="label">
-              <span className="label-text">Password</span>
-            </label>
-            <input type="password" placeholder="password" className="input input-bordered" value={password} onChange={(e) => setPassword(e.target.value)} required />
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Password</span>
+              </label>
+              <input type="password" placeholder="password" className="input input-bordered" value={password} onChange={(e) => setPassword(e.target.value)} required />
+            </div>
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Confirm Password</span>
+              </label>
+              <input type="password" placeholder="Confirm password" className="input input-bordered" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
+            </div>
+            <div className="form-control mt-6">
+              <button className="btn bg-primary text-white hover:bg-black">{isLoading ? "Register in..." : "Register"}</button>
+            </div>
+          </form>
+          <div className="flex justify-center mb-4 gap-2">
+            <p className="label-text-alt">Already Have an Account?</p>
+            <Link to={redirect ? `/login?redirect=${redirect}` : "/login"} className="label-text-alt link link-hover text-blue-700">
+              Login
+            </Link>
           </div>
-          <div className="form-control">
-            <label className="label">
-              <span className="label-text">Confirm Password</span>
-            </label>
-            <input type="password" placeholder="Confirm password" className="input input-bordered" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
-          </div>
-          <div className="form-control mt-6">
-            <button className="btn bg-primary text-white hover:bg-black">{isLoading ? "Register in..." : "Register"}</button>
-          </div>
-        </form>
-        <div className="flex justify-center mb-4 gap-2">
-          <p className="label-text-alt">Already Have an Account?</p>
-          <Link to={redirect ? `/login?redirect=${redirect}` : "/login"} className="label-text-alt link link-hover text-blue-700">
-            Login
-          </Link>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

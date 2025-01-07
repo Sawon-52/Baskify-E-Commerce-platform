@@ -8,19 +8,12 @@ import { fetchProductDetails, createReview, getReview } from "../slices/products
 import Loader from "../Components/Loader";
 import { addToCart } from "../slices/cartSlice";
 import { toast } from "react-toastify";
+import Meta from "../Components/Meta";
 
 const ProductDetailsPage = () => {
   const [rating, setRating] = useState();
   const [comment, setComment] = useState("");
   const { id: productId } = useParams();
-  // const reviews = [
-  //   {
-  //     rating: 5,
-  //     date: "01/02/2025",
-  //     name: "Mehedi hasan",
-  //     comment: "nice product",
-  //   },
-  // ];
 
   //quentity state
   const [qty, setQty] = useState(1);
@@ -77,6 +70,7 @@ const ProductDetailsPage = () => {
 
   return (
     <div>
+      <Meta title={name} />
       <NavLink to={"/"}>
         <div className="flex items-center text-base gap-1 mb-4">
           <IoIosArrowRoundBack />
