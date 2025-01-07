@@ -8,6 +8,7 @@ const initialState = {
   createdProduct: [],
   productImage: [],
   reviews: [],
+  topProducts: [],
   isLoading: false,
   isError: null,
 };
@@ -88,6 +89,16 @@ export const createReview = createAsyncThunk("products/createReview", async (dat
 export const getReview = createAsyncThunk("products/getReviews", async (productId, { rejectWithValue }) => {
   try {
     const response = await axios.get(`${PRODUCTS_URL}/${productId}/reviews`);
+    return response.data;
+  } catch (error) {
+    return rejectWithValue(error.response ? error.response.data : error.message);
+  }
+});
+
+//Async thunk to get top products
+export const getTopProducts = createAsyncThunk("products/topProducts", async (_, { rejectWithValue }) => {
+  try {
+    const response = await axios.get(`${PRODUCTS_URL}/top`);
     return response.data;
   } catch (error) {
     return rejectWithValue(error.response ? error.response.data : error.message);
@@ -196,6 +207,18 @@ const productsApiSlice = createSlice({
         state.reviews = action.payload;
       })
       .addCase(getReview.rejected, (state, action) => {
+        state.isError = action.error.message;
+      })
+
+      // get top products
+      .addCase(getTopProducts.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getTopProducts.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.topProducts = action.payload;
+      })
+      .addCase(getTopProducts.rejected, (state, action) => {
         state.isError = action.error.message;
       });
   },
