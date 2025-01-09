@@ -20,7 +20,7 @@ import AdminRoute from "./Components/AdminRoute.jsx";
 import OrderListPage from "./pages/admin/OrderListPage.jsx";
 import ProductListPage from "./pages/admin/ProductListPage.jsx";
 import ProductEditPage from "./pages/admin/ProductEditPage.jsx";
-import UserListPage from "./pages/admin/userListPage.jsx";
+import UserListPage from "./pages/admin/UserListPage.jsx";
 import UserEditPage from "./pages/admin/userEditPage.jsx";
 import { HelmetProvider } from "react-helmet-async";
 

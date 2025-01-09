@@ -40,7 +40,7 @@ const UserListPage = () => {
         {isLoading ? (
           <Loader />
         ) : (
-          <div className="overflow-x-auto">
+          <div className="min-h-screen">
             <table className="table px-0">
               {/* head */}
               <thead>

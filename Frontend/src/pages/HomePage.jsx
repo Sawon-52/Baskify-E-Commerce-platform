@@ -9,9 +9,11 @@ import ProductCarousel from "../Components/ProductCarousel";
 import { IoIosArrowRoundBack } from "react-icons/io";
 import Meta from "../Components/Meta";
 const HomePage = () => {
-  const { pageNumber, keyword } = useParams();
   const dispatch = useDispatch();
+  const params = useParams() || {};
+  const { pageNumber = "1", keyword = "" } = params;
   const { data, isLoading, isError } = useSelector((state) => state.products);
+
   useEffect(() => {
     dispatch(fetchProducts({ pageNumber, keyword }));
   }, [pageNumber, keyword]);
@@ -32,18 +34,20 @@ const HomePage = () => {
       {isLoading ? (
         <Loader />
       ) : isError ? (
-        <p>isError</p>
+        <p>Error:{isError.message || isError.error}</p>
       ) : (
-        <div className="p-3 bg-white-50 rounded-md my-5 shadow-xl">
-          <div>
-            <h1 className="text-xl my-4 text-primary font-bold">Latest Product</h1>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-5">
-            {data.products?.map((product) => (
-              <div key={product._id}>
-                <ProductCard product={product} />
-              </div>
-            ))}
+        <div>
+          <div className="p-3 bg-white-50 rounded-md shadow-xl my-5 pb-8">
+            <div>
+              <h1 className="text-xl my-4 text-primary font-bold">Latest Product</h1>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-5">
+              {data.products?.map((product) => (
+                <div key={product._id}>
+                  <ProductCard product={product} />
+                </div>
+              ))}
+            </div>
           </div>
 
           <div className="flex justify-center my-14">

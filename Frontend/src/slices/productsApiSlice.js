@@ -185,6 +185,7 @@ const productsApiSlice = createSlice({
       })
       .addCase(deleteProduct.rejected, (state, action) => {
         state.isError = action.error.message;
+        state.isLoading = false;
       })
 
       // create review section

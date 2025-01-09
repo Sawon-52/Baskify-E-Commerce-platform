@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Rating from "./Rating";
+import { TbCurrencyTaka } from "react-icons/tb";
 
 const ProductCard = ({ product }) => {
   const { name, image, category, price, rating, numReviews } = product;
@@ -21,7 +22,10 @@ const ProductCard = ({ product }) => {
             <Rating value={rating} text={`${numReviews} `} />
           </div>
           <div>
-            <p className="text-secondary text-base font-semibold">${price}</p>
+            <p className="text-secondary text-base font-semibold flex items-center">
+              <TbCurrencyTaka className="text-xl font-bold" />
+              {price}
+            </p>
           </div>
         </div>
       </div>
