@@ -26,36 +26,30 @@ const ProductCarousel = () => {
 
   return (
     <>
-      {isLoading ? (
-        <Loader />
-      ) : isError ? (
-        <p>{isError}</p>
-      ) : (
-        <div className="relative w-full overflow-hidden flex items-center">
-          <button onClick={handlePrev} className="absolute left-0 top-1/2 transform -translate-y-1/2  text-primary p-2 z-10">
-            <MdArrowBackIosNew />
-          </button>
-          <div className="flex transition-transform duration-500 ease-in-out w-full" style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
-            {topProducts.map((item, index) => (
-              <div key={index} className="w-full flex-shrink-0 flex flex-col md:flex-row items-center bg-gray-100">
-                <div className="w-full  md:w-1/2 ">
-                  <img src={item.image} alt={item.name} className="w-full h-72 object-cover" />
-                </div>
-                <div className=" w-full md:w-1/2 p-8">
-                  <h2 className="text-3xl font-bold mb-4">{item.name}</h2>
-                  <p className=" text-xl  font-medium text-red-400">Price: {item.price}</p>
-                  <Link to={`/product/${item._id}`}>
-                    <p className=" text-xl font-medium text-primary text-right my-10 hover:underline">Go Explore</p>
-                  </Link>
-                </div>
+      <div className="relative w-full overflow-hidden flex items-center rounded-md">
+        <button onClick={handlePrev} className="absolute left-0 top-1/2 transform -translate-y-1/2  text-primary p-2 z-10">
+          <MdArrowBackIosNew />
+        </button>
+        <div className="flex transition-transform duration-500 ease-in-out w-full" style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
+          {topProducts.map((item, index) => (
+            <div key={index} className="w-full flex-shrink-0 flex flex-col md:flex-row items-center bg-gray-100">
+              <div className="w-full  md:w-1/2 ">
+                <img src={item.image} alt={item.name} className="w-full h-72 object-cover" />
               </div>
-            ))}
-          </div>
-          <button onClick={handleNext} className="absolute right-0 top-1/2 transform -translate-y-1/2 text-primary p-2 z-10">
-            <MdArrowForwardIos />
-          </button>
+              <div className=" w-full md:w-1/2 p-8">
+                <h2 className="text-3xl font-bold mb-4">{item.name}</h2>
+                <p className=" text-xl  font-medium text-red-400">Price: {item.price}</p>
+                <Link to={`/product/${item._id}`}>
+                  <p className=" text-xl font-medium text-primary text-right my-10 hover:underline">Go Explore</p>
+                </Link>
+              </div>
+            </div>
+          ))}
         </div>
-      )}
+        <button onClick={handleNext} className="absolute right-0 top-1/2 transform -translate-y-1/2 text-primary p-2 z-10">
+          <MdArrowForwardIos />
+        </button>
+      </div>
     </>
   );
 };

@@ -12,7 +12,7 @@ const Meta = ({ title, description, keyword }) => {
 };
 
 Meta.defaultProps = {
-  title: "Welcome to Baskyfi",
+  title: "Welcome to Baskify",
   description: "We sell the best products for cheap",
   keyword: "electronics, buy electronics, cheap electronics",
 };

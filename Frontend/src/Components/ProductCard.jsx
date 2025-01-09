@@ -6,10 +6,10 @@ const ProductCard = ({ product }) => {
   const { name, image, category, price, rating, numReviews } = product;
   return (
     <div>
-      <div className="card bg-base-100 w-full shadow-xl rounded-xl">
-        <figure>
+      <div className="card w-full border rounded-md">
+        <figure className=" h-44">
           <Link to={`/product/${product._id}`}>
-            <img className="cursor-pointer hover:scale-125 transition duration-500 ease-linear" src={image} alt={name} />
+            <img className="cursor-pointer hover:scale-125 transition duration-500 ease-linear h-full" src={image} alt={name} />
           </Link>
         </figure>
         <div className="card-body px-6 py-10 md:py-6">

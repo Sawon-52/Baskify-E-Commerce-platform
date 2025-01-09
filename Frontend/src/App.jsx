@@ -28,19 +28,13 @@ const App = () => {
       </header>
 
       <main className="max-w-screen-lg mx-auto px-4 md:px-6 my-10 min-h-max">
-        
         <Outlet />
       </main>
 
       <footer className="">
-        <div className="w-full bg-third ">
-          <Footer />
-        </div>
-
-        <div>
-          <SecondFooter />
-        </div>
+        <Footer />
       </footer>
+
       <ToastContainer />
     </div>
   );

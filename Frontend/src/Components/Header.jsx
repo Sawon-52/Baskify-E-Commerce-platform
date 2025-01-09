@@ -46,8 +46,8 @@ const Header = () => {
   return (
     <div className="navbar ">
       <div className="navbar-start">
-        <Link to={"/"} className="text-xl font-bold text-primary cursor-pointer">
-          <span className="text-2xl text-mintGreen">B</span>askify
+        <Link to={"/"} className="text-3xl font-bold text-primary cursor-pointer">
+          <span className="text-4xl text-mintGreen">B</span>askify
         </Link>
       </div>
       <div className="navbar-center">
