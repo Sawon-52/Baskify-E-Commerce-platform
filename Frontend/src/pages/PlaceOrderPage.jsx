@@ -15,12 +15,12 @@ const PlaceOrderPage = () => {
   const { isLoading } = useSelector((state) => state.orders);
 
   useEffect(() => {
-    if (!cart.shippingAddress.city) {
+    if (!cart.shippingAddress) {
       navigate("/shipping");
     } else if (!cart.paymentMethod) {
       navigate("/payment");
     }
-  }, [cart.paymentMethod, cart.shippingAddress.city, navigate]);
+  }, [cart.paymentMethod, cart.shippingAddress, navigate]);
 
   const placeOrderHandle = async () => {
     try {
@@ -83,6 +83,7 @@ const PlaceOrderPage = () => {
             </div>
           )}
         </div>
+        
         {/* Address Payment and order summary  */}
         <div className="flex flex-col md:flex-row gap-5 justify-between  border my-5 p-3 rounded-md">
           {/* payment and Address Information */}

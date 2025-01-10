@@ -4,6 +4,7 @@ import { deliverOrder, getOrderDetails } from "../slices/OrdersApiSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
+import { TbCurrencyTaka } from "react-icons/tb";
 
 const OrderPage = () => {
   const { id: orderId } = useParams();
@@ -38,73 +39,17 @@ const OrderPage = () => {
       ) : (
         <>
           <h1 className="font-medium">
-            <span className="font-bold">Order Id:</span> {orders._id}
+            <span className="text-xl font-bold">Order Id:</span> {orders._id}
           </h1>
-          <div className="flex flex-col md:flex-row gap-5 py-6">
-            <div className="w-full">
-              {/* Summary Section */}
-              <div className="my-2 space-y-2">
-                <h2 className="text-2xl font-bold mb-5">Shipping</h2>
-                <p>
-                  <strong>Name: </strong>
-                  {orders.user?.name}{" "}
-                </p>
-                <p>
-                  <strong>Email: </strong>
-                  {orders.user?.email}{" "}
-                </p>
-                <p>
-                  <strong>Phone: </strong>
-                  {orders.shippingAddress?.phoneNumber}{" "}
-                </p>
-                <p className="">
-                  <strong>Address: </strong>
-                  {orders.shippingAddress?.address}, {orders.shippingAddress?.postalCode},{orders.shippingAddress?.country}
-                </p>
 
-                {orders?.isDelivered ? (
-                  <div role="alert" className="alert alert-success bg-green-200 my-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <span>Delivered on {orders.deliveredAt}</span>
-                  </div>
-                ) : (
-                  <div role="alert" className="alert alert-error my-2 bg-red-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
-                      <path strokeLinecap="" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <span>Not Delivered</span>
-                  </div>
-                )}
-              </div>
-
-              <hr />
-              <div className="my-2">
-                <h2 className="font-bold text-base my-1">Payment Method</h2>
-                <strong className="text-sm font-semibold">Method: </strong>
-                <span className="text-sm">{orders.paymentMethod}</span>
-                {orders.isPaid ? (
-                  <div role="alert" className="alert alert-success bg-green-200 my-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <span>Paid</span>
-                  </div>
-                ) : (
-                  <div role="alert" className="alert alert-error bg-red-200 my-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
-                      <path strokeLinecap="" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <span>Not Paid</span>
-                  </div>
-                )}
-              </div>
-              <hr />
+          <div className="flex flex-col md:flex-row gap-5 py-6 md:p-5 shadow-xl rounded-md">
+            <div className="w-full p-1 md:p-3">
+              {/* Orders items  */}
               <div>
                 <div>
-                  <h2 className="text-xl font-bold my-2">Order Items</h2>
+                  <h2 className="text-xl font-semibold my-2">Order Items</h2>
                 </div>
+
                 {orders.orderItems?.length === 0 ? (
                   <div>
                     <h2 className="text-red-400 font-medium">Your Cart is empty</h2>
@@ -126,9 +71,14 @@ const OrderPage = () => {
                             <td>
                               <img src={item.image} alt={item.name} className="h-12 w-12 rounded" />
                             </td>
-                            <td className="text-primary">{item.name}</td>
+                            <td className="underline cursor-pointer">
+                              <Link to={`/product/${item._id}`}>{item.name}</Link>
+                            </td>
                             <td>
-                              {item.qty} X ${item.price} = ${(item.qty * item.price).toFixed(2)}
+                              <div className="flex items-center">
+                                {item.qty} X <TbCurrencyTaka />
+                                {item.price} = <TbCurrencyTaka /> {(item.qty * item.price).toFixed(2)} Tk
+                              </div>
                             </td>
                           </tr>
                         ))}
@@ -138,39 +88,126 @@ const OrderPage = () => {
                   </div>
                 )}
               </div>
-            </div>
 
-            <div className="w-full md:w-1/3 ">
-              <div className="rounded-lg text-sm shadow-lg p-5 min-h-max">
-                <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
-                <div className="border-t pt-4 font-medium">
-                  <div className="flex justify-between mb-2">
-                    <p>Subtotal</p>
-                    <p>${orders.itemsPrice}</p>
+              {/* shipping address */}
+              <div className="flex flex-col md:flex-row justify-between gap-3 my-5 border p-3 rounded-md">
+                <div className="w-full">
+                  <h2 className="font-semibold text-xl my-2">Shipping Address</h2>
+                  <div className="text-base space-y-2">
+                    <p>
+                      <span className="font-semibold">Name: </span>
+                      {`${orders.shippingAddress?.firstName} ${orders.shippingAddress?.lastName}`}
+                    </p>
+                    <p>
+                      {" "}
+                      <span className="font-semibold">Phone Number: </span>
+                      {`${orders.shippingAddress?.phoneNumber} `}
+                    </p>
+                    <p>
+                      {" "}
+                      <span className="font-semibold">Email: </span>
+                      {`${orders.shippingAddress?.emailAddress}`}
+                    </p>
+                    <div>
+                      <p>
+                        <span className="font-semibold">Address: </span> {orders.shippingAddress?.street}, {orders.shippingAddress?.streetNumber} , {orders.shippingAddress?.buildingNumber}, {orders.shippingAddress?.city}, {orders.shippingAddress?.district} , {orders.shippingAddress?.country}
+                      </p>
+                    </div>
+                    {orders?.isDelivered ? (
+                      <div role="alert" className="alert alert-success bg-green-200 my-2 rounded-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span>Delivered on {orders.deliveredAt}</span>
+                      </div>
+                    ) : (
+                      <div role="alert" className="alert alert-error my-2 bg-red-200 rounded-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+                          <path strokeLinecap="" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span>Not Delivered</span>
+                      </div>
+                    )}
                   </div>
-                  <div className="flex justify-between mb-2">
-                    <p>Discount</p>
-                    <p>-$0.0</p>
-                  </div>
-                  <div className="flex justify-between mb-2">
-                    <p>Delivery</p>
-                    <p>${orders.shippingPrice}</p>
-                  </div>
-                  <div className="flex justify-between mb-2">
-                    <p>Tax</p>
-                    <p>+${orders.taxPrice}</p>
-                  </div>
-                  <div className="flex justify-between font-semibold text-lg">
-                    <p>Total</p>
-                    <p>${orders.totalPrice}</p>
+
+                  <hr className="my-5" />
+                  <div className="my-2">
+                    <h2 className="font-bold text-base my-1">Payment Method</h2>
+                    <strong className="text-sm font-semibold">Method: </strong>
+                    <span className="text-sm">{orders.paymentMethod}</span>
+                    {orders.isPaid ? (
+                      <div role="alert" className="alert alert-success bg-green-200 my-2 rounded-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span>Paid</span>
+                      </div>
+                    ) : (
+                      <div role="alert" className="alert alert-error bg-red-200 my-2 rounded-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+                          <path strokeLinecap="" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span>Not Paid</span>
+                      </div>
+                    )}
                   </div>
                 </div>
-                {!userInfo.isAdmin && !orders.isPaid && <button className=" btn w-full mt-4 py-2 bg-primary text-white rounded-lg hover:bg-primary">Please Paid first</button>}
-                {userInfo.isAdmin && !orders.isDelivered && (
-                  <button className=" btn w-full mt-4 py-2 bg-primary text-white rounded-lg hover:bg-primary" onClick={handleToDeliver}>
-                    Mark As Delivered
-                  </button>
-                )}
+
+                {/* order summary  */}
+                <div className="w-full md:w-1/2 ">
+                  <div className="rounded-lg text-sm  p-5 min-h-max">
+                    <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
+                    <div className="border-t pt-4 font-medium">
+                      <div className="flex justify-between mb-2">
+                        <p>Subtotal</p>
+                        <p className="flex items-center">
+                          <TbCurrencyTaka />
+                          {orders.itemsPrice} Tk
+                        </p>
+                      </div>
+                      <div className="flex justify-between mb-2">
+                        <p>Discount</p>
+                        <p className="flex items-center">
+                          <TbCurrencyTaka />
+                          0.0 Tk
+                        </p>
+                      </div>
+                      <div className="flex justify-between mb-2">
+                        <p>Delivery</p>
+                        <p className="flex items-center">
+                          <TbCurrencyTaka />
+                          {orders.shippingPrice} Tk
+                        </p>
+                      </div>
+                      <div className="flex justify-between mb-2">
+                        <p>Tax</p>
+                        <p className="flex items-center">
+                          <TbCurrencyTaka />
+                          {orders.taxPrice} Tk
+                        </p>
+                      </div>
+                      <div className="flex justify-between font-semibold text-lg">
+                        <p>Total</p>
+                        <p className="flex items-center">
+                          <TbCurrencyTaka />
+                          {orders.totalPrice} Tk
+                        </p>
+                      </div>
+                    </div>
+                    {!userInfo.isAdmin && !orders.isPaid && (
+                      <div className="flex justify-end">
+                        <button className=" btn  mt-10 py-2 bg-primary text-white rounded-lg hover:bg-primary">Please Paid first</button>
+                      </div>
+                    )}
+                    {userInfo.isAdmin && !orders.isDelivered && (
+                      <div className="flex justify-end">
+                        <button className=" btn  mt-10 py-2 bg-primary text-white rounded-lg hover:bg-primary" onClick={handleToDeliver}>
+                          Mark As Delivered
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
