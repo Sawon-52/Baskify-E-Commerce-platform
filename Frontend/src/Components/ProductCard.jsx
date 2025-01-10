@@ -24,7 +24,7 @@ const ProductCard = ({ product }) => {
           <div>
             <p className="text-secondary text-base font-semibold flex items-center">
               <TbCurrencyTaka className="text-xl font-bold" />
-              {price}
+              {price} Tk
             </p>
           </div>
         </div>

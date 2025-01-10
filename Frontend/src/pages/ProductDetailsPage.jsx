@@ -106,7 +106,7 @@ const ProductDetailsPage = () => {
             <div className="text-sm font-semibold flex items-center text-primary">
               <p>Price: </p>
               <TbCurrencyTaka className="text-base" />
-              {price}
+              {price} Tk
             </div>
 
             {countInStock > 0 ? (

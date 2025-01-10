@@ -12,11 +12,14 @@ const PaymentPage = () => {
 
   const cart = useSelector((state) => state.cart);
   const { shippingAddress } = cart;
+  console.log(shippingAddress);
+  
   useEffect(() => {
     if (!shippingAddress) {
       navigate("/shipping");
     }
   }, [shippingAddress, navigate]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(savePaymentMethod(paymentMethod));

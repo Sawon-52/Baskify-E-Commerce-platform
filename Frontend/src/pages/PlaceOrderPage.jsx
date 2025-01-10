@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import Loader from "../Components/Loader";
 import { createOrder } from "../slices/OrdersApiSlice";
 import { clearCartItems } from "../slices/cartSlice";
+import { TbCurrencyTaka } from "react-icons/tb";
 
 const PlaceOrderPage = () => {
   const navigate = useNavigate();
@@ -14,12 +15,12 @@ const PlaceOrderPage = () => {
   const { isLoading } = useSelector((state) => state.orders);
 
   useEffect(() => {
-    if (!cart.shippingAddress.address) {
+    if (!cart.shippingAddress.city) {
       navigate("/shipping");
     } else if (!cart.paymentMethod) {
       navigate("/payment");
     }
-  }, [cart.paymentMethod, cart.shippingAddress.address, navigate]);
+  }, [cart.paymentMethod, cart.shippingAddress.city, navigate]);
 
   const placeOrderHandle = async () => {
     try {
@@ -32,98 +33,150 @@ const PlaceOrderPage = () => {
   };
   return (
     <>
-      <CheckoutSteps step1 step2 step3 step4 />
-      <div className="flex flex-col md:flex-row gap-5 py-6">
-        <div className="w-full">
-          {/* Summary Section */}
+      <div>
+        <CheckoutSteps step1 step2 step3 step4 />
+      </div>
+      <div>
+        <h2 className="text-2xl font-bold mb-5">Place Order</h2>
+      </div>
+      <div className="card bg-base-100 w-full mx-auto p-1 md:p-6  rounded-md shadow-xl border ">
+        {/* order items  */}
+        <div>
           <div>
-            <h2 className="text-2xl font-bold mb-5">Shipping</h2>
-            <p className="my-2">
-              <strong>Address: </strong>
-              {cart.shippingAddress.address}, {cart.shippingAddress.postalCode},{cart.shippingAddress.country}
-            </p>
+            <h2 className="text-xl font-semibold my-2">Order Items</h2>
           </div>
-          <hr />
-          <div className="my-2">
-            <h2 className="font-bold text-base my-1">Payment Method</h2>
-            <strong className="text-sm font-medium">Method: </strong>
-            <span className="text-sm">{cart.paymentMethod}</span>
-          </div>
-          <hr />
-          <div>
+          {cart.cartItems.length === 0 ? (
             <div>
-              <h2 className="text-xl font-bold my-2">Order Items</h2>
+              <h2 className="text-red-400 font-medium">Your Cart is empty</h2>
             </div>
-            {cart.cartItems.length === 0 ? (
-              <div>
-                <h2 className="text-red-400 font-medium">Your Cart is empty</h2>
-              </div>
-            ) : (
-              <div className="overflow-x-auto">
-                <table className="table">
-                  {/* head */}
-                  <thead>
-                    <tr className="text-primary">
-                      <th>image</th>
-                      <th>Title</th>
-                      <th>price</th>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="table">
+                {/* head */}
+                <thead>
+                  <tr className="text-primary">
+                    <th>image</th>
+                    <th>Title</th>
+                    <th>price</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {cart.cartItems.map((item, index) => (
+                    <tr key={index}>
+                      <td>
+                        <img src={item.image} alt={item.name} className="h-12 w-12 rounded" />
+                      </td>
+                      <td className="underline cursor-pointer">
+                        <Link to={`/product/${item._id}`}>{item.name}</Link>
+                      </td>
+                      <td>
+                        <div className="flex items-center">
+                          {item.qty} X <TbCurrencyTaka />
+                          {item.price} = <TbCurrencyTaka /> {(item.qty * item.price).toFixed(2)} Tk
+                        </div>
+                      </td>
                     </tr>
-                  </thead>
-                  <tbody>
-                    {cart.cartItems.map((item, index) => (
-                      <tr key={index}>
-                        <td>
-                          <img src={item.image} alt={item.name} className="h-12 w-12 rounded" />
-                        </td>
-                        <td className="underline cursor-pointer">
-                          <Link to={`/product/${item._id}`}>{item.name}</Link>
-                        </td>
-                        <td>
-                          {item.qty} X ${item.price} = ${(item.qty * item.price).toFixed(2)}
-                        </td>
-                      </tr>
-                    ))}
-                    {/* row */}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </div>
+                  ))}
+                  {/* row */}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
-
-        <div className="w-full md:w-1/3 ">
-          <div className="rounded-lg text-sm shadow-lg p-5 min-h-max">
-            <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
-            <div className="border-t pt-4 font-medium">
-              <div className="flex justify-between mb-2">
-                <p>Subtotal</p>
-                <p>${cart.itemsPrice}</p>
-              </div>
-              <div className="flex justify-between mb-2">
-                <p>Discount</p>
-                <p>-$0.0</p>
-              </div>
-              <div className="flex justify-between mb-2">
-                <p>Delivery</p>
-                <p>${cart.shippingPrice}</p>
-              </div>
-              <div className="flex justify-between mb-2">
-                <p>Tax</p>
-                <p>+${cart.taxPrice}</p>
-              </div>
-              <div className="flex justify-between font-semibold text-lg">
-                <p>Total</p>
-                <p>${cart.totalPrice}</p>
+        {/* Address Payment and order summary  */}
+        <div className="flex flex-col md:flex-row gap-5 justify-between  border my-5 p-3 rounded-md">
+          {/* payment and Address Information */}
+          <div className="w-full">
+            <div>
+              <h2 className="font-semibold text-xl my-2">Shipping Address</h2>
+              <div className="text-base space-y-2">
+                <p>
+                  <span className="font-semibold">Name: </span>
+                  {`${cart.shippingAddress.firstName} ${cart.shippingAddress.lastName}`}
+                </p>
+                <p>
+                  {" "}
+                  <span className="font-semibold">Phone Number: </span>
+                  {`${cart.shippingAddress.phoneNumber} `}
+                </p>
+                <p>
+                  {" "}
+                  <span className="font-semibold">Email: </span>
+                  {`${cart.shippingAddress.emailAddress}`}
+                </p>
+                <div>
+                  <p>
+                    <span className="font-semibold">Address: </span> {cart.shippingAddress.street}, {cart.shippingAddress.streetNumber} , {cart.shippingAddress.buildingNumber}, {cart.shippingAddress.city}, {cart.shippingAddress.district} , {cart.shippingAddress.country}
+                  </p>
+                </div>
               </div>
             </div>
+            <hr className="my-3" />
+            <div>
+              <h2 className="font-semibold text-xl my-2">Payment information</h2>
+              <div className="space-y-2">
+                <p>
+                  <span className="font-semibold">Payment Method:</span> {cart.paymentMethod}{" "}
+                </p>
+                <p>
+                  <span className="font-semibold">Payment Date:</span> 02/01/2025
+                </p>
+              </div>
+            </div>
+          </div>
 
-            {isLoading ? (
-              <Loader />
-            ) : (
-              <button className=" btn w-full mt-4 py-2 bg-primary text-white rounded-lg hover:bg-primary" disabled={cart.cartItems.length === 0} onClick={placeOrderHandle}>
-                place Order
-              </button>
-            )}
+          {/* order Summary  */}
+          <div className="w-full md:w-1/2 ">
+            <div className="rounded-lg text-sm p-0  min-h-max">
+              <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
+              <div className="border-t pt-4 font-medium">
+                <div className="flex justify-between mb-2">
+                  <p>Subtotal</p>
+                  <p className="flex items-center">
+                    <TbCurrencyTaka />
+                    {cart.itemsPrice} Tk
+                  </p>
+                </div>
+                <div className="flex justify-between mb-2">
+                  <p>Discount</p>
+                  <p className="flex items-center">
+                    <TbCurrencyTaka />
+                    0.0 Tk
+                  </p>
+                </div>
+                <div className="flex justify-between mb-2">
+                  <p>Delivery</p>
+                  <p className="flex items-center">
+                    <TbCurrencyTaka />
+                    {cart.shippingPrice} Tk
+                  </p>
+                </div>
+                <div className="flex justify-between mb-2">
+                  <p>Tax</p>
+                  <p className="flex items-center">
+                    <TbCurrencyTaka />
+                    {cart.taxPrice} Tk
+                  </p>
+                </div>
+                <div className="flex justify-between font-semibold text-lg">
+                  <p>Total</p>
+                  <p className="flex items-center">
+                    <TbCurrencyTaka />
+                    {cart.totalPrice} Tk
+                  </p>
+                </div>
+              </div>
+
+              {isLoading ? (
+                <Loader />
+              ) : (
+                <div className="flex justify-end">
+                  <button className=" btn px-4 py-2 bg-primary hover:bg-mintGreen text-white rounded-md my-4" disabled={cart.cartItems.length === 0} onClick={placeOrderHandle}>
+                    place Order
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

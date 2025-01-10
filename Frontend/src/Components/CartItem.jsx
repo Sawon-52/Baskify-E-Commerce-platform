@@ -3,6 +3,7 @@ import { AiFillDelete } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../slices/cartSlice";
 import { removeFromCart } from "../slices/cartSlice";
+import { TbCurrencyTaka } from "react-icons/tb";
 
 const CartItem = ({ item }) => {
   const dispatch = useDispatch();
@@ -19,8 +20,9 @@ const CartItem = ({ item }) => {
           <img src={item?.image} alt="Product" className="w-24 h-24 object-cover rounded-lg" />
           <div>
             <h3 className="font-medium">{item?.name}</h3>
-            <p className="text-sm text-gray-500">
-              ${item?.price} | <span className="text-green-600">{`${item?.countInStock > 0 ? "In Stock" : "Out of Stock"}`}</span>
+            <p className="text-sm text-gray-500 flex gap-1 items-center">
+              <TbCurrencyTaka className="font-medium" />
+              {item?.price} Tk | <span className="text-green-600">{`${item?.countInStock > 0 ? "In Stock" : "Out of Stock"}`}</span>
             </p>
             <div className="flex items-center gap-2 mt-2">
               <h2 className="font-medium">Quantity:</h2>
@@ -36,7 +38,10 @@ const CartItem = ({ item }) => {
         </div>
         <div className="flex flex-col items-end justify-between h-full space-y-10">
           <div>
-            <p className="font-semibold ">${item?.price}</p>
+            <p className="font-semibold flex gap-1 items-center">
+              <TbCurrencyTaka />
+              {item?.price} Tk
+            </p>
           </div>
           <div onClick={() => removeFromCartHandler(item?._id)}>
             <button className="text-2xl text-red-400">
