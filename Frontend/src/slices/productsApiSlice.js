@@ -150,6 +150,7 @@ const productsApiSlice = createSlice({
       })
       .addCase(createProduct.rejected, (state, action) => {
         state.isError = action.error.message;
+        state.isLoading = false;
       })
 
       // for Update product
@@ -162,6 +163,7 @@ const productsApiSlice = createSlice({
       })
       .addCase(updateProduct.rejected, (state, action) => {
         state.isError = action.error.message;
+        state.isLoading = false;
       })
 
       // for image upload

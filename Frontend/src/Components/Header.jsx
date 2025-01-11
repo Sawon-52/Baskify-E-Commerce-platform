@@ -2,8 +2,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import profilePic from "../assets/profile.png";
-import { logoutUser } from "../slices/usersApiSlice";
-import { removeCredentials } from "../slices/authSlice";
+
 import { toast } from "react-toastify";
 import { getOrders } from "../slices/OrdersApiSlice";
 import SearchBox from "./SearchBox";
@@ -26,16 +25,6 @@ const Header = () => {
     setHideModal(false);
   };
 
-  const logoutHandler = async () => {
-    try {
-      await dispatch(logoutUser()).unwrap();
-      await dispatch(removeCredentials()).unwrap();
-      toast.success("Logged out successfully!");
-      navigate("/login");
-    } catch (error) {
-      console.log(error);
-    }
-  };
   const handleFetchOrder = async () => {
     try {
       await dispatch(getOrders()).unwrap();
@@ -114,9 +103,6 @@ const Header = () => {
                     </li>
                   </ul>
                 )}
-                <li onClick={logoutHandler}>
-                  <Link>Logout</Link>
-                </li>
               </ul>
             )}
           </div>

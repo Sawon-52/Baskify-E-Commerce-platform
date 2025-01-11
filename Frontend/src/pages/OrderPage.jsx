@@ -76,8 +76,8 @@ const OrderPage = () => {
                             </td>
                             <td>
                               <div className="flex items-center">
-                                {item.qty} X <TbCurrencyTaka />
-                                {item.price} = <TbCurrencyTaka /> {(item.qty * item.price).toFixed(2)} Tk
+                                {item.qty} X <TbCurrencyTaka className="hidden md:block"  />
+                                {item.price} = <TbCurrencyTaka className="hidden md:block" /> {(item.qty * item.price).toFixed(2)} Tk
                               </div>
                             </td>
                           </tr>

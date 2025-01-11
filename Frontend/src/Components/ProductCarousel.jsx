@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getTopProducts } from "../slices/productsApiSlice";
-import Loader from "./Loader";
 import { MdArrowForwardIos } from "react-icons/md";
 import { MdArrowBackIosNew } from "react-icons/md";
 import { Link } from "react-router-dom";
+import { TbCurrencyTaka } from "react-icons/tb";
 
 const ProductCarousel = () => {
   const dispatch = useDispatch();
@@ -38,9 +38,11 @@ const ProductCarousel = () => {
               </div>
               <div className=" w-full md:w-1/2 p-8">
                 <h2 className="text-3xl font-bold mb-4">{item.name}</h2>
-                <p className=" text-xl  font-medium text-red-400">Price: {item.price}</p>
+                <p className=" text-xl  font-medium text-red-500 flex items-center">
+                  Price: <TbCurrencyTaka /> {item.price} TK
+                </p>
                 <Link to={`/product/${item._id}`}>
-                  <p className=" text-xl font-medium text-primary text-right my-10 hover:underline">Go Explore</p>
+                  <p className=" text-base font-medium text-right my-10 hover:underline">Go Explore</p>
                 </Link>
               </div>
             </div>

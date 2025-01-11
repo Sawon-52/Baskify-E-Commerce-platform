@@ -71,8 +71,8 @@ const PlaceOrderPage = () => {
                       </td>
                       <td>
                         <div className="flex items-center">
-                          {item.qty} X <TbCurrencyTaka />
-                          {item.price} = <TbCurrencyTaka /> {(item.qty * item.price).toFixed(2)} Tk
+                          {item.qty} X <TbCurrencyTaka className=" hidden md:block" />
+                          {item.price} = <TbCurrencyTaka className=" hidden md:block" /> {(item.qty * item.price).toFixed(2)} Tk
                         </div>
                       </td>
                     </tr>
@@ -83,7 +83,7 @@ const PlaceOrderPage = () => {
             </div>
           )}
         </div>
-        
+
         {/* Address Payment and order summary  */}
         <div className="flex flex-col md:flex-row gap-5 justify-between  border my-5 p-3 rounded-md">
           {/* payment and Address Information */}
