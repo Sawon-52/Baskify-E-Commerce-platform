@@ -3,7 +3,6 @@ import { NavLink, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProductDetails, clearProductInfo, updateProduct, uploadProductImage } from "../../slices/productsApiSlice";
 import Loader from "../../Components/Loader";
-import { IoIosArrowRoundBack } from "react-icons/io";
 import { toast } from "react-toastify";
 
 const ProductEditPage = () => {
@@ -78,69 +77,65 @@ const ProductEditPage = () => {
 
   return (
     <>
-      <NavLink to={"/admin/productlist"}>
-        <div className="flex items-center text-base gap-1 mb-4">
-          <IoIosArrowRoundBack />
-          <p className="text-sm font-bold">Go Back</p>
-        </div>
-      </NavLink>
       {isLoading ? (
         <Loader />
       ) : (
-        <div className="flex flex-col max-w-sm ">
+        <div>
           <h2 className="text-xl font-bold ">Edit Product</h2>
-          <div className="card w-full max-w-xl">
-            <form onSubmit={handleSubmit}>
-              <div className="form-control">
-                <label className="label font-medium">
-                  <span className="label-text">Product Name</span>
-                </label>
-                <input type="text" placeholder="Enter Product Name" className="input input-bordered input-sm" value={name} onChange={(e) => setName(e.target.value)} />
-              </div>
-              <div className="form-control">
-                <label className="label font-medium">
-                  <span className="label-text">Price</span>
-                </label>
-                <input type="text" placeholder="Enter Price" className="input input-bordered input-sm" value={price} onChange={(e) => setPrice(e.target.value)} />
-              </div>
-              <div className="form-control">
-                <label className="label font-medium">
-                  <span className="label-text">Image</span>
-                </label>
-                <input type="text" placeholder="Enter Image url" className="input input-bordered input-sm my-1" value={image} onChange={(e) => setImage(e.target.value)} />
-                <input type="file" className="file-input file-input-bordered file-input-xs w-full " onChange={uploadFileHandler} />
-              </div>
-
-              <div className="form-control">
-                <label className="label font-medium">
-                  <span className="label-text">Brand</span>
-                </label>
-                <input type="text" placeholder="Enter Brand" className="input input-bordered input-sm" value={brand} onChange={(e) => setBrand(e.target.value)} />
-              </div>
-              <div className="form-control">
-                <label className="label font-medium">
-                  <span className="label-text">Category</span>
-                </label>
-                <input type="text" placeholder="Enter Category" className="input input-bordered input-sm" value={category} onChange={(e) => setCategory(e.target.value)} />
-              </div>
-              <div className="form-control">
-                <label className="label font-medium">
-                  <span className="label-text">Stock</span>
-                </label>
-                <input type="number" placeholder="Enter Stock" className="input input-bordered input-sm" value={countInStock} onChange={(e) => setCountInStock(e.target.value)} />
-              </div>
-              <div>
-                <div className="form-control mb-4">
+          <div className="flex justify-center  ">
+            <div className="card w-full max-w-md">
+              <form onSubmit={handleSubmit}>
+                <div className="form-control">
                   <label className="label font-medium">
-                    <span className="label-text">Description</span>
+                    <span className="label-text">Product Name</span>
                   </label>
-                  <textarea placeholder="Enter Description" className="textarea textarea-bordered textarea-sm w-full text-sm " value={description} onChange={(e) => setDescription(e.target.value)} />
+                  <input type="text" placeholder="Enter Product Name" className="input input-bordered input-sm" value={name} onChange={(e) => setName(e.target.value)} />
                 </div>
-              </div>
-              <div className="form-control mt-6">
-                <button className="btn  bg-primary text-white hover:bg-black">Update</button>
-              </div>
-            </form>
+                <div className="form-control">
+                  <label className="label font-medium">
+                    <span className="label-text">Price</span>
+                  </label>
+                  <input type="text" placeholder="Enter Price" className="input input-bordered input-sm" value={price} onChange={(e) => setPrice(e.target.value)} />
+                </div>
+                <div className="form-control">
+                  <label className="label font-medium">
+                    <span className="label-text">Image</span>
+                  </label>
+                  <input type="text" placeholder="Enter Image url" className="input input-bordered input-sm my-1" value={image} onChange={(e) => setImage(e.target.value)} />
+                  <input type="file" className="file-input file-input-bordered file-input-xs w-full " onChange={uploadFileHandler} />
+                </div>
+
+                <div className="form-control">
+                  <label className="label font-medium">
+                    <span className="label-text">Brand</span>
+                  </label>
+                  <input type="text" placeholder="Enter Brand" className="input input-bordered input-sm" value={brand} onChange={(e) => setBrand(e.target.value)} />
+                </div>
+                <div className="form-control">
+                  <label className="label font-medium">
+                    <span className="label-text">Category</span>
+                  </label>
+                  <input type="text" placeholder="Enter Category" className="input input-bordered input-sm" value={category} onChange={(e) => setCategory(e.target.value)} />
+                </div>
+                <div className="form-control">
+                  <label className="label font-medium">
+                    <span className="label-text">Stock</span>
+                  </label>
+                  <input type="number" placeholder="Enter Stock" className="input input-bordered input-sm" value={countInStock} onChange={(e) => setCountInStock(e.target.value)} />
+                </div>
+                <div>
+                  <div className="form-control mb-4">
+                    <label className="label font-medium">
+                      <span className="label-text">Description</span>
+                    </label>
+                    <textarea placeholder="Enter Description" className="textarea textarea-bordered textarea-sm w-full text-sm " value={description} onChange={(e) => setDescription(e.target.value)} />
+                  </div>
+                </div>
+                <div className="form-control mt-6">
+                  <button className="btn  bg-primary text-white hover:bg-black">Update</button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       )}

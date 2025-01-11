@@ -86,19 +86,8 @@ const Header = () => {
                 {userInfo.isAdmin && (
                   <ul>
                     <li>
-                      <Link to={"/admin/productlist"} className="justify-between">
-                        Products
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to={"/admin/userlist"} className="justify-between">
-                        Users
-                      </Link>
-                    </li>
-
-                    <li onClick={handleFetchOrder}>
-                      <Link to={"/admin/orderlist"} className="justify-between">
-                        Orders
+                      <Link to={"/admin/dashboard"} className="justify-between">
+                        Dashboard
                       </Link>
                     </li>
                   </ul>

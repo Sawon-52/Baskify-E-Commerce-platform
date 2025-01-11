@@ -48,18 +48,19 @@ const UserEditPage = () => {
 
   return (
     <>
-      <NavLink to={"/admin/userlist"}>
+      {/* <NavLink to={"/admin/userlist"}>
         <div className="flex items-center text-base gap-1 mb-4">
           <IoIosArrowRoundBack />
           <p className="text-sm font-bold">Go Back</p>
         </div>
-      </NavLink>
+      </NavLink> */}
       {isLoading ? (
         <Loader />
       ) : (
-        <div className="flex flex-col max-w-sm ">
+        <div >
           <h2 className="text-xl font-bold ">Edit User</h2>
-          <div className="card w-full max-w-xl">
+          <div className="flex justify-center ">
+          <div className="card w-full max-w-md  p-3 rounded-md">
             <form onSubmit={handleSubmit}>
               <div className="form-control">
                 <label className="label font-medium">
@@ -85,6 +86,7 @@ const UserEditPage = () => {
               </div>
             </form>
           </div>
+        </div>
         </div>
       )}
     </>

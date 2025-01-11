@@ -23,6 +23,9 @@ import ProductEditPage from "./pages/admin/ProductEditPage.jsx";
 import UserListPage from "./pages/admin/UserListPage.jsx";
 import UserEditPage from "./pages/admin/userEditPage.jsx";
 import { HelmetProvider } from "react-helmet-async";
+import AdminLayout from "./pages/admin/AdminLayout.jsx";
+import AdminDashboard from "./pages/admin/AdminDashboard.jsx";
+import CategorylistPage from "./pages/admin/CategorylistPage.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -45,14 +48,19 @@ const router = createBrowserRouter(
       </Route>
 
       <Route path="" element={<AdminRoute />}>
-        <Route path="/admin/orderlist" element={<OrderListPage />} />
-        <Route path="/admin/productlist" element={<ProductListPage />} />
-        <Route path="/admin/productlist/search/:keyword" element={<ProductListPage />} />
-        <Route path="/admin/productlist/page/:pageNumber" element={<ProductListPage />} />
-        <Route path="/admin/productlist/search/:keyword/page/:pageNumber" element={<ProductListPage />} />
-        <Route path="/admin/product/:productId/edit" element={<ProductEditPage />} />
-        <Route path="/admin/user/:userId/edit" element={<UserEditPage />} />
-        <Route path="/admin/userlist" element={<UserListPage />} />
+        <Route path="admin" element={<AdminLayout />}>
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+
+          <Route path="/admin/orderlist" element={<OrderListPage />} />
+          <Route path="/admin/productlist" element={<ProductListPage />} />
+          <Route path="/admin/productlist/search/:keyword" element={<ProductListPage />} />
+          <Route path="/admin/productlist/page/:pageNumber" element={<ProductListPage />} />
+          <Route path="/admin/productlist/search/:keyword/page/:pageNumber" element={<ProductListPage />} />
+          <Route path="/admin/product/:productId/edit" element={<ProductEditPage />} />
+          <Route path="/admin/user/:userId/edit" element={<UserEditPage />} />
+          <Route path="/admin/userlist" element={<UserListPage />} />
+          <Route path="/admin/Categorylist" element={<CategorylistPage />} />
+        </Route>
       </Route>
     </Route>,
   ),
