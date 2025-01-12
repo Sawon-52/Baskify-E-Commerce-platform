@@ -20,7 +20,7 @@ const HomePage = () => {
 
   return (
     <>
-      <Meta></Meta>
+      <Meta title={"Welcome to Baskify"}></Meta>
       {!keyword ? (
         <ProductCarousel />
       ) : (

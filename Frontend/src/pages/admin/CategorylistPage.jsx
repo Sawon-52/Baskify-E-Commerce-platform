@@ -1,19 +1,39 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Modal from "../../Components/Modal";
 import { RxCross2 } from "react-icons/rx";
+import { useDispatch, useSelector } from "react-redux";
+import { createCategory, getCategory } from "../../slices/categoryApiSlice";
+import { toast } from "react-toastify";
+import Loader from "../../Components/Loader";
+
 const CategorylistPage = () => {
+  const dispatch = useDispatch();
+  const { category: newCategory } = useSelector((state) => state.category);
+  const { categories, isLoading: getCategoriesLoading, isError } = useSelector((state) => state.category);
   const [isModalOpen, setModalOpen] = useState(false);
   const [category, setCategory] = useState("");
 
-  const [categories, setCategories] = useState([{ name: "Electronics" }, { name: "Men Cloth" }, { name: "Woman Cloth" }, { name: "Sports" }, { name: "Cosmetics" }, { name: "Electronics" }, { name: "Men Cloth" }, { name: "Woman Cloth" }, { name: "Sports" }, { name: "Cosmetics" }]);
+  useEffect(() => {
+    dispatch(getCategory());
+  }, [dispatch, category]);
 
-  const handleAddCategory = (e) => {
+  const handleAddCategory = async (e) => {
     e.preventDefault();
+    if (category.trim() === "") {
+      alert("Category Name is required!");
+      return;
+    }
     setModalOpen(false);
-    const newCategory = { name: category };
-    console.log(newCategory);
-    setCategories((preCategory) => [...preCategory, newCategory]);
+    try {
+      await dispatch(createCategory({ category })).unwrap();
+      toast.success(newCategory.message);
+    } catch (err) {
+      console.log(err);
+      toast.error(err?.message);
+    }
+
+    dispatch(getCategory());
   };
   return (
     <>
@@ -29,13 +49,17 @@ const CategorylistPage = () => {
           </div>
         </div>
 
-        <div className="flex  flex-wrap gap-2">
-          {categories.map((category, index) => (
-            <Link key={index} className="border p-2 text-sm font-medium">
-              {category.name}
-            </Link>
-          ))}
-        </div>
+        {getCategoriesLoading ? (
+          <Loader />
+        ) : (
+          <div className="flex  flex-wrap gap-2">
+            {categories?.map((category, index) => (
+              <Link key={index} className="border p-2 text-sm font-medium">
+                {category.name}
+              </Link>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* modal for add category  */}
@@ -53,7 +77,7 @@ const CategorylistPage = () => {
               <label className="label">
                 <span className="label-text font-semibold">Category Name</span>
               </label>
-              <input type="text" placeholder="Category Name" value={category} onChange={(e) => setCategory(e.target.value)} className="input input-bordered" required />
+              <input type="text" required placeholder="Category Name" value={category} onChange={(e) => setCategory(e.target.value)} className="input input-bordered" />
             </div>
             <div className="form-control mt-6">
               <button className="btn  text-white bg-primary hover:bg-mintGreen" onClick={handleAddCategory}>
