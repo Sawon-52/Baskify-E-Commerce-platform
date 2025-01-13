@@ -10,11 +10,23 @@ const getProducts = asyncHandler(async (req, res) => {
 
   //sarching products
   const keyword = req.query.keyword ? { name: { $regex: req.query.keyword, $options: "i" } } : {};
-  const count = await Product.countDocuments({ ...keyword });
-  const products = await Product.find({ ...keyword })
+
+  const categoryFilter = req.query.category ? { category: req.query.category } : {};
+
+  const count = await Product.countDocuments({ ...keyword, ...categoryFilter });
+
+  const products = await Product.find({ ...keyword, ...categoryFilter })
     .limit(pageSize)
     .skip(pageSize * (page - 1));
-  res.json({ products, page, pages: Math.ceil(count / pageSize) });
+
+  if (products.length > 0) {
+    // If products are found, send the response
+    res.json({ products, page, pages: Math.ceil(count / pageSize) });
+  } else {
+    // If no products are found, send a 404 status and a custom message
+    res.status(404);
+    throw new Error("No products found");
+  }
 });
 
 //@desc     Fetch a Products By ID

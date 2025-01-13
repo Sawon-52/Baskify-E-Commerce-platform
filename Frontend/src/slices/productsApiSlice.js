@@ -14,10 +14,10 @@ const initialState = {
 };
 
 //async thunk for fetching products
-export const fetchProducts = createAsyncThunk("products/fetchAllProducts", async ({ keyword, pageNumber }, { rejectWithValue }) => {
+export const fetchProducts = createAsyncThunk("products/fetchAllProducts", async ({ keyword, pageNumber, category }, { rejectWithValue }) => {
   try {
     const response = await axios.get(`${PRODUCTS_URL}`, {
-      params: { keyword, pageNumber },
+      params: { keyword, pageNumber, category },
     });
     return response.data;
   } catch (error) {
@@ -112,6 +112,10 @@ const productsApiSlice = createSlice({
   reducers: {
     clearProductInfo: (state, action) => {
       state.productInfo = null;
+    },
+
+    cleardata: (state, action) => {
+      state.data = null;
     },
   },
   extraReducers: (builder) => {
@@ -226,5 +230,5 @@ const productsApiSlice = createSlice({
       });
   },
 });
-export const { clearProductInfo } = productsApiSlice.actions;
+export const { clearProductInfo, cleardata } = productsApiSlice.actions;
 export default productsApiSlice.reducer;

@@ -4,12 +4,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchProductDetails, clearProductInfo, updateProduct, uploadProductImage } from "../../slices/productsApiSlice";
 import Loader from "../../Components/Loader";
 import { toast } from "react-toastify";
+import { getCategory } from "../../slices/categoryApiSlice";
 
 const ProductEditPage = () => {
   const { productId } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const { categories } = useSelector((state) => state.category);
   const { productInfo, isLoading } = useSelector((state) => state.products);
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
@@ -20,6 +22,7 @@ const ProductEditPage = () => {
   const [description, setDescription] = useState("");
 
   useEffect(() => {
+    dispatch(getCategory());
     dispatch(fetchProductDetails(productId));
     if (productInfo) {
       setName(productInfo.name);
@@ -115,7 +118,15 @@ const ProductEditPage = () => {
                   <label className="label font-medium">
                     <span className="label-text">Category</span>
                   </label>
-                  <input type="text" placeholder="Enter Category" className="input input-bordered input-sm" value={category} onChange={(e) => setCategory(e.target.value)} />
+                  <select className="select w-full border" value={category} onChange={(e) => setCategory(e.target.value)}>
+                    <option disabled selected>
+                      Select your Category
+                    </option>
+                    {categories?.map((category) => (
+                      <option key={category._id}>{category.name}</option>
+                    ))}
+                  </select>
+                  {/* <input type="text" placeholder="Enter Category" className="input input-bordered input-sm" value={category} onChange={(e) => setCategory(e.target.value)} /> */}
                 </div>
                 <div className="form-control">
                   <label className="label font-medium">

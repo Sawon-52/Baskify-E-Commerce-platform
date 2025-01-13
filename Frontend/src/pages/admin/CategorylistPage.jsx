@@ -29,7 +29,6 @@ const CategorylistPage = () => {
       await dispatch(createCategory({ category })).unwrap();
       toast.success(newCategory.message);
     } catch (err) {
-      console.log(err);
       toast.error(err?.message);
     }
 

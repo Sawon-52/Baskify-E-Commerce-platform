@@ -78,7 +78,9 @@ const ShippingPage = () => {
             </div>
             <div className="mt-4">
               <select name="country" value={formData.country} onChange={handleChange} className="border border-gray-300 p-2 rounded-md w-full">
-                <option value="Bangladesh">Bangladesh</option>
+                <option disabled selected value="Bangladesh">
+                  Select Your Country
+                </option>
                 <option value="Bangladesh">Bangladesh</option>
               </select>
             </div>

@@ -5,6 +5,7 @@ import { TbCurrencyTaka } from "react-icons/tb";
 
 const ProductCard = ({ product }) => {
   const { name, image, category, price, rating, numReviews } = product;
+
   return (
     <div>
       <div className="card w-full border rounded-md">

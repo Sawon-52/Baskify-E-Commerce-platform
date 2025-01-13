@@ -4,33 +4,37 @@ import Rating from "../Components/Rating";
 import { BsCart2 } from "react-icons/bs";
 import { IoIosArrowRoundBack } from "react-icons/io";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchProductDetails, createReview, getReview } from "../slices/productsApiSlice";
+import { fetchProductDetails, createReview, getReview, fetchProducts, cleardata } from "../slices/productsApiSlice";
 import Loader from "../Components/Loader";
 import { addToCart } from "../slices/cartSlice";
 import { toast } from "react-toastify";
 import Meta from "../Components/Meta";
 import { TbCurrencyTaka } from "react-icons/tb";
+import ProductCard from "../Components/ProductCard";
 
 const ProductDetailsPage = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [rating, setRating] = useState();
   const [comment, setComment] = useState("");
   const { id: productId } = useParams();
 
   //quentity state
   const [qty, setQty] = useState(1);
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const { productInfo, isLoading: productInfoLoading, isError } = useSelector((state) => state.products);
+  const { productInfo, isLoading: productInfoLoading } = useSelector((state) => state.products);
   const { reviews, isLoading: reviewLoading } = useSelector((state) => state.products);
   const userInfo = localStorage.getItem("userInfo");
-  // const { userInfo } = useSelector((state) => state.users);
+  const { name, description, image, category, brand, price, rating: productRating, numReviews, countInStock } = productInfo;
+
+  const { data, isLoading, isError } = useSelector((state) => state.products);
 
   useEffect(() => {
     dispatch(fetchProductDetails(productId));
     dispatch(getReview(productId));
-  }, [dispatch, productId]);
-
-  const { name, description, image, category, brand, price, rating: productRating, numReviews, countInStock } = productInfo;
+    if (category) {
+      dispatch(fetchProducts({ category }));
+    }
+  }, [dispatch, productId, category]);
 
   const addToCartHandler = () => {
     dispatch(addToCart({ ...productInfo, qty }));
@@ -48,20 +52,15 @@ const ProductDetailsPage = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault(); // Prevent page reload
-    console.log("Rating:", rating);
-    console.log("Comment:", comment);
     try {
       await dispatch(createReview({ productId, rating, comment })).unwrap();
       toast.success("Review Submitted");
       await dispatch(fetchProductDetails(productId)).unwrap();
-      // await dispatch(getReview()).unwrap();
+      dispatch(getReview(productId));
     } catch (error) {
       await dispatch(fetchProductDetails(productId)).unwrap();
       toast.error(error?.message || error.error);
     }
-
-    // You can send the data to a server here (e.g., using fetch or Axios)
-    // Reset form after submission
     setRating(0);
     setComment("");
   };
@@ -217,6 +216,35 @@ const ProductDetailsPage = () => {
               </Link>
               to write a review
             </p>
+          )}
+        </div>
+      </section>
+
+      {/* Simillar Product */}
+      <section className="my-10">
+        <div>
+          <h2 className="text-xl font-semibold my-4">Similar Products</h2>
+        </div>
+
+        <div className=" w-full min-h-96 border">
+          {isLoading ? (
+            <Loader title="Product Loading..." />
+          ) : isError ? (
+            <div className="flex justify-center items-center">
+              <p className="my-10 text-red-500 font-semibold">{isError.message}</p>
+            </div>
+          ) : (
+            data && (
+              <div className="p-3 bg-white-50 rounded-md shadow-xl my-5 pb-8">
+                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-5">
+                  {data.products?.map((product) => (
+                    <div key={product._id}>
+                      <ProductCard product={product} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )
           )}
         </div>
       </section>

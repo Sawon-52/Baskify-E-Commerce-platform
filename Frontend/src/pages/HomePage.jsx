@@ -9,17 +9,30 @@ import { getCategory } from "../slices/categoryApiSlice";
 import ProductCarousel from "../Components/ProductCarousel";
 import { IoIosArrowRoundBack } from "react-icons/io";
 import Meta from "../Components/Meta";
+import { toast } from "react-toastify";
+
 const HomePage = () => {
   const dispatch = useDispatch();
   const params = useParams() || {};
-  const { pageNumber = "1", keyword = "" } = params;
+  const { pageNumber = "1", keyword = "", category } = params;
+
   const { data, isLoading, isError } = useSelector((state) => state.products);
   const { categories, isLoading: getCategoriesLoading, isError: categoriesLoading } = useSelector((state) => state.category);
 
   useEffect(() => {
-    dispatch(fetchProducts({ pageNumber, keyword }));
+    dispatch(fetchProducts({ pageNumber, keyword, category }));
     dispatch(getCategory());
-  }, [pageNumber, keyword]);
+  }, [pageNumber, keyword, category]);
+
+  const handleCategory = () => {
+    useEffect(() => {
+      dispatch(fetchProducts({ pageNumber, keyword, category }));
+    }, [pageNumber, keyword, category]);
+  };
+
+  const handleAllProduct = () => {
+    dispatch(fetchProducts());
+  };
 
   return (
     <>
@@ -46,9 +59,11 @@ const HomePage = () => {
               <Loader title="Categories Loading...." />
             ) : (
               <div className="flex gap-3 flex-wrap ">
-                <Link className="border border-primary p-3 px-4 text-sm font-semibold">All</Link>
+                <Link to={`/`} className="border border-primary p-3 px-4 text-sm font-semibold" onClick={handleAllProduct}>
+                  All
+                </Link>
                 {categories?.map((category) => (
-                  <Link key={category._id} className="border border-primary p-3 px-4 text-sm font-semibold hover:bg-mintGreen hover:text-white hover:border-white">
+                  <Link key={category._id} to={`/category/${category.name}`} onClick={handleCategory} className="border border-primary p-3 px-4 text-sm font-semibold hover:bg-mintGreen hover:text-white hover:border-white">
                     {category.name}
                   </Link>
                 ))}
@@ -64,7 +79,9 @@ const HomePage = () => {
           {isLoading ? (
             <Loader title="Product Loading..." />
           ) : isError ? (
-            <p>Error:{isError.message || isError.error}</p>
+            <div className="flex justify-center items-center">
+              <p className="my-10 text-red-500 font-semibold">{isError.message}</p>
+            </div>
           ) : (
             <div>
               <div className="p-3 bg-white-50 rounded-md shadow-xl my-5 pb-8">
