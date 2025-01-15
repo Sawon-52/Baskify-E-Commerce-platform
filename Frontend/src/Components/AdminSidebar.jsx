@@ -11,11 +11,11 @@ const AdminSidebar = () => {
   ];
   return (
     <>
-      <div className=" w-full md:w-52 bg-slate-700 text-white min-h-max rounded-sm">
-        <h1 className="text-2xl font-bold p-4">Admin</h1>
-        <nav className="mt-4 space-y-3">
+      <div className=" w-full bg-slate-600 text-white min-h-max rounded-sm p-4  ">
+        <h1 className="text-2xl font-bold ">Admin</h1>
+        <nav className=" my-4 flex flex-col md:flex-row md:items-center gap-5">
           {links.map((link) => (
-            <NavLink key={link.name} to={link.path} className={({ isActive }) => `block px-4 py-2 rounded-none ${isActive ? "bg-slate-600" : "hover:bg-slate-600"}`}>
+            <NavLink key={link.name} to={link.path} className={({ isActive }) => `px-4 py-2 rounded-none ${isActive ? "bg-slate-500" : "hover:bg-slate-500"}`}>
               {link.name}
             </NavLink>
           ))}
