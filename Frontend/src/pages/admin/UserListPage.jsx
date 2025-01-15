@@ -61,14 +61,16 @@ const UserListPage = () => {
                       <a href={`mailto:${user.email}`}> {user.email}</a>
                     </td>
                     <td>{user.isAdmin ? <FaCheck className="text-green-500" /> : <FaTimes className="text-red-400" />}</td>
-                    <td className="flex text-xl cursor-pointer h-full gap-2">
-                      <Link to={`/admin/user/${user._id}/edit`}>
-                        <IoCreate className="text-green-400" />
-                      </Link>
+                    <td>
+                      <div className="flex text-xl cursor-pointer h-full gap-2">
+                        <Link to={`/admin/user/${user._id}/edit`}>
+                          <IoCreate className="text-green-400" />
+                        </Link>
 
-                      <Link>
-                        <MdDelete className="text-red-400" onClick={() => handleUserDelete(user._id)} />
-                      </Link>
+                        <Link>
+                          <MdDelete className="text-red-400" onClick={() => handleUserDelete(user._id)} />
+                        </Link>
+                      </div>
                     </td>
                   </tr>
                 ))}

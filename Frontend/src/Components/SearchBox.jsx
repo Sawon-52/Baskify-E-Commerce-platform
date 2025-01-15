@@ -36,8 +36,3 @@ const SearchBox = () => {
 };
 
 export default SearchBox;
-
-// if (location.pathname === "/admin/productlist" && userInfo.isAdmin === true) {
-//     console.log("hlw admin");
-//     navigate(`/admin/productlist/search/${keyword}`);
-//   } else

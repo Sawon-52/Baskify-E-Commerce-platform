@@ -3,9 +3,9 @@ import MetricCard from "../../Components/MetricCard";
 
 const AdminDashboard = () => {
   const metrics = [
-    { icon: "👤", title: "Total Users", value: "3,456", growth: -0.95 },
-    { icon: "📦", title: "Total Products", value: "2,450", growth: 2.59 },
-    { icon: "🛒", title: "Total Order", value: "$45.2K", growth: 4.35 },
+    { icon: "👤", title: "Total Users", value: "30"},
+    { icon: "📦", title: "Total Products", value: "200" },
+    { icon: "🛒", title: "Total Order", value: "100", },
   ];
   return (
     <div className="p-6">

@@ -6,8 +6,11 @@ import { Link } from "react-router-dom";
 import { FaFacebook } from "react-icons/fa6";
 import { FaInstagramSquare } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
+import { useSelector } from "react-redux";
 
 const Footer = () => {
+  const { categories } = useSelector((state) => state.category);
+  console.log(categories);
   const handleSubscribe = (e) => {
     e.preventDefault();
   };
@@ -53,10 +56,11 @@ const Footer = () => {
           </nav>
           <nav className=" space-y-1">
             <h6 className="mb-[0.5rem] font-bold uppercase ">Categories</h6>
-            <Link className="link link-hover">Men</Link>
-            <Link className="link link-hover">Woman</Link>
-            <Link className="link link-hover">Accessories</Link>
-            <Link className="link link-hover">Shoes</Link>
+            {categories?.map((category) => (
+              <Link key={category._id} to={`/category/${category.name}`} className="link link-hover">
+                {category?.name}
+              </Link>
+            ))}
           </nav>
           <nav className=" space-y-1">
             <h6 className="mb-[0.5rem] font-bold uppercase ">Legal</h6>

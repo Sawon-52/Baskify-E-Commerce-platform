@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, Link } from "react-router-dom";
 import Footer from "./Components/Footer";
 import Header from "./Components/Header";
 import { ToastContainer } from "react-toastify";
@@ -10,11 +10,14 @@ const App = () => {
     <>
       <ScrollToTop />
       <div className="font-Montserrat">
-        <header className=" sticky top-0 z-10">
+        <header className=" sticky top-0 z-20">
           {/* discount header it is top of the page  */}
-          <div className="w-full min-h-10 py-2 bg-[#222222] text-base flex justify-center text-white ">
-            <p className="text-[12px]">
-              Summer sale discount off 50%! <span className="text-red-500 ">Shop Now</span>
+          <div className="w-full min-h-10 py-2 bg-slate-800 text-base flex justify-center text-white ">
+            <p className="text-sm">
+              Summer sale discount off 50%!{" "}
+              <Link to="/">
+                <span className="text-red-500 "> Shop Now</span>
+              </Link>
             </p>
           </div>
 

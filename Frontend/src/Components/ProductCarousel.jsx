@@ -27,28 +27,28 @@ const ProductCarousel = () => {
   return (
     <>
       <div className="relative w-full overflow-hidden flex items-center rounded-md">
-        <button onClick={handlePrev} className="absolute left-0 top-1/2 transform -translate-y-1/2  text-primary p-2 z-10">
+        <button onClick={handlePrev} className="absolute left-1 top-1/2 transform -translate-y-1/2  text-primary p-2 z-10 rounded-full bg-stone-200">
           <MdArrowBackIosNew />
         </button>
-        <div className="flex transition-transform duration-500 ease-in-out w-full" style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
+        <div className="flex transition-transform duration-500 ease-in-out w-full h-max md:h-96" style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
           {topProducts.map((item, index) => (
             <div key={index} className="w-full flex-shrink-0 flex flex-col md:flex-row items-center bg-gray-100">
-              <div className="w-full  md:w-1/2 ">
-                <img src={item.image} alt={item.name} className="w-full h-72 object-cover" />
+              <div className="w-full  md:w-1/2 z-0">
+                <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
               </div>
-              <div className=" w-full md:w-1/2 p-8">
+              <div className=" w-full md:w-1/2 p-3 md:p-8">
                 <h2 className="text-3xl font-bold mb-4">{item.name}</h2>
                 <p className=" text-xl  font-medium text-red-500 flex items-center">
                   Price: <TbCurrencyTaka /> {item.price} TK
                 </p>
                 <Link to={`/product/${item._id}`}>
-                  <p className=" text-base font-medium text-right my-10 hover:underline">Go Explore</p>
+                  <p className=" text-base font-medium text-right hover:underline">Go Explore</p>
                 </Link>
               </div>
             </div>
           ))}
         </div>
-        <button onClick={handleNext} className="absolute right-0 top-1/2 transform -translate-y-1/2 text-primary p-2 z-10">
+        <button onClick={handleNext} className="absolute right-1 top-1/2 transform -translate-y-1/2 text-primary p-2 z-10 rounded-full bg-stone-200">
           <MdArrowForwardIos />
         </button>
       </div>

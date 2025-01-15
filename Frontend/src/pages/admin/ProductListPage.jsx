@@ -7,11 +7,12 @@ import { MdDelete } from "react-icons/md";
 import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import Paginate from "../../Components/paginate";
+import { TbCurrencyTaka } from "react-icons/tb";
 
 const ProductListPage = () => {
   const params = useParams() || {};
   const { pageNumber = "1", keyword = "" } = params;
-  
+
   const dispatch = useDispatch();
   const { data, isLoading } = useSelector((state) => state.products);
 
@@ -73,17 +74,23 @@ const ProductListPage = () => {
                   <tr key={index} className="font-medium">
                     <td>{product._id}</td>
                     <td>{product.name}</td>
-                    <td>$ {product.price}</td>
+                    <td>
+                      <div className="flex items-center gap-1 justify-center h-full">
+                        <TbCurrencyTaka /> {product.price}
+                      </div>
+                    </td>
                     <td>{product.category}</td>
                     <td>{product.brand}</td>
-                    <td className="flex text-xl cursor-pointer h-full gap-2">
-                      <Link to={`/admin/product/${product._id}/edit`}>
-                        <IoCreate className="text-green-400" />
-                      </Link>
+                    <td>
+                      <div className="flex text-xl cursor-pointer h-full gap-2">
+                        <Link to={`/admin/product/${product._id}/edit`}>
+                          <IoCreate className="text-green-400" />
+                        </Link>
 
-                      <Link>
-                        <MdDelete className="text-red-400" onClick={() => handleProductDelete(product._id)} />
-                      </Link>
+                        <Link>
+                          <MdDelete className="text-red-400" onClick={() => handleProductDelete(product._id)} />
+                        </Link>
+                      </div>
                     </td>
                   </tr>
                 ))}

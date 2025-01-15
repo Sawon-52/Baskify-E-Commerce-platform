@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../Components/Loader";
 import { RxCross2 } from "react-icons/rx";
 import { Link } from "react-router-dom";
+import { TbCurrencyTaka } from "react-icons/tb";
 
 const OrderListPage = () => {
   const dispatch = useDispatch();
@@ -46,7 +47,12 @@ const OrderListPage = () => {
                     <td>{order._id}</td>
                     <td>{order.user && order.user.name}</td>
                     <td>{order.createdAt.substring(0, 10)}</td>
-                    <td>${order.taxPrice}</td>
+                    <td>
+                      <div className="flex items-center gap-1">
+                        <TbCurrencyTaka />
+                        {order.taxPrice}
+                      </div>
+                    </td>
                     <td>{order.isPaid ? order.paidAt?.substring(0, 10) : <RxCross2 className="text-red-500 " />}</td>
                     <td>{order.isDelivered ? order.deliveredAt?.substring(0, 10) : <RxCross2 className="text-red-500 " />}</td>
                     <td className="underline text-primary font-medium">

@@ -9,7 +9,6 @@ import { getCategory } from "../slices/categoryApiSlice";
 import ProductCarousel from "../Components/ProductCarousel";
 import { IoIosArrowRoundBack } from "react-icons/io";
 import Meta from "../Components/Meta";
-import { toast } from "react-toastify";
 
 const HomePage = () => {
   const dispatch = useDispatch();
@@ -24,10 +23,8 @@ const HomePage = () => {
     dispatch(getCategory());
   }, [pageNumber, keyword, category]);
 
-  const handleCategory = () => {
-    useEffect(() => {
-      dispatch(fetchProducts({ pageNumber, keyword, category }));
-    }, [pageNumber, keyword, category]);
+  const handleCategory = (categoryName) => {
+    dispatch(fetchProducts({ pageNumber, keyword, category: categoryName }));
   };
 
   const handleAllProduct = () => {
@@ -49,7 +46,7 @@ const HomePage = () => {
           </NavLink>
         )}
 
-        <section className="my-10">
+        <section className="my-16">
           <div>
             <h2 className="text-2xl my-4 text-primary font-medium">Featured Categories</h2>
           </div>
@@ -63,7 +60,7 @@ const HomePage = () => {
                   All
                 </Link>
                 {categories?.map((category) => (
-                  <Link key={category._id} to={`/category/${category.name}`} onClick={handleCategory} className="border border-primary p-3 px-4 text-sm font-semibold hover:bg-mintGreen hover:text-white hover:border-white">
+                  <Link key={category._id} to={`/category/${category.name}`} onClick={() => handleCategory(category.name)} className="border border-primary p-3 px-4 text-sm font-semibold hover:bg-mintGreen hover:text-white hover:border-white">
                     {category.name}
                   </Link>
                 ))}
