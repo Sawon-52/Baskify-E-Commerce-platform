@@ -41,6 +41,7 @@ export const getOrders = createAsyncThunk("orders/getOrders", async (_, { reject
     return rejectWithValue(error.response.data);
   }
 });
+
 // Async Thunks for API Calls
 export const deliverOrder = createAsyncThunk("orders/deliverOrder", async (orderId, { rejectWithValue }) => {
   try {
@@ -50,6 +51,17 @@ export const deliverOrder = createAsyncThunk("orders/deliverOrder", async (order
     return rejectWithValue(error.response.data);
   }
 });
+
+// Async Thunks for order to pay
+export const paidToOrder = createAsyncThunk("orders/pay", async (orderId, { rejectWithValue }) => {
+  try {
+    const response = await axios.put(`${ORDER_URL}/${orderId}/pay`, orderId);
+    return response.data;
+  } catch (error) {
+    return rejectWithValue(error.response.data);
+  }
+});
+
 // create orders slice
 const ordersSlice = createSlice({
   name: "orders",

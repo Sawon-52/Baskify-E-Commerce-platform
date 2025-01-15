@@ -88,6 +88,11 @@ const orderSchema = new mongoose.Schema(
     deliveredAt: {
       type: Date,
     },
+
+    paymentResult: {
+      type: Object,
+      default: null, // Default value for paymentResult is null
+    },
   },
 
   {

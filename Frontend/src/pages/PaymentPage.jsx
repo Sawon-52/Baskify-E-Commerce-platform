@@ -5,15 +5,14 @@ import { useNavigate } from "react-router-dom";
 import { savePaymentMethod } from "../slices/cartSlice";
 
 const PaymentPage = () => {
-  const [paymentMethod, setPaymentMethod] = useState("Paypal");
+  const [paymentMethod, setPaymentMethod] = useState("SSLCOMMERZ");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const cart = useSelector((state) => state.cart);
   const { shippingAddress } = cart;
-  console.log(shippingAddress);
-  
+
   useEffect(() => {
     if (!shippingAddress) {
       navigate("/shipping");
@@ -25,25 +24,39 @@ const PaymentPage = () => {
     dispatch(savePaymentMethod(paymentMethod));
     navigate("/placeorder");
   };
+
   return (
-    <div>
+    <>
       <CheckoutSteps step1 step2 step3 />
-      <div>
-        <h1 className="text-xl font-bold my-2">Payment Method</h1>
-        <form onSubmit={handleSubmit}>
-          <h2 className="text-base font-medium">Select Method</h2>
 
-          <div className="flex items-center gap-2 my-4">
-            <input type="radio" className="radio w-5 h-5 defaultChecked" name="paymentMethod" value="Paypal" onChange={(e) => setPaymentMethod(e.target.value)} />
-            <label htmlFor="">Paypal or Credit Card</label>
-          </div>
+      <div className="max-w-3xl mx-auto px-4 py-8 border rounded-sm my-10">
+        <div className="text-center mb-8">
+          <h1 className="text-2xl font-semibold text-gray-800">Select Payment Method</h1>
+          <p className="text-gray-600">Choose your preferred method to proceed with the payment.</p>
+        </div>
 
-          <button type="submit" className="btn bg-primary text-white hover:bg-primary">
-            Continue
-          </button>
-        </form>
+        <div className="bg-white rounded-md shadow-lg p-6">
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="space-y-4">
+              <label className="block text-lg font-medium text-gray-700">Payment Method</label>
+
+              <div className="flex items-center gap-4">
+                <input type="radio" id="sslcommerz" name="paymentMethod" value="SSLCOMMERZ" checked={paymentMethod === "SSLCOMMERZ"} onChange={(e) => setPaymentMethod(e.target.value)} className="h-4 w-4 text-primary focus:ring-primary border-gray-300" />
+                <label htmlFor="sslcommerz" className="text-gray-800">
+                  SSLCOMMERZ
+                </label>
+              </div>
+            </div>
+
+            <div className="flex justify-center">
+              <button type="submit" className=" btn btn-wide  bg-primary text-white py-3 rounded-md font-semibold hover:bg-mintGreen transition duration-300">
+                Continue
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

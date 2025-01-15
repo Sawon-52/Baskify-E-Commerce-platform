@@ -1,6 +1,7 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import Loader from "../Components/Loader";
 import { deliverOrder, getOrderDetails } from "../slices/OrdersApiSlice";
+import { paymentCreate, paymentSuccess } from "../slices/paymentApiSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
@@ -11,17 +12,35 @@ const OrderPage = () => {
   const dispatch = useDispatch();
   const { orders, isLoading } = useSelector((state) => state.orders);
   const { userInfo } = useSelector((state) => state.auth);
+  const { paymentInfo } = useSelector((state) => state.payment);
+
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
-    const fetchData = async () => {
+    if (orderId) {
       try {
-        const res = await dispatch(getOrderDetails(orderId)).unwrap();
+        dispatch(getOrderDetails(orderId));
+        dispatch(paymentCreate(orderId)).unwrap();
       } catch (error) {
-        console.log(error);
+        console.error(error);
+        toast.error("Failed to fetch order details.");
       }
-    };
-    fetchData();
-  }, [orderId]);
+    } else {
+      toast.error("Invalid order ID.");
+    }
+  }, [orderId, dispatch, searchParams]);
+
+  useEffect(() => {
+    // Check for success or failure
+    const success = searchParams.get("success");
+    const message = searchParams.get("message");
+
+    if (success === "true") {
+      toast.success(message || "Payment successful!");
+    } else if (success === "false") {
+      toast.error(message || "Payment failed. Please try again.");
+    }
+  }, [searchParams]);
 
   const handleToDeliver = async () => {
     try {
@@ -29,6 +48,12 @@ const OrderPage = () => {
       toast.success("Order delivered");
     } catch (error) {
       toast.error(error.message || error.message);
+    }
+  };
+
+  const handleToPaid = async () => {
+    if (paymentInfo.url) {
+      window.location.replace(paymentInfo.url);
     }
   };
 
@@ -76,7 +101,7 @@ const OrderPage = () => {
                             </td>
                             <td>
                               <div className="flex items-center">
-                                {item.qty} X <TbCurrencyTaka className="hidden md:block"  />
+                                {item.qty} X <TbCurrencyTaka className="hidden md:block" />
                                 {item.price} = <TbCurrencyTaka className="hidden md:block" /> {(item.qty * item.price).toFixed(2)} Tk
                               </div>
                             </td>
@@ -195,7 +220,7 @@ const OrderPage = () => {
                       </div>
                     </div>
                     {!userInfo.isAdmin && !orders.isPaid && (
-                      <div className="flex justify-end">
+                      <div className="flex justify-end" onClick={handleToPaid}>
                         <button className=" btn  mt-10 py-2 bg-primary text-white rounded-lg hover:bg-primary">Please Paid first</button>
                       </div>
                     )}

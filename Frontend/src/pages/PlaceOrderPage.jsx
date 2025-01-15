@@ -31,6 +31,7 @@ const PlaceOrderPage = () => {
       toast.error(err);
     }
   };
+
   return (
     <>
       <div>
