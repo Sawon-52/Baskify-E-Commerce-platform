@@ -22,6 +22,7 @@ const ProfilePage = () => {
   const { isLoading: updatingLoading } = useSelector((state) => state.users);
   const { myOrders, isLoading, isError } = useSelector((state) => state.orders);
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(getMyOrders());
     if (userInfo) {
@@ -48,7 +49,7 @@ const ProfilePage = () => {
   const logoutHandler = async () => {
     try {
       await dispatch(logoutUser()).unwrap();
-      await dispatch(removeCredentials()).unwrap();
+      dispatch(removeCredentials());
       toast.success("Logged out successfully!");
       navigate("/login");
     } catch (error) {

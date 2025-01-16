@@ -50,7 +50,7 @@ const OrderListPage = () => {
                     <td>
                       <div className="flex items-center gap-1">
                         <TbCurrencyTaka />
-                        {order.taxPrice}
+                        {order.totalPrice}
                       </div>
                     </td>
                     <td>{order.isPaid ? order.paidAt?.substring(0, 10) : <RxCross2 className="text-red-500 " />}</td>

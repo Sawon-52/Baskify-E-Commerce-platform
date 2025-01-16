@@ -30,7 +30,7 @@ const RegisterPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(name, email, password, confirmPassword);
+
     if (password !== confirmPassword) {
       toast.error("Password do not match");
       return;

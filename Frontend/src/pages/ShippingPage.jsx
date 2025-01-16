@@ -77,12 +77,7 @@ const ShippingPage = () => {
               <input type="text" name="district" value={formData.district} onChange={handleChange} placeholder="District" className="border border-gray-300 p-2 rounded-md w-full focus:outline-1 focus:outline-mintGreen" />
             </div>
             <div className="mt-4">
-              <select name="country" value={formData.country} onChange={handleChange} className="border border-gray-300 p-2 rounded-md w-full">
-                <option disabled selected value="Bangladesh">
-                  Select Your Country
-                </option>
-                <option value="Bangladesh">Bangladesh</option>
-              </select>
+              <input type="text" name="country" value={formData.country} onChange={handleChange} placeholder="Country" className="border border-gray-300 p-2 rounded-md w-full focus:outline-1 focus:outline-mintGreen" />
             </div>
           </div>
 

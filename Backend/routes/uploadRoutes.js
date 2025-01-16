@@ -35,7 +35,6 @@ router.post("/", upload.single("image"), (req, res) => {
       message: "Image Uploaded",
       image: "/" + imagePath,
     });
-    console.log(imagePath);
   } else {
     res.status(400).json({ message: "No file uploaded" });
   }

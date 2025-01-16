@@ -58,7 +58,9 @@ const PlaceOrderPage = () => {
                   <tr className="text-primary">
                     <th>image</th>
                     <th>Title</th>
+                    <th>No.Items</th>
                     <th>price</th>
+                    <th>Total price</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -70,11 +72,10 @@ const PlaceOrderPage = () => {
                       <td className="underline cursor-pointer">
                         <Link to={`/product/${item._id}`}>{item.name}</Link>
                       </td>
+                      <td>{item.qty}</td>
+                      <td>{`${item.price} Tk`}</td>
                       <td>
-                        <div className="flex items-center">
-                          {item.qty} X <TbCurrencyTaka className=" hidden md:block" />
-                          {item.price} = <TbCurrencyTaka className=" hidden md:block" /> {(item.qty * item.price).toFixed(2)} Tk
-                        </div>
+                        <p>{`${(item.qty * item.price).toFixed(2)}Tk`}</p>
                       </td>
                     </tr>
                   ))}
@@ -119,9 +120,6 @@ const PlaceOrderPage = () => {
               <div className="space-y-2">
                 <p>
                   <span className="font-semibold">Payment Method:</span> {cart.paymentMethod}{" "}
-                </p>
-                <p>
-                  <span className="font-semibold">Payment Date:</span> 02/01/2025
                 </p>
               </div>
             </div>

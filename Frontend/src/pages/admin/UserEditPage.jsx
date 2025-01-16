@@ -17,12 +17,15 @@ const UserEditPage = () => {
 
   useEffect(() => {
     dispatch(getUser(userId));
+  }, [dispatch, userId]);
+
+  useEffect(() => {
     if (user) {
       setName(user.name);
       setEmail(user.email);
       setIsAdmin(user.isAdmin);
     }
-  }, [dispatch, userId, user]);
+  }, [dispatch, user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -32,7 +35,7 @@ const UserEditPage = () => {
       email,
       isAdmin,
     };
-    const result = await dispatch(updateUser(updatedUser)).unwrap();
+    const result = dispatch(updateUser(updatedUser));
     if (result.error) {
       toast.error(result.error);
     } else {

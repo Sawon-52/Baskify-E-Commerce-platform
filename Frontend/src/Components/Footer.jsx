@@ -10,7 +10,7 @@ import { useSelector } from "react-redux";
 
 const Footer = () => {
   const { categories } = useSelector((state) => state.category);
-  console.log(categories);
+
   const handleSubscribe = (e) => {
     e.preventDefault();
   };
