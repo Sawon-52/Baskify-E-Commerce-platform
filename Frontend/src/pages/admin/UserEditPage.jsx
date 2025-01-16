@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProductDetails, clearProductInfo, updateProduct, uploadProductImage } from "../../slices/productsApiSlice";
 import { getUser, updateUser } from "../../slices/usersApiSlice";
 import Loader from "../../Components/Loader";
-import { IoIosArrowRoundBack } from "react-icons/io";
 import { toast } from "react-toastify";
 
 const UserEditPage = () => {
