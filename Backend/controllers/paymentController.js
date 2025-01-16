@@ -91,9 +91,9 @@ const paymentSuccess = asyncHandler(async (req, res) => {
     const updatedOrder = await order.save();
 
     // Redirect with query parameters
-    res.redirect(`http://localhost:3000/orders/${order._id}?success=true&message=${encodeURIComponent("Payment successful!")}`);
+    res.redirect(`https://baskify-e-commerce-platform-wu0y.onrender.com/orders/${order._id}?success=true&message=${encodeURIComponent("Payment successful!")}`);
   } else {
-    res.redirect(`http://localhost:3000/orders/${tran_id}?success=false&message=${encodeURIComponent("Payment failed. Please try again.")}`);
+    res.redirect(`https://baskify-e-commerce-platform-wu0y.onrender.com/orders/${tran_id}?success=false&message=${encodeURIComponent("Payment failed. Please try again.")}`);
   }
 });
 
@@ -117,7 +117,7 @@ const paymentFail = asyncHandler(async (req, res) => {
   await order.save();
 
   // Redirect to client with error message
-  res.redirect(`http://localhost:3000/orders/${order._id}?success=false&message=${encodeURIComponent("Payment failed. Please try again.")}`);
+  res.redirect(`https://baskify-e-commerce-platform-wu0y.onrender.com/orders/${order._id}?success=false&message=${encodeURIComponent("Payment failed. Please try again.")}`);
 });
 
 const paymentCancel = asyncHandler(async (req, res) => {
@@ -139,7 +139,7 @@ const paymentCancel = asyncHandler(async (req, res) => {
   await order.save();
 
   // Redirect to client with cancellation message
-  res.redirect(`http://localhost:3000/orders/${order._id}?success=false&message=${encodeURIComponent("Payment was canceled by the user.")}`);
+  res.redirect(`https://baskify-e-commerce-platform-wu0y.onrender.com/orders/${order._id}?success=false&message=${encodeURIComponent("Payment was canceled by the user.")}`);
 });
 
 const paymentIPN = asyncHandler(async (req, res) => {
