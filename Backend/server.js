@@ -25,10 +25,6 @@ app.use(express.urlencoded({ extended: true }));
 // cookie parser middleware
 app.use(cookieParser());
 
-app.get("/", (req, res) => {
-  res.send("Api is Running......");
-});
-
 app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/orders", orderRoutes);
@@ -39,6 +35,17 @@ app.use("/api/payments", paymentRoutes);
 const __dirname = path.resolve();
 app.use("/uploads", express.static(path.join(__dirname, "/uploads/")));
 
+if (process.env.NODE_ENV === "production") {
+  // set static folder
+  app.use(express.static(path.join(__dirname, "/Frontend/dist")));
+
+  //any route that  is not api will be redirected to index.html
+  app.get("*", (req, res) => res.sendFile(path.resolve(__dirname, "Frontend", "dist", "index.html")));
+} else {
+  app.get("/", (req, res) => {
+    res.send("Api is Running......");
+  });
+}
 app.use(notFound);
 app.use(errorHandler);
 app.listen(port, () => console.log(`Server running on port ${port}`));

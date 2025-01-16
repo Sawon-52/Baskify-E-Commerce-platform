@@ -9,10 +9,10 @@
     "start": "node Backend/server.js",
     "server": "nodemon Backend/server.js",
     "client": "npm run dev --prefix Frontend",
-    "build": "npm run build --prefix Frontend",
     "dev": "concurrently \"npm run server\" \" npm run client\"",
     "data:import": "node Backend/seeder.js",
-    "data:destroy": "node Backend/seeder.js -d"
+    "data:destroy": "node Backend/seeder.js -d",
+    "build": "npm install && npm install --prefix Frontend && npm run build --prefix Frontend"
   },
   "keywords": [
     "MERN",
