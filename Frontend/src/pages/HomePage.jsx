@@ -3,7 +3,7 @@ import ProductCard from "../Components/ProductCard";
 import { useSelector, useDispatch } from "react-redux";
 import Loader from "../Components/Loader";
 import { Link, NavLink, useParams } from "react-router-dom";
-import Paginate from "../Components/paginate";
+import Paginate from "../Components/Paginate";
 import { fetchProducts } from "../slices/productsApiSlice";
 import { getCategory } from "../slices/categoryApiSlice";
 import ProductCarousel from "../Components/ProductCarousel";
