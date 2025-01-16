@@ -21,7 +21,7 @@ import OrderListPage from "./pages/admin/OrderListPage.jsx";
 import ProductListPage from "./pages/admin/ProductListPage.jsx";
 import ProductEditPage from "./pages/admin/ProductEditPage.jsx";
 import UserListPage from "./pages/admin/UserListPage.jsx";
-import UserEditPage from "./pages/admin/userEditPage.jsx";
+import UserEditPage from "./pages/admin/UserEditPage.jsx";
 import { HelmetProvider } from "react-helmet-async";
 import AdminLayout from "./pages/admin/AdminLayout.jsx";
 import AdminDashboard from "./pages/admin/AdminDashboard.jsx";
