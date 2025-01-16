@@ -7,12 +7,12 @@ import SSLCommerzPayment from "sslcommerz-lts";
 const tran_id = new mongoose.Types.ObjectId().toString();
 
 const paymentCreate = asyncHandler(async (req, res) => {
+  const order = await Order.findById(req.params.id);
+
   //SSlCommerz store
   const store_id = process.env.STORE_ID;
   const store_passwd = process.env.STORE_PASSWD;
   const is_live = false; //true for live, false for sandbox
-
-  const order = await Order.findById(req.params.id);
 
   const data = {
     total_amount: order?.totalPrice,
@@ -63,13 +63,13 @@ const paymentCreate = asyncHandler(async (req, res) => {
 const paymentSuccess = asyncHandler(async (req, res) => {
   const { tran_id, val_id, amount, card_type, status, store_amount } = req.body;
 
-  // Find the order by transaction ID
-  const order = await Order.findOne({
-    paymentResult: { $exists: true, $ne: null },
-    "paymentResult.transactionId": tran_id,
-  });
-
   if (status === "VALID") {
+    // Find the order by transaction ID
+    const order = await Order.findOne({
+      paymentResult: { $exists: true, $ne: null },
+      "paymentResult.transactionId": tran_id,
+    });
+
     if (!order) {
       res.status(404);
       throw new Error("Order not found");
@@ -97,7 +97,12 @@ const paymentSuccess = asyncHandler(async (req, res) => {
 
     res.redirect(`https://baskify-e-commerce-platform-wu0y.onrender.com/orders/${order._id}?success=true&message=${encodeURIComponent("Payment successful!")}`);
   } else {
-    res.redirect(`https://baskify-e-commerce-platform-wu0y.onrender.com/orders/${order._id}?success=false&message=${encodeURIComponent("Payment failed. Please try again.")}`);
+    // Find the order by transaction ID
+    const odr = await Order.findOne({
+      paymentResult: { $exists: true, $ne: null },
+      "paymentResult.transactionId": tran_id,
+    });
+    res.redirect(`https://baskify-e-commerce-platform-wu0y.onrender.com/orders/${odr._id}?success=false&message=${encodeURIComponent("Payment failed. Please try again.")}`);
   }
 });
 
