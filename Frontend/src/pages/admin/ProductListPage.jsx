@@ -6,7 +6,7 @@ import { IoCreate } from "react-icons/io5";
 import { MdDelete } from "react-icons/md";
 import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import Paginate from "../../Components/paginate";
+import Paginate from "../../Components/Paginate";
 import { TbCurrencyTaka } from "react-icons/tb";
 
 const ProductListPage = () => {
