@@ -69,7 +69,7 @@ const paymentSuccess = asyncHandler(async (req, res) => {
       paymentResult: { $exists: true, $ne: null },
       "paymentResult.transactionId": tran_id,
     });
-
+    console.log(order);
     if (!order) {
       res.status(404);
       throw new Error("Order not found");
