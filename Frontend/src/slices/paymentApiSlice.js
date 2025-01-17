@@ -8,17 +8,7 @@ const initialState = {
 // Async Thunks for order to pay
 export const paymentCreate = createAsyncThunk("payment/createPayment", async (orderId, { rejectWithValue }) => {
   try {
-    const response = await axios.put(`${PAYMENT_URL}/${orderId}/pay`, orderId);
-    return response.data;
-  } catch (error) {
-    return rejectWithValue(error.response.data);
-  }
-});
-
-// Async Thunks for payment success
-export const paymentSuccess = createAsyncThunk("payment/paymentSuccess", async (_, { rejectWithValue }) => {
-  try {
-    const response = await axios.post(`${PAYMENT_URL}/pay/success`);
+    const response = await axios.post(`${PAYMENT_URL}/${orderId}/pay`, orderId);
     return response.data;
   } catch (error) {
     return rejectWithValue(error.response.data);
@@ -43,20 +33,6 @@ const paymentSlice = createSlice({
         state.paymentInfo = action.payload;
       })
       .addCase(paymentCreate.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = action.payload;
-      })
-
-      // for payment success
-      .addCase(paymentSuccess.pending, (state) => {
-        state.isLoading = true;
-        state.isError = null;
-      })
-      .addCase(paymentSuccess.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.paymentInfo = action.payload;
-      })
-      .addCase(paymentSuccess.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = action.payload;
       });

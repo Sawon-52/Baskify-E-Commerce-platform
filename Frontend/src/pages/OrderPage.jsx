@@ -1,7 +1,7 @@
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import Loader from "../Components/Loader";
 import { deliverOrder, getOrderDetails } from "../slices/OrdersApiSlice";
-import { paymentCreate, paymentSuccess } from "../slices/paymentApiSlice";
+import { paymentCreate } from "../slices/paymentApiSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
@@ -20,37 +20,36 @@ const OrderPage = () => {
     if (orderId) {
       try {
         dispatch(getOrderDetails(orderId));
-        dispatch(paymentCreate(orderId)).unwrap();
       } catch (error) {
         toast.error("Failed to fetch order details.");
       }
     } else {
       toast.error("Invalid order ID.");
     }
-  }, [orderId, dispatch, searchParams]);
 
-  useEffect(() => {
-    // Check for success or failure
-    const success = searchParams.get("success");
-    const message = searchParams.get("message");
+    if (searchParams.size > 0) {
+      const success = searchParams.get("success");
+      const message = searchParams.get("message");
 
-    if (success === "true") {
-      toast.success(message || "Payment successful!");
-    } else if (success === "false") {
-      toast.error(message || "Payment failed. Please try again.");
+      if (success === "true") {
+        toast.success(message || "Payment successful!");
+      } else if (success === "false") {
+        toast.error(message || "Payment failed. Please try again.");
+      }
     }
-  }, [searchParams]);
+  }, [dispatch, orderId, searchParams]);
 
   const handleToDeliver = async () => {
     try {
-      await dispatch(deliverOrder(orderId)).unwrap();
+      dispatch(deliverOrder(orderId));
       toast.success("Order delivered");
     } catch (error) {
-      toast.error(error.message || error.message);
+      toast.error(error.message || error.error);
     }
   };
 
   const handleToPaid = async () => {
+    dispatch(paymentCreate(orderId));
     if (paymentInfo.url) {
       window.location.replace(paymentInfo.url);
     }
@@ -220,8 +219,10 @@ const OrderPage = () => {
                       </div>
                     </div>
                     {!userInfo.isAdmin && !orders.isPaid && (
-                      <div className="flex justify-end" onClick={handleToPaid}>
-                        <button className=" btn  mt-10 py-2 bg-primary text-white rounded-lg hover:bg-primary">Please Pay First</button>
+                      <div className="flex justify-end">
+                        <button className=" btn  mt-10 py-2 bg-primary text-white rounded-lg hover:bg-primary" onClick={handleToPaid}>
+                          Please Pay First
+                        </button>
                       </div>
                     )}
                     {userInfo.isAdmin && !orders.isDelivered && (

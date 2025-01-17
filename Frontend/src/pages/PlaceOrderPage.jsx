@@ -12,7 +12,7 @@ const PlaceOrderPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
-  const { isLoading } = useSelector((state) => state.orders);
+  const { orders, isLoading } = useSelector((state) => state.orders);
 
   useEffect(() => {
     if (!cart.shippingAddress) {
@@ -24,11 +24,13 @@ const PlaceOrderPage = () => {
 
   const placeOrderHandle = async () => {
     try {
-      const res = dispatch(createOrder({ orderItems: cart.cartItems, shippingAddress: cart.shippingAddress, paymentMethod: cart.paymentMethod, itemsPrice: cart.itemsPrice, shippingPrice: cart.shippingPrice, taxPrice: cart.taxPrice, totalPrice: cart.totalPrice }));
+      dispatch(createOrder({ orderItems: cart.cartItems, shippingAddress: cart.shippingAddress, paymentMethod: cart.paymentMethod, itemsPrice: cart.itemsPrice, shippingPrice: cart.shippingPrice, taxPrice: cart.taxPrice, totalPrice: cart.totalPrice }));
       dispatch(clearCartItems());
-      navigate(`/orders/${res._id}`);
+      if (orders) {
+        navigate(`/orders/${orders._id}`);
+      }
     } catch (err) {
-      toast.error(err);
+      toast.error(err || err.message);
     }
   };
 
