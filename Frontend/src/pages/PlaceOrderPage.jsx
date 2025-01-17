@@ -26,11 +26,12 @@ const PlaceOrderPage = () => {
     try {
       dispatch(createOrder({ orderItems: cart.cartItems, shippingAddress: cart.shippingAddress, paymentMethod: cart.paymentMethod, itemsPrice: cart.itemsPrice, shippingPrice: cart.shippingPrice, taxPrice: cart.taxPrice, totalPrice: cart.totalPrice }));
       dispatch(clearCartItems());
-      if (orders) {
-        navigate(`/orders/${orders._id}`);
-      }
     } catch (err) {
       toast.error(err || err.message);
+    }
+
+    if (orders._id) {
+      navigate(`/orders/${orders._id}`);
     }
   };
 

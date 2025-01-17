@@ -49,7 +49,12 @@ const OrderPage = () => {
   };
 
   const handleToPaid = async () => {
-    dispatch(paymentCreate(orderId));
+    try {
+      dispatch(paymentCreate(orderId));
+    } catch (error) {
+      toast.error(error?.message || error.error);
+    }
+
     if (paymentInfo.url) {
       window.location.replace(paymentInfo.url);
     }
