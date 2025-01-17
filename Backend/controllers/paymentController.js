@@ -1,87 +1,84 @@
 import asyncHandler from "../middleware/asyncHandler.js";
 import Order from "../models/orderModel.js";
 import mongoose from "mongoose";
-import SSLCommerzPayment from "sslcommerz-lts";
+import { SslCommerzPayment } from "sslcommerz";
+import dotenv from "dotenv";
+dotenv.config();
 
-//create Unique Transection id
+// Create unique transaction ID
 const tran_id = new mongoose.Types.ObjectId().toString();
 
 const paymentCreate = asyncHandler(async (req, res) => {
   const order = await Order.findById(req.params.id);
 
-  //SSlCommerz store
+  // SSLCommerz store credentials
   const store_id = process.env.STORE_ID;
   const store_passwd = process.env.STORE_PASSWD;
-  const is_live = false; //true for live, false for sandbox
+  const is_live = process.env.IS_LIVE; // true for live, false for sandbox
 
   const data = {
-    total_amount: order?.totalPrice,
+    total_amount: order?.totalPrice || 0,
     currency: "BDT",
-    tran_id: tran_id, // use unique tran_id for each api call
-    success_url: "https://baskify-e-commerce-platform-wu0y.onrender.com/api/payments/pay/success",
-    fail_url: "https://baskify-e-commerce-platform-wu0y.onrender.com/api/payments/pay/fail",
-    cancel_url: "https://baskify-e-commerce-platform-wu0y.onrender.com/api/payments/pay/cancel",
-    ipn_url: "https://baskify-e-commerce-platform-wu0y.onrender.com/api/payments/pay/ipn",
+    tran_id: tran_id,
+    success_url: `${process.env.BASE_URL}/api/payments/pay/success`,
+    fail_url: `${process.env.BASE_URL}/api/payments/pay/fail`,
+    cancel_url: `${process.env.BASE_URL}/api/payments/pay/cancel`,
+    ipn_url: `${process.env.BASE_URL}/api/payments/pay/ipn`,
     shipping_method: "Courier",
     product_name: "Combined Product",
-    product_category: "Combined Category",
+    product_category: "General",
     product_profile: "general",
-    cus_name: order?.shippingAddress?.firstName,
-    cus_email: order?.shippingAddress?.emailAddress,
-    cus_add1: order?.shippingAddress?.city,
-    cus_add2: order?.shippingAddress?.city,
-    cus_city: order?.shippingAddress?.city,
-    cus_state: order?.shippingAddress?.city,
-    cus_postcode: order?.shippingAddress?.zipCode,
-    cus_country: order?.shippingAddress?.country,
-    cus_phone: order?.shippingAddress?.phoneNumber,
-    ship_name: order?.shippingAddress?.firstName,
-    ship_add1: order?.shippingAddress?.city,
-    ship_add2: order?.shippingAddress?.city,
-    ship_city: order?.shippingAddress?.city,
-    ship_state: order?.shippingAddress?.city,
-    ship_postcode: order?.shippingAddress?.zipCode,
-    ship_country: order?.shippingAddress?.country,
+    cus_name: order?.shippingAddress?.firstName || "Customer",
+    cus_email: order?.shippingAddress?.emailAddress || "unknown@example.com",
+    cus_add1: order?.shippingAddress?.address || "Unknown Address",
+    cus_city: order?.shippingAddress?.city || "Unknown City",
+    cus_postcode: order?.shippingAddress?.zipCode || "0000",
+    cus_country: order?.shippingAddress?.country || "Bangladesh",
+    cus_phone: order?.shippingAddress?.phoneNumber || "0000000000",
+    ship_name: order?.shippingAddress?.firstName || "Customer",
+    ship_add1: order?.shippingAddress?.address || "Unknown Address",
+    ship_city: order?.shippingAddress?.city || "Unknown City",
+    ship_postcode: order?.shippingAddress?.zipCode || "0000",
+    ship_country: order?.shippingAddress?.country || "Bangladesh",
   };
 
-  const sslcz = new SSLCommerzPayment(store_id, store_passwd, is_live);
+  const sslcz = new SslCommerzPayment(store_id, store_passwd, is_live);
   sslcz.init(data).then(async (apiResponse) => {
-    let GatewayPageURL = apiResponse.GatewayPageURL;
-    res.send({ url: GatewayPageURL });
-    //Update new order with the transaction ID (after  payment initiation)
-    if (order && GatewayPageURL) {
-      order.paymentResult = {
-        update_time: Date.now(),
-        transactionId: tran_id,
-      };
+      let GatewayPageURL = apiResponse.GatewayPageURL;
+      res.send({ url: GatewayPageURL });
 
-      const updatedOrder = await order.save();
-    }
-  });
+      if (order && GatewayPageURL) {
+        order.paymentResult = {
+          update_time: Date.now(),
+          transactionId: tran_id,
+        };
+
+        await order.save();
+      }
+    })
+    .catch((error) => {
+      res.status(500).json({ message: "SSLCommerz initialization failed", error });
+    });
 });
 
 const paymentSuccess = asyncHandler(async (req, res) => {
   const { tran_id, val_id, amount, card_type, status, store_amount } = req.body;
+  const order = await Order.findOne({
+    paymentResult: { $exists: true, $ne: null },
+    "paymentResult.transactionId": tran_id,
+  });
 
   if (status === "VALID") {
-    // Find the order by transaction ID
-    const order = await Order.findOne({
-      paymentResult: { $exists: true, $ne: null },
-      "paymentResult.transactionId": tran_id,
-    });
-
     if (!order) {
-      // res.status(404);
-      // throw new Error("Order not found");
-      res.redirect(`https://baskify-e-commerce-platform-wu0y.onrender.com/orders/${order?._id}?success=false&message=${encodeURIComponent("Payment failed. Order not found")}`);
+      res.redirect(`${process.env.BASE_URL}/orders/${tran_id}?success=false&message=Order not found`);
+      return;
     }
 
-    // Verify amount
     if (parseFloat(order.totalPrice) !== parseFloat(amount)) {
-      res.redirect(`https://baskify-e-commerce-platform-wu0y.onrender.com/orders/${order?._id}?success=false&message=${encodeURIComponent("Payment failed. Amount mismatch")}`);
+      res.redirect(`${process.env.BASE_URL}/orders/${order._id}?success=false&message=Amount mismatch`);
+      return;
     }
 
-    // Update order status to paid
     order.isPaid = true;
     order.paidAt = Date.now();
     order.paymentResult = {
@@ -92,63 +89,16 @@ const paymentSuccess = asyncHandler(async (req, res) => {
       storeAmount: store_amount,
     };
 
-    const updatedOrder = await order.save();
-    // Redirect with query parameters
-    res.redirect(`https://baskify-e-commerce-platform-wu0y.onrender.com/orders/${order?._id}?success=true&message=${encodeURIComponent("Payment successful!")}`);
+    await order.save();
+    res.redirect(`${process.env.BASE_URL}/orders/${order._id}?success=true&message=Payment successful`);
   } else {
-    res.redirect(`https://baskify-e-commerce-platform-wu0y.onrender.com/orders/${tran_id}?success=false&message=${encodeURIComponent("Payment failed. Please try again.")}`);
+    res.redirect(`${process.env.BASE_URL}/orders/${order._id}?success=false&message=Payment validation failed`);
   }
 });
 
 const paymentFail = asyncHandler(async (req, res) => {
-  const { tran_id, error } = req.body;
-
-  // Find the order by transaction ID
-  const order = await Order.findOne({
-    paymentResult: { $exists: true, $ne: null },
-    "paymentResult.transactionId": tran_id,
-  });
-
-  if (!order) {
-    res.status(404);
-    throw new Error("Order not found");
-  }
-
-  // Update order status as failed
-  order.paymentResult.status = "FAILED";
-  order.paymentResult.error = error || "Unknown error";
-  await order.save();
-
-  // Redirect to client with error message
-  res.redirect(`https://baskify-e-commerce-platform-wu0y.onrender.com/orders/${order._id}?success=false&message=${encodeURIComponent("Payment failed. Please try again.")}`);
-});
-
-const paymentCancel = asyncHandler(async (req, res) => {
   const { tran_id } = req.body;
 
-  // Find the order by transaction ID
-  const order = await Order.findOne({
-    paymentResult: { $exists: true, $ne: null },
-    "paymentResult.transactionId": tran_id,
-  });
-
-  if (!order) {
-    res.status(404);
-    throw new Error("Order not found");
-  }
-
-  // Update order status as canceled
-  order.paymentResult.status = "CANCELED";
-  await order.save();
-
-  // Redirect to client with cancellation message
-  res.redirect(`https://baskify-e-commerce-platform-wu0y.onrender.com/orders/${order._id}?success=false&message=${encodeURIComponent("Payment was canceled by the user.")}`);
-});
-
-const paymentIPN = asyncHandler(async (req, res) => {
-  const { tran_id, status, val_id, amount, card_type, store_amount } = req.body;
-
-  // Find the order by transaction ID
   const order = await Order.findOne({
     paymentResult: { $exists: true, $ne: null },
     "paymentResult.transactionId": tran_id,
@@ -159,9 +109,45 @@ const paymentIPN = asyncHandler(async (req, res) => {
     return;
   }
 
-  // Handle different statuses
+  order.paymentResult.status = "FAILED";
+  await order.save();
+
+  res.redirect(`${process.env.BASE_URL}/orders/${order._id}?success=false&message=Payment failed`);
+});
+
+const paymentCancel = asyncHandler(async (req, res) => {
+  const { tran_id } = req.body;
+
+  const order = await Order.findOne({
+    paymentResult: { $exists: true, $ne: null },
+    "paymentResult.transactionId": tran_id,
+  });
+
+  if (!order) {
+    res.status(404).json({ message: "Order not found" });
+    return;
+  }
+
+  order.paymentResult.status = "CANCELED";
+  await order.save();
+
+  res.redirect(`${process.env.BASE_URL}/orders/${order._id}?success=false&message=Payment canceled`);
+});
+
+const paymentIPN = asyncHandler(async (req, res) => {
+  const { tran_id, status, val_id, amount, card_type, store_amount } = req.body;
+
+  const order = await Order.findOne({
+    paymentResult: { $exists: true, $ne: null },
+    "paymentResult.transactionId": tran_id,
+  });
+
+  if (!order) {
+    res.status(404).json({ message: "Order not found" });
+    return;
+  }
+
   if (status === "VALID") {
-    // Update order status to paid
     order.isPaid = true;
     order.paidAt = Date.now();
     order.paymentResult = {
@@ -174,13 +160,10 @@ const paymentIPN = asyncHandler(async (req, res) => {
 
     await order.save();
     res.status(200).json({ message: "Payment validated successfully" });
-  } else if (status === "FAILED") {
-    // Update order status as failed
+  } else {
     order.paymentResult.status = "FAILED";
     await order.save();
     res.status(400).json({ message: "Payment failed" });
-  } else {
-    res.status(400).json({ message: "Invalid IPN data" });
   }
 });
 
