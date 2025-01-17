@@ -63,24 +63,22 @@ const paymentCreate = asyncHandler(async (req, res) => {
 const paymentSuccess = asyncHandler(async (req, res) => {
   const { tran_id, val_id, amount, card_type, status, store_amount } = req.body;
 
-  // Find the order by transaction ID
-  const order = await Order.findOne({
-    paymentResult: { $exists: true, $ne: null },
-    "paymentResult.transactionId": tran_id,
-  });
-
-  
-
   if (status === "VALID") {
+    // Find the order by transaction ID
+    const order = await Order.findOne({
+      paymentResult: { $exists: true, $ne: null },
+      "paymentResult.transactionId": tran_id,
+    });
+
     if (!order) {
-      res.status(404);
-      throw new Error("Order not found");
+      // res.status(404);
+      // throw new Error("Order not found");
+      res.redirect(`https://baskify-e-commerce-platform-wu0y.onrender.com/orders/${order._id}?success=false&message=${encodeURIComponent("Payment failed. Order not found")}`);
     }
 
     // Verify amount
     if (parseFloat(order.totalPrice) !== parseFloat(amount)) {
-      res.status(400);
-      throw new Error("Amount mismatch");
+      res.redirect(`https://baskify-e-commerce-platform-wu0y.onrender.com/orders/${order._id}?success=false&message=${encodeURIComponent("Payment failed. Amount mismatch")}`);
     }
 
     // Update order status to paid
