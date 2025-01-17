@@ -70,12 +70,10 @@ const paymentSuccess = asyncHandler(async (req, res) => {
   });
 
   if (status === "VALID") {
-    // order ch
-    if (!order) {
-      // res.status(404);
-      // throw new Error("Order not found");
-      res.redirect(`https://baskify-e-commerce-platform-wu0y.onrender.com/orders/${order._id}?success=false&message=${encodeURIComponent("Payment failed. Order not found")}`);
-    }
+    // if (!order) {
+    //   res.status(404);
+    //   throw new Error("Order not found");
+    // }
 
     // Verify amount
     if (parseFloat(order.totalPrice) !== parseFloat(amount)) {

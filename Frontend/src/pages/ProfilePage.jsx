@@ -128,7 +128,7 @@ const ProfilePage = () => {
                         <td>{order.createdAt.substring(0, 10)}</td>
                         <td className="flex items-center flex-nowrap">
                           <TbCurrencyTaka className="hidden md:block " />
-                          {order.taxPrice} Tk
+                          {order.totalPrice} Tk
                         </td>
                         <td>{order.isPaid ? order.paidAt?.substring(0, 10) : <RxCross2 className="text-red-500 " />}</td>
                         <td>{order.isDelivered ? order.deliveredAt?.substring(0, 10) : <RxCross2 className="text-red-500 " />}</td>
