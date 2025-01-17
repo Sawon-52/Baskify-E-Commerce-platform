@@ -1,9 +1,7 @@
 import asyncHandler from "../middleware/asyncHandler.js";
 import Order from "../models/orderModel.js";
 import mongoose from "mongoose";
-import { SslCommerzPayment } from "sslcommerz";
-import dotenv from "dotenv";
-dotenv.config();
+import SSLCommerzPayment from "sslcommerz-lts";
 
 // Create unique transaction ID
 const tran_id = new mongoose.Types.ObjectId().toString();
@@ -42,23 +40,48 @@ const paymentCreate = asyncHandler(async (req, res) => {
     ship_country: order?.shippingAddress?.country || "Bangladesh",
   };
 
-  const sslcz = new SslCommerzPayment(store_id, store_passwd, is_live);
+  // const sslcz = new SSLCommerzPayment(store_id, store_passwd, is_live);
+  // console.log(store_id, store_passwd, is_live);
+  // try {
+  //   const apiResponse = await sslcz.init(data);
+
+  //   if (!apiResponse.GatewayPageURL) {
+  //     console.error("GatewayPageURL not found:", apiResponse);
+  //     return res.status(400).json({
+  //       message: "Could not retrieve payment gateway URL",
+  //       details: apiResponse,
+  //     });
+  //   }
+
+  //   // Return the GatewayPageURL
+  //   res.send({ url: apiResponse.GatewayPageURL });
+
+  //   // Update the order with the transaction ID
+  //   if (order) {
+  //     order.paymentResult = {
+  //       update_time: Date.now(),
+  //       transactionId: tran_id,
+  //     };
+  //     await order.save();
+  //   }
+  // } catch (error) {
+  //   console.error("SSLCommerz Payment Error:", error.message);
+  //   res.status(500).json({ message: "Payment initiation failed", error: error.message });
+  // }
+  const sslcz = new SSLCommerzPayment(store_id, store_passwd, is_live);
   sslcz.init(data).then(async (apiResponse) => {
-      let GatewayPageURL = apiResponse.GatewayPageURL;
-      res.send({ url: GatewayPageURL });
+    let GatewayPageURL = apiResponse.GatewayPageURL;
+    res.send({ url: GatewayPageURL });
+    //Update new order with the transaction ID (after  payment initiation)
+    if (order && GatewayPageURL) {
+      order.paymentResult = {
+        update_time: Date.now(),
+        transactionId: tran_id,
+      };
 
-      if (order && GatewayPageURL) {
-        order.paymentResult = {
-          update_time: Date.now(),
-          transactionId: tran_id,
-        };
-
-        await order.save();
-      }
-    })
-    .catch((error) => {
-      res.status(500).json({ message: "SSLCommerz initialization failed", error });
-    });
+      const updatedOrder = await order.save(); 
+    }
+  });
 });
 
 const paymentSuccess = asyncHandler(async (req, res) => {

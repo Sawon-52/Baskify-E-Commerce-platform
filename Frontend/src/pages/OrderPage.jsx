@@ -40,8 +40,9 @@ const OrderPage = () => {
       toast.error(error.message || error.error);
     }
   };
-
+  
   const handleToPaid = async () => {
+    console.log(paymentInfo);
     if (paymentInfo?.url) {
       window.location.replace(paymentInfo.url);
     }

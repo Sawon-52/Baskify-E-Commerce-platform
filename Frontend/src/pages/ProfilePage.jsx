@@ -13,6 +13,7 @@ import Meta from "../Components/Meta";
 import { TbCurrencyTaka } from "react-icons/tb";
 
 const ProfilePage = () => {
+  const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
