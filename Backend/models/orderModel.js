@@ -45,11 +45,6 @@ const orderSchema = new mongoose.Schema(
       status: { type: String },
       update_time: { type: String },
       transactionId: { type: String },
-<<<<<<< HEAD
-      cardType: { type: String },
-      storeAmount: { type: String },
-=======
->>>>>>> ac70619ca738b4cec5f65cfb9d2361bef459e000
     },
 
     itemsPrice: {
