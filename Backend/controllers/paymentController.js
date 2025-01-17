@@ -63,13 +63,15 @@ const paymentCreate = asyncHandler(async (req, res) => {
 const paymentSuccess = asyncHandler(async (req, res) => {
   const { tran_id, val_id, amount, card_type, status, store_amount } = req.body;
 
-  if (status === "VALID") {
-    // Find the order by transaction ID
-    const order = await Order.findOne({
-      paymentResult: { $exists: true, $ne: null },
-      "paymentResult.transactionId": tran_id,
-    });
+  // Find the order by transaction ID
+  const order = await Order.findOne({
+    paymentResult: { $exists: true, $ne: null },
+    "paymentResult.transactionId": tran_id,
+  });
 
+  console.log(order);
+
+  if (status === "VALID") {
     if (!order) {
       res.status(404);
       throw new Error("Order not found");
@@ -94,15 +96,9 @@ const paymentSuccess = asyncHandler(async (req, res) => {
 
     const updatedOrder = await order.save();
     // Redirect with query parameters
-
     res.redirect(`https://baskify-e-commerce-platform-wu0y.onrender.com/orders/${order._id}?success=true&message=${encodeURIComponent("Payment successful!")}`);
   } else {
-    // Find the order by transaction ID
-    const odr = await Order.findOne({
-      paymentResult: { $exists: true, $ne: null },
-      "paymentResult.transactionId": tran_id,
-    });
-    res.redirect(`https://baskify-e-commerce-platform-wu0y.onrender.com/orders/${odr._id}?success=false&message=${encodeURIComponent("Payment failed. Please try again.")}`);
+    res.redirect(`https://baskify-e-commerce-platform-wu0y.onrender.com/orders/${order._id}?success=false&message=${encodeURIComponent("Payment failed. Please try again.")}`);
   }
 });
 

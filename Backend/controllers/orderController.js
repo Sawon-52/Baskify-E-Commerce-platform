@@ -31,8 +31,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
       const createdOrder = await order.save();
       res.status(201).json(createdOrder);
     } catch (error) {
-      console.error(error.message);
-      res.status(500).json({ message: "Order creation failed", error: error.message });
+      res.status(500).json({ message: "Order creation failed", error: error });
     }
   }
 });

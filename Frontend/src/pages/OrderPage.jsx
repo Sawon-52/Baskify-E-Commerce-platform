@@ -221,7 +221,7 @@ const OrderPage = () => {
                     </div>
                     {!userInfo.isAdmin && !orders.isPaid && (
                       <div className="flex justify-end" onClick={handleToPaid}>
-                        <button className=" btn  mt-10 py-2 bg-primary text-white rounded-lg hover:bg-primary">Please Paid first</button>
+                        <button className=" btn  mt-10 py-2 bg-primary text-white rounded-lg hover:bg-primary">Please Pay First</button>
                       </div>
                     )}
                     {userInfo.isAdmin && !orders.isDelivered && (

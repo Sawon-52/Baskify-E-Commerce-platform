@@ -24,7 +24,7 @@ const PlaceOrderPage = () => {
 
   const placeOrderHandle = async () => {
     try {
-      const res = await dispatch(createOrder({ orderItems: cart.cartItems, shippingAddress: cart.shippingAddress, paymentMethod: cart.paymentMethod, itemsPrice: cart.itemsPrice, shippingPrice: cart.shippingPrice, taxPrice: cart.taxPrice, totalPrice: cart.totalPrice })).unwrap();
+      const res = dispatch(createOrder({ orderItems: cart.cartItems, shippingAddress: cart.shippingAddress, paymentMethod: cart.paymentMethod, itemsPrice: cart.itemsPrice, shippingPrice: cart.shippingPrice, taxPrice: cart.taxPrice, totalPrice: cart.totalPrice }));
       dispatch(clearCartItems());
       navigate(`/orders/${res._id}`);
     } catch (err) {
