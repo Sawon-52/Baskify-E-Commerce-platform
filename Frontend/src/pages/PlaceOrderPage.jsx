@@ -23,10 +23,12 @@ const PlaceOrderPage = () => {
   }, [cart.paymentMethod, cart.shippingAddress, navigate]);
 
   const placeOrderHandle = async () => {
-    dispatch(createOrder({ orderItems: cart.cartItems, shippingAddress: cart.shippingAddress, paymentMethod: cart.paymentMethod, itemsPrice: cart.itemsPrice, shippingPrice: cart.shippingPrice, taxPrice: cart.taxPrice, totalPrice: cart.totalPrice }));
-    if (orders?._id) {
-      navigate(`/orders/${orders._id}`);
+    try {
+      const res = await dispatch(createOrder({ orderItems: cart.cartItems, shippingAddress: cart.shippingAddress, paymentMethod: cart.paymentMethod, itemsPrice: cart.itemsPrice, shippingPrice: cart.shippingPrice, taxPrice: cart.taxPrice, totalPrice: cart.totalPrice })).unwrap();
       dispatch(clearCartItems());
+      navigate(`/orders/${res._id}`);
+    } catch (err) {
+      toast.error(err.error || err?.message);
     }
   };
 

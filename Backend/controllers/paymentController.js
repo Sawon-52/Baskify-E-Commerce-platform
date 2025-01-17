@@ -69,7 +69,7 @@ const paymentSuccess = asyncHandler(async (req, res) => {
     "paymentResult.transactionId": tran_id,
   });
 
-  console.log(order);
+  
 
   if (status === "VALID") {
     if (!order) {

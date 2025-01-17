@@ -18,8 +18,8 @@ const OrderPage = () => {
 
   useEffect(() => {
     if (orderId) {
+      dispatch(paymentCreate(orderId));
       dispatch(getOrderDetails(orderId));
-      toast.error("Failed to fetch order details.");
     } else if (searchParams.size > 0) {
       const success = searchParams.get("success");
       const message = searchParams.get("message");
@@ -33,12 +33,15 @@ const OrderPage = () => {
   }, [dispatch, orderId, searchParams]);
 
   const handleToDeliver = async () => {
-    dispatch(deliverOrder(orderId));
-    toast.success("Order delivered");
+    try {
+      dispatch(deliverOrder(orderId));
+      toast.success("Order delivered");
+    } catch (error) {
+      toast.error(error.message || error.error);
+    }
   };
 
   const handleToPaid = async () => {
-    dispatch(paymentCreate(orderId));
     if (paymentInfo?.url) {
       window.location.replace(paymentInfo.url);
     }
