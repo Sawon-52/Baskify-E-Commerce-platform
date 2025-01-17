@@ -25,13 +25,12 @@ const PlaceOrderPage = () => {
   const placeOrderHandle = async () => {
     try {
       dispatch(createOrder({ orderItems: cart.cartItems, shippingAddress: cart.shippingAddress, paymentMethod: cart.paymentMethod, itemsPrice: cart.itemsPrice, shippingPrice: cart.shippingPrice, taxPrice: cart.taxPrice, totalPrice: cart.totalPrice }));
-      dispatch(clearCartItems());
     } catch (err) {
       toast.error(err || err.message);
     }
-
     if (orders._id) {
       navigate(`/orders/${orders._id}`);
+      dispatch(clearCartItems());
     }
   };
 
