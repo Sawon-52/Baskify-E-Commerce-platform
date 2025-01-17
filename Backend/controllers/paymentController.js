@@ -63,13 +63,13 @@ const paymentCreate = asyncHandler(async (req, res) => {
 const paymentSuccess = asyncHandler(async (req, res) => {
   const { tran_id, val_id, amount, card_type, status, store_amount } = req.body;
 
-  if (status === "VALID") {
-    // Find the order by transaction ID
-    const order = await Order.findOne({
-      paymentResult: { $exists: true, $ne: null },
-      "paymentResult.transactionId": tran_id,
-    });
+  // Find the order by transaction ID
+  const order = await Order.findOne({
+    paymentResult: { $exists: true, $ne: null },
+    "paymentResult.transactionId": tran_id,
+  });
 
+  if (status === "VALID") {
     if (!order) {
       // res.status(404);
       // throw new Error("Order not found");
