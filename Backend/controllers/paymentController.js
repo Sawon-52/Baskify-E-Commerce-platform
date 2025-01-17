@@ -73,12 +73,12 @@ const paymentSuccess = asyncHandler(async (req, res) => {
     if (!order) {
       // res.status(404);
       // throw new Error("Order not found");
-      res.redirect(`https://baskify-e-commerce-platform-wu0y.onrender.com/orders/${order._id}?success=false&message=${encodeURIComponent("Payment failed. Order not found")}`);
+      res.redirect(`https://baskify-e-commerce-platform-wu0y.onrender.com/orders/${order?._id}?success=false&message=${encodeURIComponent("Payment failed. Order not found")}`);
     }
 
     // Verify amount
     if (parseFloat(order.totalPrice) !== parseFloat(amount)) {
-      res.redirect(`https://baskify-e-commerce-platform-wu0y.onrender.com/orders/${order._id}?success=false&message=${encodeURIComponent("Payment failed. Amount mismatch")}`);
+      res.redirect(`https://baskify-e-commerce-platform-wu0y.onrender.com/orders/${order?._id}?success=false&message=${encodeURIComponent("Payment failed. Amount mismatch")}`);
     }
 
     // Update order status to paid
@@ -94,9 +94,9 @@ const paymentSuccess = asyncHandler(async (req, res) => {
 
     const updatedOrder = await order.save();
     // Redirect with query parameters
-    res.redirect(`https://baskify-e-commerce-platform-wu0y.onrender.com/orders/${order._id}?success=true&message=${encodeURIComponent("Payment successful!")}`);
+    res.redirect(`https://baskify-e-commerce-platform-wu0y.onrender.com/orders/${order?._id}?success=true&message=${encodeURIComponent("Payment successful!")}`);
   } else {
-    res.redirect(`https://baskify-e-commerce-platform-wu0y.onrender.com/orders/${order._id}?success=false&message=${encodeURIComponent("Payment failed. Please try again.")}`);
+    res.redirect(`https://baskify-e-commerce-platform-wu0y.onrender.com/orders/${tran_id}?success=false&message=${encodeURIComponent("Payment failed. Please try again.")}`);
   }
 });
 
