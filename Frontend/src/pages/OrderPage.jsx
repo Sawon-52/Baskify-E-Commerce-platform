@@ -18,17 +18,25 @@ const OrderPage = () => {
 
   useEffect(() => {
     if (orderId) {
-      dispatch(paymentCreate(orderId));
-      dispatch(getOrderDetails(orderId));
-    } else if (searchParams.size > 0) {
-      const success = searchParams.get("success");
-      const message = searchParams.get("message");
-
-      if (success === "true") {
-        toast.success(message || "Payment successful!");
-      } else if (success === "false") {
-        toast.error(message || "Payment failed. Please try again.");
+      try {
+        dispatch(getOrderDetails(orderId));
+        dispatch(paymentCreate(orderId)).unwrap();
+      } catch (error) {
+        console.error(error);
+        toast.error("Failed to fetch order details.");
       }
+    } else {
+      toast.error("Invalid order ID.");
+    }
+
+    // Check for success or failure
+    const success = searchParams.get("success");
+    const message = searchParams.get("message");
+
+    if (success === "true") {
+      toast.success(message || "Payment successful!");
+    } else if (success === "false") {
+      toast.error(message || "Payment failed. Please try again.");
     }
   }, [dispatch, orderId, searchParams]);
 
@@ -40,9 +48,8 @@ const OrderPage = () => {
       toast.error(error.message || error.error);
     }
   };
-  
+
   const handleToPaid = async () => {
-    console.log(paymentInfo);
     if (paymentInfo?.url) {
       window.location.replace(paymentInfo.url);
     }

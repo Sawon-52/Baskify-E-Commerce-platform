@@ -127,14 +127,15 @@ const ProfilePage = () => {
                       <tr key={order._id} className="text-base font-medium">
                         <td>{order._id}</td>
                         <td>{order.createdAt.substring(0, 10)}</td>
-                        <td className="flex items-center flex-nowrap">
-                          <TbCurrencyTaka className="hidden md:block " />
-                          {order.totalPrice} Tk
+                        <td>
+                          <p className="flex items-center flex-nowrap">{order.totalPrice} Tk</p>
                         </td>
                         <td>{order.isPaid ? order.paidAt?.substring(0, 10) : <RxCross2 className="text-red-500 " />}</td>
                         <td>{order.isDelivered ? order.deliveredAt?.substring(0, 10) : <RxCross2 className="text-red-500 " />}</td>
-                        <td className="underline text-primary font-medium ">
-                          <Link to={`/orders/${order._id}`}>Details</Link>
+                        <td>
+                          <div className="underline text-primary font-medium ">
+                            <Link to={`/orders/${order._id}`}>Details</Link>
+                          </div>
                         </td>
                       </tr>
                     ))}

@@ -1,73 +1,49 @@
+import mongoose from "mongoose";
 import asyncHandler from "../middleware/asyncHandler.js";
 import Order from "../models/orderModel.js";
-import mongoose from "mongoose";
 import SSLCommerzPayment from "sslcommerz-lts";
 
-// Create unique transaction ID
+//create Unique Transection id
 const tran_id = new mongoose.Types.ObjectId().toString();
 
 const paymentCreate = asyncHandler(async (req, res) => {
-  const order = await Order.findById(req.params.id);
-
-  // SSLCommerz store credentials
+  //SSlCommerz store
   const store_id = process.env.STORE_ID;
   const store_passwd = process.env.STORE_PASSWD;
-  const is_live = process.env.IS_LIVE; // true for live, false for sandbox
+  const is_live = false; //true for live, false for sandbox
+
+  const order = await Order.findById(req.params.id);
 
   const data = {
-    total_amount: order?.totalPrice || 0,
+    total_amount: order?.totalPrice,
     currency: "BDT",
-    tran_id: tran_id,
+    tran_id: tran_id, // use unique tran_id for each api call
     success_url: `${process.env.BASE_URL}/api/payments/pay/success`,
     fail_url: `${process.env.BASE_URL}/api/payments/pay/fail`,
     cancel_url: `${process.env.BASE_URL}/api/payments/pay/cancel`,
     ipn_url: `${process.env.BASE_URL}/api/payments/pay/ipn`,
     shipping_method: "Courier",
     product_name: "Combined Product",
-    product_category: "General",
+    product_category: "Combined Category",
     product_profile: "general",
-    cus_name: order?.shippingAddress?.firstName || "Customer",
-    cus_email: order?.shippingAddress?.emailAddress || "unknown@example.com",
-    cus_add1: order?.shippingAddress?.address || "Unknown Address",
-    cus_city: order?.shippingAddress?.city || "Unknown City",
-    cus_postcode: order?.shippingAddress?.zipCode || "0000",
-    cus_country: order?.shippingAddress?.country || "Bangladesh",
-    cus_phone: order?.shippingAddress?.phoneNumber || "0000000000",
-    ship_name: order?.shippingAddress?.firstName || "Customer",
-    ship_add1: order?.shippingAddress?.address || "Unknown Address",
-    ship_city: order?.shippingAddress?.city || "Unknown City",
-    ship_postcode: order?.shippingAddress?.zipCode || "0000",
-    ship_country: order?.shippingAddress?.country || "Bangladesh",
+    cus_name: order?.shippingAddress?.firstName,
+    cus_email: order?.shippingAddress?.emailAddress,
+    cus_add1: order?.shippingAddress?.city,
+    cus_add2: order?.shippingAddress?.city,
+    cus_city: order?.shippingAddress?.city,
+    cus_state: order?.shippingAddress?.city,
+    cus_postcode: order?.shippingAddress?.zipCode,
+    cus_country: order?.shippingAddress?.country,
+    cus_phone: order?.shippingAddress?.phoneNumber,
+    ship_name: order?.shippingAddress?.firstName,
+    ship_add1: order?.shippingAddress?.city,
+    ship_add2: order?.shippingAddress?.city,
+    ship_city: order?.shippingAddress?.city,
+    ship_state: order?.shippingAddress?.city,
+    ship_postcode: order?.shippingAddress?.zipCode,
+    ship_country: order?.shippingAddress?.country,
   };
 
-  // const sslcz = new SSLCommerzPayment(store_id, store_passwd, is_live);
-  // console.log(store_id, store_passwd, is_live);
-  // try {
-  //   const apiResponse = await sslcz.init(data);
-
-  //   if (!apiResponse.GatewayPageURL) {
-  //     console.error("GatewayPageURL not found:", apiResponse);
-  //     return res.status(400).json({
-  //       message: "Could not retrieve payment gateway URL",
-  //       details: apiResponse,
-  //     });
-  //   }
-
-  //   // Return the GatewayPageURL
-  //   res.send({ url: apiResponse.GatewayPageURL });
-
-  //   // Update the order with the transaction ID
-  //   if (order) {
-  //     order.paymentResult = {
-  //       update_time: Date.now(),
-  //       transactionId: tran_id,
-  //     };
-  //     await order.save();
-  //   }
-  // } catch (error) {
-  //   console.error("SSLCommerz Payment Error:", error.message);
-  //   res.status(500).json({ message: "Payment initiation failed", error: error.message });
-  // }
   const sslcz = new SSLCommerzPayment(store_id, store_passwd, is_live);
   sslcz.init(data).then(async (apiResponse) => {
     let GatewayPageURL = apiResponse.GatewayPageURL;
@@ -79,8 +55,10 @@ const paymentCreate = asyncHandler(async (req, res) => {
         transactionId: tran_id,
       };
 
-      const updatedOrder = await order.save(); 
+      const updatedOrder = await order.save();
     }
+
+    console.log(GatewayPageURL);
   });
 });
 
@@ -91,10 +69,16 @@ const paymentSuccess = asyncHandler(async (req, res) => {
     "paymentResult.transactionId": tran_id,
   });
 
+  console.log(order);
+
   if (status === "VALID") {
-    
+    if (!order) {
+      res.status(404);
+      throw new Error("Order not found");
+    }
+
     if (parseFloat(order.totalPrice) !== parseFloat(amount)) {
-      res.redirect(`https://baskify-e-commerce-platform-wu0y.onrender.com/orders/${order?._id}?success=false&message=${encodeURIComponent("Payment failed. Amount mismatch")}`);
+      res.redirect(`${process.env.BASE_URL}/orders/${order?._id}?success=false&message=${encodeURIComponent("Payment failed. Amount mismatch")}`);
     }
 
     order.isPaid = true;
@@ -109,10 +93,10 @@ const paymentSuccess = asyncHandler(async (req, res) => {
 
     const updatedOrder = await order.save();
     // Redirect with query parameters
-    res.redirect(`https://baskify-e-commerce-platform-wu0y.onrender.com/orders/${order?._id}?success=true&message=${encodeURIComponent("Payment successful!")}`);
+    res.redirect(`${process.env.BASE_URL}/orders/${order?._id}?success=true&message=${encodeURIComponent("Payment successful!")}`);
   } else {
-    res.redirect(`https://baskify-e-commerce-platform-wu0y.onrender.com/orders/${tran_id}?success=false&message=${encodeURIComponent("Payment failed. Please try again.")}`);
-    res.redirect(`https://baskify-e-commerce-platform-wu0y.onrender.com/?success=false&message=${encodeURIComponent("Payment failed. Please try again.")}`);
+    res.redirect(`${process.env.BASE_URL}/orders/${tran_id}?success=false&message=${encodeURIComponent("Payment failed. Please try again.")}`);
+    res.redirect(`${process.env.BASE_URL}/?success=false&message=${encodeURIComponent("Payment failed. Please try again.")}`);
   }
 });
 
@@ -151,7 +135,7 @@ const paymentCancel = asyncHandler(async (req, res) => {
   order.paymentResult.status = "CANCELED";
   await order.save();
 
-  res.redirect(`${process.env.BASE_URL}/orders/${order._id}?success=false&message=Payment canceled`);
+  res.redirect(`${process.env.BASE_URL}/orders/${order?._id}?success=false&message=Payment canceled`);
 });
 
 const paymentIPN = asyncHandler(async (req, res) => {
