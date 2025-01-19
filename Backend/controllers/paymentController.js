@@ -85,7 +85,7 @@ const paymentSuccess = asyncHandler(async (req, res) => {
         storeAmount: store_amount,
       };
 
-      const updatedOrder = await order.save();
+      await order.save();
       // Redirect with query parameters
       res.redirect(`${process.env.BASE_URL}/orders/${order?._id}?success=true&message=${encodeURIComponent("Payment successful!")}`);
     } else {
