@@ -65,34 +65,27 @@ const paymentCreate = asyncHandler(async (req, res) => {
 const paymentSuccess = asyncHandler(async (req, res) => {
   const { tran_id, val_id, amount, card_type, status, store_amount } = req.body;
 
-  console.log(amount, store_amount);
-
   const order = await Order.findOne({
     paymentResult: { $exists: true, $ne: null },
     "paymentResult.transactionId": tran_id,
   });
 
-  if (status === "VALID") {
-    if (parseFloat(order?.totalPrice) === parseFloat(amount)) {
-      console.log(typeof parseFloat(amount), parseFloat(amount), typeof parseFloat(order?.totalPrice), parseFloat(order?.totalPrice));
-      order.isPaid = true;
-      order.paidAt = Date.now();
-      order.paymentResult = {
-        id: val_id,
-        status,
-        update_time: Date.now(),
-        cardType: card_type,
-        storeAmount: store_amount,
-      };
+  if (status === "VALID" && parseFloat(order?.totalPrice) === parseFloat(amount)) {
+    order.isPaid = true;
+    order.paidAt = Date.now();
+    order.paymentResult = {
+      id: val_id,
+      status,
+      update_time: Date.now(),
+      cardType: card_type,
+      storeAmount: store_amount,
+    };
+    await order.save();
 
-      await order.save();
-      // Redirect with query parameters
-      res.redirect(`${process.env.BASE_URL}/orders/${order?._id}?success=true&message=${encodeURIComponent("Payment successful!")}`);
-    } else {
-      res.redirect(`${process.env.BASE_URL}/orders/${order._id}?success=false&message=${encodeURIComponent("Payment failed. Please try again.")}`);
-    }
+    // Redirect with query parameters
+    res.redirect(`${process.env.BASE_URL}/orders/${order?._id}?success=true&message=${encodeURIComponent("Payment successful!")}`);
   } else {
-    res.redirect(`${process.env.BASE_URL}/orders/${order._id}?success=false&message=${encodeURIComponent("Payment failed. Please try again.")}`);
+    res.redirect(`${process.env.BASE_URL}/orders/${order?._id}?success=false&message=${encodeURIComponent("Payment failed. Please try again.")}`);
   }
 });
 
