@@ -21,7 +21,7 @@ const paymentCreate = asyncHandler(async (req, res) => {
     success_url: `${process.env.BASE_URL}/api/payments/pay/success`,
     fail_url: `${process.env.BASE_URL}/api/payments/pay/fail`,
     cancel_url: `${process.env.BASE_URL}/api/payments/pay/cancel`,
-    ipn_url: `${process.env.BASE_URL}/api/payments/pay/ipn`,
+    // ipn_url: `${process.env.BASE_URL}/api/payments/pay/ipn`,
     shipping_method: "Courier",
     product_name: "Combined Product",
     product_category: "Combined Category",
@@ -67,6 +67,15 @@ const paymentSuccess = asyncHandler(async (req, res) => {
 
   if (status === "VALID") {
     const order = await Order.findOne({ paymentResult: { $exists: true, $ne: null }, "paymentResult.transactionId": tran_id });
+    if (!order) {
+      res.status(404);
+      throw new Error("Order not found");
+    }
+    // Verify amount
+    if (parseFloat(order.totalPrice) !== parseFloat(amount)) {
+      res.status(400);
+      throw new Error("Amount mismatch");
+    }
     // Update order status to paid
     order.isPaid = true;
     order.paidAt = Date.now();
@@ -124,37 +133,8 @@ const paymentCancel = asyncHandler(async (req, res) => {
   res.redirect(`${process.env.BASE_URL}/orders/${order?._id}?success=false&message=Payment canceled`);
 });
 
-const paymentIPN = asyncHandler(async (req, res) => {
-  const { tran_id, status, val_id, amount, card_type, store_amount } = req.body;
+// const paymentIPN = asyncHandler(async (req, res) => {
 
-  const order = await Order.findOne({
-    paymentResult: { $exists: true, $ne: null },
-    "paymentResult.transactionId": tran_id,
-  });
+// });
 
-  if (!order) {
-    res.status(404).json({ message: "Order not found" });
-    return;
-  }
-
-  if (status === "VALID") {
-    order.isPaid = true;
-    order.paidAt = Date.now();
-    order.paymentResult = {
-      id: val_id,
-      status,
-      update_time: Date.now(),
-      cardType: card_type,
-      storeAmount: store_amount,
-    };
-
-    await order.save();
-    res.status(200).json({ message: "Payment validated successfully" });
-  } else {
-    order.paymentResult.status = "FAILED";
-    await order.save();
-    res.status(400).json({ message: "Payment failed" });
-  }
-});
-
-export { paymentCreate, paymentSuccess, paymentFail, paymentCancel, paymentIPN };
+export { paymentCreate, paymentSuccess, paymentFail, paymentCancel };
