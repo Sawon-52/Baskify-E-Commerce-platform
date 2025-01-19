@@ -67,15 +67,6 @@ const paymentSuccess = asyncHandler(async (req, res) => {
 
   if (status === "VALID") {
     const order = await Order.findOne({ paymentResult: { $exists: true, $ne: null }, "paymentResult.transactionId": tran_id });
-    if (!order) {
-      res.status(404);
-      throw new Error("Order not found");
-    }
-    // Verify amount
-    if (parseFloat(order.totalPrice) !== parseFloat(amount)) {
-      res.status(400);
-      throw new Error("Amount mismatch");
-    }
     // Update order status to paid
     order.isPaid = true;
     order.paidAt = Date.now();
