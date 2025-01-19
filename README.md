@@ -55,7 +55,7 @@ Developing Baskify was a rewarding experience that enhanced my skills in:
 
 1. Clone the repository:
    ```bash
-   git clone <repository-link>
+   git clone https://github.com/Sawon-52/Baskify-E-Commerce-platform.git
    ```
 
 2. Install dependencies for both frontend and backend:
